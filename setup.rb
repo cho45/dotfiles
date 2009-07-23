@@ -1,13 +1,4 @@
 #!/usr/bin/env ruby
-#
-# Create:
-# ~/
-#   bin/
-#     sometools (symlinks)
-#   dotfiles/
-#     foobar
-#   coderepos/
-#     foobar
 
 require "pathname"
 require "fileutils"
