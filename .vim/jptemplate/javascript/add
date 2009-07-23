@@ -1,0 +1,2 @@
+addEventListener("${cursor}", function (e) {
+}, false);

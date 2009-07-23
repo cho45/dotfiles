@@ -1,0 +1,8 @@
+use Config::Pit;
+
+my $config = pit_get("${domain}", require => {
+	"username" => "username of ${domain}",
+	"password" => "password of ${domain}",
+});
+
+

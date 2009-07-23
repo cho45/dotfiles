@@ -1,0 +1,3 @@
+addEventListener(function (e:Event) {
+${cursor}
+});

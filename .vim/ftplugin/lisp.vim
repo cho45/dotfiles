@@ -1,0 +1,3 @@
+setf scheme
+set expandtab
+

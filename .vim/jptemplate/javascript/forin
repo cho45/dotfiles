@@ -1,0 +1,4 @@
+for (var key in ${obj}) if (${obj}.hasOwnProperty(key)) {
+	var val = ${obj}[key];
+	${cursor}
+}

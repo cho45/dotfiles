@@ -1,0 +1,16 @@
+*.o
+*.lo
+*.la
+#*#
+.*.rej
+*.rej
+.*~
+*~
+.#*
+.DS_Store
+*.sw[po]
+*.tmp
+tags
+Session.vim
+*cache.sql
+

@@ -1,0 +1,59 @@
+[user]
+	name  = cho45
+	email = cho45@lowreal.net
+
+[alias]
+	psuh    = push
+	lop     = log -p
+	st      = status
+	di      = diff
+	co      = checkout
+	ci      = commit -v
+	cii     = !sh -c 'git commit -av && [ \"$(git config --bool svn-remote.svn.autodcommit)\" = "true" ] && $HOME/.screen/asyncrun.rb \"git svn dcommit && echo dcommit done\"'
+	svn-ad  = config svn-remote.svn.autodcommit true
+	svn-ado = config svn-remote.svn.autodcommit false
+	br      = branch
+	svr     = svn rebase
+	svd     = svn dcommit
+	lc      = log ORIG_HEAD.. --stat --no-merges
+	hub-url = !ruby -e 'puts (%Q{http://github.com/%s/%s/tree/master/} + %x{git rev-parse --show-prefix}) % %x{git config -l}.match(%r{^remote.origin.url=git@github.com:([^/]+)/([^.]+).git}).captures'
+	hub     = !open $(git hub-url)
+
+[color]
+	diff   = auto
+	branch = auto
+	status = auto
+	interactive = auto
+
+[color "branch"]
+	current = red
+	local = yellow
+	remote = green
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+
+[color "diff"]
+	commit = black white bold
+	meta = blue
+	frag = black
+	old = red
+	new = green
+
+
+[i18n]
+	commitencoding = utf-8
+
+[core]
+	excludesfile = /Users/cho45/.gitignore
+
+[github]
+	user = cho45
+	token = 0e6390d1d35c2eb2242fac895a028c91
+
+[push]
+	default = current
+

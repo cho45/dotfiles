@@ -1,0 +1,16 @@
+PROCESS SUBSTITUTION
+    =( list ) # list の出力を一時ファイルにし、ファイル名に置換
+    <( list ) #
+    >( list ) # list に出力を渡す
+
+LOOP
+    for i in *; do; echo $i; done;
+
+PARAMETER EXPANSION
+    ${i//.old/.new} # 拡張子置換
+
+GLOB (man zshexpn)
+    *~hoge # hoge 以外の *
+    *(/)   # dir
+    *(^/)  # not dir
+    *(.)   # plain file

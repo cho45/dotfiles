@@ -1,0 +1,356 @@
+#!/usr/bin/env perl
+# for rake addict
+
+use strict;
+use warnings;
+use ExtUtils::MakeMaker qw(prompt);
+use File::Basename;
+use File::Path;
+use File::Spec;
+use Template;
+use YAML;
+use Config::Pit;
+
+my $config = pit_get("pmsetup", require => {
+	author        => "cho45",
+	email         => "cho45\@lowreal.net",
+	scratch_repos => "Your svk base scratch DEPOTPATH: //scratch",
+#	mirror_repos  => "Your svk base mirror DEPOTPATH: //mirror",
+	workdir       => "$ENV{HOME}/tmp",
+});
+$config->{author} || $config->{email} || $config->{workdir} || die("no settings");
+
+-e $config->{workdir} || mkdir $config->{workdir}, 0777;
+
+unless ($config->{scratch_repos} =~ m{^//.}) {
+	delete $config->{scratch_repos};
+}
+
+#unless ($config->{mirror_repos} =~ m{^//.}) {
+#	delete $config->{mirror_repos};
+#}
+
+
+my $modname = shift @ARGV or die "Usage: $0 module\n";
+$modname =~ s/-/::/g;
+
+write_plugin_files($modname, $config);
+
+sub write_plugin_files {
+	my($module, $config) = @_;
+
+	my $svk = $config->{scratch_repos} ? prompt("import to SVK? [yN] ", 'n') : "n";
+	my $coderepos = prompt("CodeRepos friendly? [Yn] ", 'y');
+
+	# $module = "Foo::Bar"
+	# $dist   = "Foo-Bar"
+	# $path   = "Foo/Bar.pm"
+	my @pkg  = split /::/, $module;
+	my $dist = join "-", @pkg;
+	my $path = join("/", @pkg) . ".pm";
+
+	mkdir $dist, 0777;
+	chdir $dist;
+	if ($svk =~ /[Yy]/ || $coderepos =~ /[Yy]/ ) {
+		mkdir $_, 0777 for (qw/ trunk tags branches /);
+		chdir 'trunk';
+	}
+
+	my @template = YAML::Load(join '', <DATA>);
+	my $vars = { module => $module, dist => $dist, path => $path,
+		config => $config, localtime => scalar localtime };
+
+	for my $tmpl (@template) {
+		my $file = $tmpl->{file};
+		$file =~ s/(\$\w+)/$1/eeg;
+		if (defined $tmpl->{coderepos}) {
+			if ($coderepos =~ /[Yy]/) {
+				next unless $tmpl->{coderepos};
+			} else {
+				next if $tmpl->{coderepos};
+			}
+		}
+		write_file($file, $tmpl->{template}, $vars);
+		chmod oct($tmpl->{chmod}), $tmpl->{file} if $tmpl->{chmod};
+	}
+
+	!system "perl Makefile.PL" or die $?;
+	!system 'make test' or die $?;
+	!system 'make manifest' or die $?;
+	!system 'make distclean' or die $?;
+
+	return unless $svk =~ /[Yy]/;
+	chdir '..';
+	system("svk import -m '$dist import' $config->{scratch_repos}/$dist");
+	chdir '..';
+	rmtree("$dist");
+	system("svk co $config->{scratch_repos}/$dist/trunk $dist");
+}
+
+sub write_file {
+	my($path, $template, $vars) = @_;
+
+	if (-e $path) {
+		my $ans = prompt("$path exists. Override? [yN] ", 'n');
+		return if $ans !~ /[Yy]/;
+	}
+
+	my $dir = File::Basename::dirname($path);
+	unless (-e $dir) {
+		warn "Creating directory $dir\n";
+		File::Path::mkpath($dir, 1, 0777);
+	}
+
+	my $tt = Template->new;
+	$tt->process(\$template, $vars, \my $content);
+
+	warn "Creating $path\n";
+	open my $out, ">", $path or die "$path: $!";
+	print $out $content;
+	close $out;
+}
+
+=pod
+
+original L<http://svn.bulknews.net/repos/public/misc/pmsetup>
+original L<http://coderepos.org/share/browser/lang/perl/misc/pmsetup/yappo-pmsetup>
+
+=cut
+
+__DATA__
+---
+file: Rakefile
+template: |
+  require "rubygems"
+  require "rake"
+  require "shipit"
+  require "pathname"
+
+  makefilepl = Pathname.new("Makefile.PL").read
+  mainmodule = Pathname.new("lib/[% path %]").read
+
+  NAME        = makefilepl[/name '([^']+)';/, 1]
+  VERS        = mainmodule[/our \$VERSION = '([^']+)';/, 1]
+  DESCRIPTION = mainmodule[/=head1 NAME\s+\S+ - (.*)/, 1]
+
+  task :default => :test
+
+  desc "make test"
+  task :test => ["Makefile"] do
+  	sh %{make test}
+  end
+
+  desc "make clean"
+  task :clean => ["Makefile"] do
+  	sh %{make clean}
+  end
+
+  desc "make install"
+  task :install => ["Makefile"] do
+  	sh %{sudo make install}
+  end
+
+  desc "release"
+  task :release => :shipit
+
+  task :shipit => [:test, "MANIFEST"]
+  Rake::ShipitTask.new do |s|
+  	ENV["LANG"] = "C"
+  	s.Step.new {
+  		# check
+  		system("svn", "up")
+  		raise "Any chages remain?\n#{`svn st`}" unless `svn st`.empty?
+  	}.and {}
+  	s.Step.new {
+  		system "shipit", "-n"
+  		print "Check dry-run result and press Any Key to continue (or cancel by Ctrl-C)."
+  		$stdin.gets
+  	}.and {
+  		system "shipit"
+  	}
+  end
+
+  file "Makefile" => ["Makefile.PL"] do
+  	sh %{perl Makefile.PL}
+  end
+
+  file "Makefile.PL"
+
+  file "MANIFEST" => Dir["**/*"].delete_if {|i| i == "MANIFEST" }  do
+  	rm "MANIFEST" if File.exist?("MANIFEST")
+  	sh %{perl Makefile.PL}
+  	sh %{make}
+  	sh %{make manifest}
+  end
+---
+file: Makefile.PL
+template: |
+  use inc::Module::Install;
+  name '[% dist %]';
+  all_from 'lib/[% path %]';
+
+  requires $_ for (qw/ /);
+
+  build_requires 'Test::More';
+  use_test_base;
+  auto_include;
+  WriteAll;
+---
+file: t/00_compile.t
+template: |
+  use strict;
+  use Test::More tests => 1;
+
+  BEGIN { use_ok '[% module %]' }
+---
+file: t/96_dependency.t
+template: |
+  use Test::Dependencies
+  	exclude => [qw/Test::Dependencies Test::Base Test::Perl::Critic [% module %]/],
+  	style   => 'light';
+  ok_dependencies();
+
+file: t/97_podspell.t
+template: |
+  use Test::More;
+  eval q{ use Test::Spelling };
+  plan skip_all => "Test::Spelling is not installed." if $@;
+  add_stopwords(map { split /[\s\:\-]/ } <DATA>);
+  $ENV{LANG} = 'C';
+  set_spell_cmd("aspell list");
+  all_pod_files_spelling_ok('lib');
+  __DATA__
+  [% config.author %]
+  [% module %]
+---
+file: t/98_perlcritic.t
+template: |
+  use strict;
+  use Test::More;
+  eval { use Test::Perl::Critic -profile => 't/perlcriticrc' };
+  plan skip_all => "Test::Perl::Critic is not installed." if $@;
+  all_critic_ok('lib');
+---
+file: t/99_pod.t
+template: |
+  use Test::More;
+  eval "use Test::Pod 1.00";
+  plan skip_all => "Test::Pod 1.00 required for testing POD" if $@;
+  all_pod_files_ok();
+---
+file: t/perlcriticrc
+template: |
+  [TestingAndDebugging::ProhibitNoStrict]
+  allow=refs
+---
+file: Changes
+template: |
+  Revision history for Perl extension [% module %]
+
+  0.01 [% localtime %]
+  	* original version
+---
+file: lib/$path
+template: |
+  package [% module %];
+
+  use strict;
+  use warnings;
+  our $VERSION = '0.01';
+
+  1;
+  __END__
+
+  =head1 NAME
+
+  [% module %] -
+
+  =head1 SYNOPSIS
+
+    use [% module %];
+
+  =head1 DESCRIPTION
+
+  [% module %] is
+
+  =head1 AUTHOR
+
+  [% config.author %] E<lt>[% config.email %]E<gt>
+
+  =head1 SEE ALSO
+
+  =head1 LICENSE
+
+  This library is free software; you can redistribute it and/or modify
+  it under the same terms as Perl itself.
+
+  =cut
+---
+file: MANIFEST.SKIP
+template: |
+  \bRCS\b
+  \bCVS\b
+  ^MANIFEST\.
+  ^Makefile$
+  ~$
+  ^#
+  \.old$
+  ^blib/
+  ^pm_to_blib
+  ^MakeMaker-\d
+  \.gz$
+  \.cvsignore
+  ^t/9\d_.*\.t
+  ^t/perlcritic
+  ^xt/
+  ^tools/
+  \.svn/
+  \.git/
+  ^[^/]+\.yaml$
+  ^[^/]+\.pl$
+  ^\.shipit$
+---
+file: README
+template: |
+  This is Perl module [% module %].
+
+  INSTALLATION
+
+  [% module %] installation is straightforward. If your CPAN shell is set up,
+  you should just be able to do
+
+      % cpan [% module %]
+
+  Download it, unpack it, then build it as per the usual:
+
+      % perl Makefile.PL
+      % make && make test
+
+  Then install it:
+
+      % make install
+
+  DOCUMENTATION
+
+  [% module %] documentation is available as in POD. So you can do:
+
+      % perldoc [% module %]
+
+  to read the documentation online with your favorite pager.
+
+  [% config.author %]
+---
+file: .shipit
+chmod: 0644
+coderepos: 0
+template: |
+  steps = FindVersion, ChangeVersion, CheckChangeLog, DistTest, Commit, Tag, MakeDist, UploadCPAN
+  svk.tagpattern = release-%v
+---
+file: .shipit
+chmod: 0644
+coderepos: 1
+template: |
+  steps = CommitMessageWrap, FindVersion, ChangeVersion, CheckChangeLog, DistTest, Commit, Tag, MakeDist, UploadCPAN
+  svk.tagpattern = release-%v
+  commit_message.format = lang/perl/[% dist %]: %msg

@@ -1,0 +1,144 @@
+#!/usr/bin/env ruby
+#
+# secondlife - http://rails2u.com/
+# distributed under the MIT licence.
+#
+
+CSS_ORDER = %w(
+display
+float
+clear
+position
+top
+right
+bottom
+left
+font
+font-family
+font-style
+font-variant
+font-weight
+font-stretch
+font-size
+font-size-adjust
+visibility
+z-index
+direction
+unicode-bidi
+width
+min-width
+max-width
+height
+min-height
+max-height
+line-height
+vertical-align
+overflow
+clip
+margin
+margin-top
+margin-right
+margin-bottom
+margin-left
+padding
+padding-top
+padding-right
+padding-bottom
+padding-left
+border
+border-style
+border-color
+border-width
+border-top
+border-bottom
+border-right
+border-left
+border-top-style
+border-right-style
+border-bottom-style
+border-left-style
+border-top-color
+border-right-color
+border-bottom-color
+border-left-color
+border-top-width
+border-right-width
+border-bottom-width
+border-left-width
+outline
+content
+compact
+run-in
+quotes
+marker-offset
+list-style
+list-style-type
+list-style-image
+list-style-position
+size
+marks
+page-break-before
+page-break-after
+page-break-inside
+page
+orphans
+widows
+background
+background-color
+background-image
+background-repeat
+background-attachment
+background-position
+color
+text-indent
+text-align
+text-decoration
+text-shadow
+letter-spacing
+word-spacing
+text-transform
+white-space
+table-layout
+empty-cells
+speak-header
+cursor
+volume
+speak
+pause-before
+pause-after
+pause
+cue-before
+cue-after
+cue
+play-during
+azimuth
+elevation
+speech-rate
+voice-family
+pitch
+pitch-range
+stress
+richness
+speak-punctuation
+speak-numeral
+)
+
+def property_order(line)
+	if m = line.match(/^\s*_?(.+?)\s*:/)
+		CSS_ORDER.each_with_index do |property, index|
+			return index if property == m[1].downcase
+		end
+	end
+	if line.include? '{'
+		return -1
+	elsif line.include? '}'
+		return CSS_ORDER.length + 2
+	end
+	CSS_ORDER.length + 1
+end
+
+result = ARGF.read.gsub(%r{/\*([^*]*)\*/}m, '').to_a.map {|l| l.chomp.sub(/\s*:\s*/, ": ") }.sort_by do |line|
+	property_order line
+end
+
+puts result.join("\n")

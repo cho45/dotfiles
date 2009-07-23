@@ -1,0 +1,266 @@
+BEGIN
+class
+ensure
+nil
+self
+when
+END
+def
+false
+not
+super
+while
+alias
+defined?
+for
+or
+then
+yield
+and
+do
+if
+redo
+true
+begin
+else
+in
+rescue
+undef
+break
+elsif
+module
+retry
+unless
+case
+end
+next
+return
+until
+class
+module
+def
+STDIN
+STDOUT
+STDERR
+ENV
+ARGF
+ARGV
+DATA
+TOPLEVEL_BINDING
+RUBY_VERSION
+RUBY_RELEASE_DATE
+RUBY_PLATFORM
+SCRIPT_LINES__
+abort
+at_exit
+autoload
+autoload?
+binding
+caller
+callcc
+catch
+chop
+chop!
+chomp
+chomp!
+eval
+exec
+exit
+exit!
+fork
+gets
+readline
+global_variables
+gsub
+gsub!
+block_given?
+load
+local_variables
+loop
+open
+p
+print
+printf
+proc
+lambda
+putc
+puts
+raise
+fail
+rand
+readlines
+require
+scan
+select
+set_trace_func
+sleep
+spawn
+split
+sprintf
+format
+srand
+sub
+sub!
+syscall
+system
+test
+throw
+trace_var
+trap
+untrace_var
+warn
+Object
+Array
+Value
+Binding
+Continuation
+Data
+Dir
+FlaseClass
+Hash
+IO
+File
+MatchData
+Method
+Module
+Class
+Numeric
+Integer
+Bignum
+Fixnum
+Float
+Proc
+Range
+Regexp
+String
+Struct
+Symbol
+Thread
+ThreadGroup
+Time
+TrueClass
+UnboundMethod
+NilClass
+Comparable
+Enumerable
+Errno
+FileTest
+GC
+Kernel
+Marshal
+Math
+ObjectSpace
+Precision
+Process
+Signal
+Exception
+NoMemoryError
+ScriptError
+LoadError
+NotImplementedError
+SyntaxError
+SignalException
+Interrupt
+StandardError
+ArgumentError
+IndexError
+IOError
+EOFError
+LocalJumpError
+NameError
+NoMethodError
+RangeError
+FloatDomainError
+RegexpError
+RuntimeError
+SecurityError
+SystemCallError
+SystemStackError
+ThreadError
+TypeError
+ZeroDivisionError
+SystemExit
+fatal
+
+initialize
+
+ActiveRecord::Base.establish_connection
+
+
+class clone display dup eql?
+equal? extend freeze frozen? hash id initialize_copy
+inspect instance_eval instance_of? instance_variable_get
+instance_variable_set instance_variables is_a? kind_of? method
+methods nil? object_id private_methods protected_methods
+public_methods remove_instance_variable respond_to? send
+singleton_method_added singleton_method_removed
+singleton_method_undefined singleton_methods taint tainted?
+to_a to_s type untaint
+
+
+abort at_exit autoload
+autoload? binding block_given? callcc caller catch chomp
+chomp! chop chop! eval exec exit exit! fail fork format
+getc gets global_variables gsub gsub! iterator? lambda load
+local_variables loop method_missing open p print printf
+proc putc puts raise rand readline readlines require scan
+select set_trace_func sleep split sprintf srand sub sub!
+syscall system test throw trace_var trap untrace_var warn
+
+
+all? any? collect detect each_with_index entries
+find find_all grep include? inject map max member? min
+partition reject select sort sort_by to_a to_set zip
+
+abbrev assoc at clear
+collect collect! compact compact! concat delete delete_at
+delete_if each each_index empty? eql? fetch fill first
+flatten flatten! frozen? hash include? index indexes
+indices initialize_copy insert inspect join last length map
+map! nitems pack pop push rassoc reject reject! replace
+reverse reverse! reverse_each rindex select shift size
+slice slice! sort sort! to_a to_ary to_s transpose uniq
+uniq! unshift values_at zip
+
+
+capitalize capitalize!
+casecmp center chomp chomp! chop chop! concat count crypt
+delete delete! downcase downcase! dump each each_byte
+each_line empty? eql? gsub gsub! hash hex include? index
+initialize_copy insert inspect intern length ljust lstrip
+lstrip! match next next! oct replace reverse reverse!
+rindex rjust rstrip rstrip! scan size slice slice! split
+squeeze squeeze! strip strip! sub sub! succ succ! sum
+swapcase swapcase! to_f to_i to_s to_str to_sym tr tr!
+tr_s tr_s! unpack upcase upcase! upto
+
+
+abort_on_exception
+
+assert
+assert_equal
+assert_not_equal
+assert_instance_of
+assert_nil
+assert_not_nil
+assert_kind_of
+assert_respond_to
+assert_match
+assert_no_match
+assert_same
+assert_not_same
+assert_operator
+assert_raise
+assert_nothing_raised
+assert_kind_of
+assert_match
+assert_in_delta
+assert_send
+assert_block
+
+Test::Unit::TestCase
+OptionParser
+StringScanner
+Rational
+
+Psychs

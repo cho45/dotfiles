@@ -1,0 +1,10 @@
+--- 
+:update_sources: true
+:bulk_threshold: 1000
+:sources: 
+- http://gems.rubyforge.org
+- http://gems.github.com
+:verbose: true
+:benchmark: false
+:backtrace: false
+rdoc: --template ~/coderepos/lang/ruby/rdoc/generators/template/html/resh/resh.rb --inline-source
