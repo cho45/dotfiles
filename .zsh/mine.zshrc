@@ -162,7 +162,7 @@ function socks () {
 }
 
 # screen cd
-source $HOME/coderepos/lang/zsh/cdd/cdd
+source $HOME/.zsh/cdd
 
 # window num -> tty の対応ができるように
 tty > /tmp/screen-tty-$WINDOW

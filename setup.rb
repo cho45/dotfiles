@@ -32,7 +32,7 @@ cd "~".expand
 
 if "dotfiles".expand.exist?
 	cd "dotfiles"
-#	sh "git pull"
+	sh "git pull"
 else
 	sh "git clone git@github.com:cho45/dotfiles.git dotfiles"
 	cd "dotfiles"
@@ -56,8 +56,9 @@ link ".screenrc", "~/.screenrc"
 link ".screen", "~/.screen"
 
 link ".bvirc", "~/.bvirc"
-
 link ".gemrc", "~/.gemrc"
+link ".rascutrc", "~/.rascutrc"
+link ".re.pl", "~/.re.pl"
 
 link "git/.gitconfig", "~/.gitconfig"
 link "git/.gitignore", "~/.gitignore"

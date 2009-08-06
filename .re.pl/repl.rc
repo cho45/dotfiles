@@ -1,0 +1,10 @@
+# vim:set ft=perl:
+Devel::REPL::Script->current->_repl->load_plugin($_) for qw/Colors MultiLine::PPI Packages FancyPrompt OutputCache LexEnv/;
+Devel::REPL::Script->current->_repl->load_plugin($_) for qw/Completion CompletionDriver::Keywords CompletionDriver::LexEnv/;
+Devel::REPL::Script->current->_repl->fancy_prompt(sub {
+	my $self = shift;
+	sprintf '%03d%s >_<x< ',
+		$self->lines_read,
+		$self->can('line_depth') ? ':' . $self->line_depth : '';
+});
+

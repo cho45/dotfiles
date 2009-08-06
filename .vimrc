@@ -130,6 +130,7 @@ nmap <silent> es :set fenc=cp932<CR>
 nmap <silent> eru :e ++enc=utf-8 %<CR>
 nmap <silent> ere :e ++enc=euc-jp %<CR>
 nmap <silent> ers :e ++enc=cp932 %<CR>
+nmap <silent> err :e %<CR>
 
 
 "for yanktmp.vim
@@ -250,18 +251,6 @@ function! ShebangExecute()
 		execute '!' &ft ' %'
 	endif
 endfunction
-
-" vim -b : edit binary using xxd-format!
-augroup Binary
-	au!
-	au BufReadPre  *.bin let &bin=1
-	au BufReadPost *.bin if &bin | silent %!xxd -g 1
-	au BufReadPost *.bin set ft=xxd | endif
-	au BufWritePre *.bin if &bin | %!xxd -r
-	au BufWritePre *.bin endif
-	au BufWritePost *.bin if &bin | silent %!xxd -g 1
-	au BufWritePost *.bin set nomod | endif
-augroup END
 
 augroup Indent
 	au!

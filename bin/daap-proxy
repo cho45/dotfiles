@@ -1,0 +1,4 @@
+#!/bin/sh
+
+dns-sd -P "Test"  _daap._tcp local 3689 localhost 127.0.0.1 Test &
+/usr/bin/ssh -o PreferredAuthentications=publickey -o ControlMaster=no -S /dev/null -D10080 -L3689:localhost:3689 -R9955:localhost:9955 -N -t -x lab.lowreal.net

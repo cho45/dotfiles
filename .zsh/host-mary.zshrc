@@ -1,5 +1,5 @@
 # vim:ft=zsh
-echo "Mary!"
+echo "Mary!!"
 
 export LANG=ja_JP.UTF-8
 
@@ -7,12 +7,10 @@ screen -X eval "escape ^yy"
 
 # use utf8 with pbcopy/pbpaste
 export __CF_USER_TEXT_ENCODING='0x1F5:0x08000100:14'
-#alias pbcopy="pbcopy.rb"
 alias -g CP="| pbcopy"
-#alias -g CP="| nkf -s | pbcopy"
 
 alias port="port -v"
-
+alias ql='qlmanage -p "$@" >& /dev/null'
 
 #alias mysql=/usr/local/mysql/bin/mysql
 #alias mysqladmin=/usr/local/mysql/bin/mysqladmin

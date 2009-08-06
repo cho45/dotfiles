@@ -176,8 +176,6 @@ abbreviations=(
 
 	"H"     "$HOME/project/Hatena-"
 
-	"REpP"  " RIDGE_ENV=production" # C-r 誤爆って死んだりしないよう、履歴に残さない
-	"PSS"    "perl script/server.pl"
 	"HE"    "lib/**/Engine/"
 	"HM"    "lib/**/MoCo/"
 	"HA"    "lib/**/App/"
@@ -189,7 +187,9 @@ abbreviations=(
 	"HEAD^^^^"  "HEAD\\^\\^\\^\\^\\^"
 	"HEAD^^^^^" "HEAD\\^\\^\\^\\^\\^"
 
+	# typo
 	"lkm"  "lm"
+	"it"  "git"
 )
 
 magic-abbrev-expand () {
