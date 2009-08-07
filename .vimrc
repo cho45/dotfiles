@@ -36,6 +36,8 @@ let g:Perl_Company         = ''
 
 let g:jpTemplateKey        = '<C-B>'
 
+let g:netrw_preview        = 1
+
 " zsh っぽい補完に
 "
 set wildmode=longest,list
@@ -324,5 +326,7 @@ command! -bang -narg=0  HatenaStamp call append(line('.'), "*" . localtime() . "
 
 iabbr slef self
 iabbr sefl self
+iabbr tihs this
+iabbr thsi this
 iabbr funciton function
 
