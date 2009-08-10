@@ -59,6 +59,7 @@ link ".bvirc", "~/.bvirc"
 link ".gemrc", "~/.gemrc"
 link ".rascutrc", "~/.rascutrc"
 link ".re.pl", "~/.re.pl"
+link ".irbrc", "~/.irbrc"
 
 link "git/.gitconfig", "~/.gitconfig"
 link "git/.gitignore", "~/.gitignore"
