@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+branches = `git branch -a --no-abbrev --verbose`
+branches.gsub!(/^\*?\s+/, "")
+
+branches = branches.split(/\n/).map {|i| i.split(/\s+/) }
+
+now = Time.now - (24 * 60 * 60 * 30)
+
+branches.map {|name, hash, desc|
+    time, author = *`git log -1 --pretty=format:'%ct %an' #{hash}`.split(/\s+/)
+    [name, hash, desc, Time.at(time.to_i), author]
+}.select { |_, _, _, time|
+    time > now
+}.sort_by { |_, _, _, time|
+    time
+}.each {|name, hash, desc, time, author|
+    puts "#{time.strftime('%m-%d %H:%M')} #{hash[/^.{7}/]} \e[32m#{name}\e[m #{desc} \e[31m#{author}\e[m"
+}
+
+

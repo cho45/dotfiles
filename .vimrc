@@ -144,7 +144,36 @@ map <silent> sP :call YanktmpPaste_P()<CR>
 nmap <silent> sr :redraw!<CR>
 
 nmap <silent> eo :e %:h<CR>
-nmap <silent> eg :e git:HEAD^:%<CR>
+" nmap <silent> eg :e git:HEAD^:%<CR>
+nmap <silent> eg :call <SID>git_prev_rev()<CR>
+
+function! s:git_prev_rev()
+	let path = expand('%')
+	let commit = "HEAD"
+
+	let l = matchlist(path, 'git:\([^:]\+\):\([^:]\+\)')
+	if len(l) > 0
+		let commit = l[1]
+		let path   = l[2]
+	endif
+
+	let output = system(printf("git log --pretty=format:'%%h %%s' HEAD~1000..%s -- %s",
+	\                          shellescape(commit),
+	\                          shellescape(path)))
+
+	if v:shell_error != 0
+		echoerr 'git ls-tree failed with the following reason:'
+		echoerr output
+		return
+	endif
+
+	let commits = split(output, "\n")
+	let prev    = commits[1]
+	let line    = split(prev, ' ', 2)
+
+	silent exec ":e git:" . line[0] . ":" . path
+	echo line[1]
+endfunction
 
 " cmode
 cmap <ESC>h <Left>
@@ -328,5 +357,11 @@ iabbr slef self
 iabbr sefl self
 iabbr tihs this
 iabbr thsi this
+iabbr crete create
 iabbr funciton function
 
+function! EditRRGGBBbyHSV(hsv, delta)
+	let a = 123
+	let b = "456"
+	" do something ...
+endfunction

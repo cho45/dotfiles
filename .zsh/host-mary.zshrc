@@ -11,6 +11,7 @@ alias -g CP="| pbcopy"
 
 alias port="port -v"
 alias ql='qlmanage -p "$@" >& /dev/null'
+alias lock='open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app'
 
 #alias mysql=/usr/local/mysql/bin/mysql
 #alias mysqladmin=/usr/local/mysql/bin/mysqladmin

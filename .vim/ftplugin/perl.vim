@@ -28,6 +28,7 @@ setlocal  shiftwidth=4
 "            one keyword
 " 
 setlocal iskeyword+=:
+setlocal iskeyword-=-
 "
 " ---------- Perl dictionary -------------------------------------------------
 " This will enable keyword completion for Perl

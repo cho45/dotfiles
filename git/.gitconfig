@@ -4,6 +4,7 @@
 
 [alias]
 	psuh    = push
+	puhs    = push
 	lop     = log -p
 	st      = status
 	di      = diff
@@ -52,7 +53,6 @@
 
 [github]
 	user = cho45
-	token = 0e6390d1d35c2eb2242fac895a028c91
 
 [push]
 	default = current
