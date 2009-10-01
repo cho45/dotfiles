@@ -144,8 +144,9 @@ map <silent> sP :call YanktmpPaste_P()<CR>
 nmap <silent> sr :redraw!<CR>
 
 nmap <silent> eo :e %:h<CR>
+
 " nmap <silent> eg :e git:HEAD^:%<CR>
-nmap <silent> eg :call <SID>git_prev_rev()<CR>
+nnoremap <silent> eg :<C-u>call <SID>git_prev_rev()<CR>
 
 function! s:git_prev_rev()
 	let path = expand('%')
@@ -157,22 +158,25 @@ function! s:git_prev_rev()
 		let path   = l[2]
 	endif
 
-	let output = system(printf("git log --pretty=format:'%%h %%s' HEAD~1000..%s -- %s",
+	let output = system(printf("git log -n 2 --pretty=format:'%%h %%s' HEAD~1000..%s -- %s",
 	\                          shellescape(commit),
 	\                          shellescape(path)))
 
 	if v:shell_error != 0
-		echoerr 'git ls-tree failed with the following reason:'
+		echoerr 'git log failed with the following reason:'
 		echoerr output
 		return
 	endif
 
 	let commits = split(output, "\n")
 	let prev    = commits[1]
-	let line    = split(prev, ' ', 2)
+	let [commit_id, subject] = matchlist(prev, '^\(\S*\)\s\(.*\)$')[1:2]
 
-	silent exec ":e git:" . line[0] . ":" . path
-	echo line[1]
+	let cursor = getpos(".")
+	silent edit `=printf('git:%s:%s', commit_id, path)`
+	call setpos('.', cursor)
+
+	echo subject
 endfunction
 
 " cmode
@@ -365,3 +369,14 @@ function! EditRRGGBBbyHSV(hsv, delta)
 	let b = "456"
 	" do something ...
 endfunction
+
+
+augroup BinaryXXD
+	autocmd!
+	autocmd BufReadPre  *.bin let &binary =1
+	autocmd BufReadPost * if &binary | silent %!xxd -g 1
+	autocmd BufReadPost * set ft=xxd | endif
+	autocmd BufWritePre * if &binary | %!xxd -r | endif
+	autocmd BufWritePost * if &binary | silent %!xxd -g 1
+	autocmd BufWritePost * set nomod | endif
+augroup END
