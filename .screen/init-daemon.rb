@@ -17,11 +17,11 @@ cd File.expand_path("~")
 
 
 cd File.expand_path("~")
-cd "coderepos/lang/perl/mobirc/trunk"
+cd "app/mobirc"
 system("screen", "-t", "mobirc", "zsh", "-c", "DEBUG=1 ./mobirc")
 
 cd File.expand_path("~")
-cd "coderepos/lang/ruby"
+cd "~/project/net-irc"
 system("screen")
 
 exec("irssi") # このプロセス window:0 は irssi に
