@@ -138,13 +138,9 @@ then
 else
 	alias ls='ls -F --color'
 fi
-alias ll='ls -l'
 alias lm='ls -altrh'
 alias ps='ps aux'
-alias g='git'
 
-alias mvi='mv -i'
-alias cpi='cp -i'
 alias ..='cd ..'
 
 alias wget='noglob wget --no-check-certificate'
@@ -166,7 +162,7 @@ bindkey "^F" edit-command-line
 # abbr
 typeset -A abbreviations
 abbreviations=(
-	"L"    "| $PAGER"
+	"L"    "| \$PAGER"
 	"G"    "| grep"
 	"CC"    "lib/*/Controller/" # Catalyst Controller
 	"CS"    "lib/*/Schema/"     # Catalyst Schema
@@ -174,6 +170,7 @@ abbreviations=(
 	"CV"    "lib/*/View/"       # Catalyst View
 	"CM"    "lib/*/Model/"      # Catalyst Model
 
+	"p"     "$HOME/project/"
 	"H"     "$HOME/project/Hatena-"
 
 	"HE"    "lib/**/Engine/"
@@ -202,6 +199,7 @@ magic-abbrev-expand-and-insert () {
 	magic-abbrev-expand
 	zle self-insert
 }
+
 magic-abbrev-expand-and-insert-complete () {
 	magic-abbrev-expand
 	zle self-insert

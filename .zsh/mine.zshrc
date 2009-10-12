@@ -16,10 +16,8 @@ PROMPT_CWD=" %{[33m%}%~%{[m%}"
 PROMPT_CMD="%{[32m%} / _ / X <%{[m%}%{[m%} "
 # precmd で設定される
 PROMPT_CWD_ADD=""
-PROMPT_CMD_ADD=""
 
 alias svn='svnwrapper.rb'
-alias sketch='cd ~/sketch/'
 alias b='todo.pl editdump'
 
 # for screen

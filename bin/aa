@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+require 'open-uri'
+require 'uri'
+puts open(%{http://tinyurl.com/api-create.php?url=data:text/html,#{URI.escape(<<EOS)}}).read
+<pre style='font-family:"IPA モナー Pゴシック"'>#{ARGF.read}</pre>
+EOS
