@@ -57,3 +57,5 @@
 [push]
 	default = current
 
+[branch]
+	autosetuprebase = always
