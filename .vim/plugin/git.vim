@@ -183,7 +183,7 @@ endfunction
 
 " Show revision and author for each line.
 function! GitBlame()
-    let git_output = s:SystemGit('blame -- ' . expand('%'))
+    let git_output = s:SystemGit('blame -w -- ' . expand('%'))
     if !strlen(git_output)
         echo "No output from git command"
         return
