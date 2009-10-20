@@ -115,6 +115,10 @@ bindkey '^X^Z' predict-on
 bindkey '^Z' predict-off
 zstyle ':predict' verbose true
 
+# git の補完うざいし……
+compdef -d _git
+compdef -d git
+
 # プロンプトの設定。
 # 終了ステータスが 0 でなければ終了ステータスを表示する。
 # 自分の環境の場合は mine.zshrc で上書きされる。
