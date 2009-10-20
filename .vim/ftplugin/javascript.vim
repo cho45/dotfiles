@@ -5,7 +5,7 @@ let b:surround_84  = "try {\r} catch (e) { alert(e) }\n"
 
 setlocal nocindent
 
-iabbr my var
-iabbr sub function
-iabbr def function
+iabbr <buffer> my var
+iabbr <buffer> sub function
+iabbr <buffer> def function
 
