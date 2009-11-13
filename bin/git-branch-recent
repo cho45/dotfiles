@@ -12,11 +12,13 @@ branches = branches.map {|name, hash, desc|
 	time
 }.last(10)
 
+remote_master = nil
 rtime_width = name_width = author_width = 0
-branches.each do |name,_,_,_,author,rtime|
+branches.each do |name,hash,_,_,author,rtime|
 	name_width   = name.size   if name.size   > name_width
 	author_width = author.size if author.size > author_width
 	rtime_width  = rtime.size  if rtime.size  > rtime_width
+	remote_master = hash if name == 'origin/master'
 end
 
 branches.each {|name, hash, desc, time, author, rtime|
@@ -27,7 +29,7 @@ branches.each {|name, hash, desc, time, author, rtime|
 		author,
 		desc
 	]
-	puts (name == 'origin/HEAD') ? "\e[7m#{out}\e[m" : out
+	puts (hash == remote_master) ? "\e[7m#{out}\e[m" : out
 }
 
 
