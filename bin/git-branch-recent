@@ -20,13 +20,14 @@ branches.each do |name,_,_,_,author,rtime|
 end
 
 branches.each {|name, hash, desc, time, author, rtime|
-	puts "\e[32m% -#{name_width}s\e[m % #{rtime_width}s %s \e[31m% -#{author_width}s\e[m %s" % [
+	out = "\e[32m% -#{name_width}s\e[39m % #{rtime_width}s %s \e[31m% -#{author_width}s\e[39m %s" % [
 		name,
 		rtime,
 		hash[/^.{7}/],
 		author,
 		desc
 	]
+	puts (name == 'origin/HEAD') ? "\e[7m#{out}\e[m" : out
 }
 
 
