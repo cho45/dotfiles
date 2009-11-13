@@ -118,7 +118,7 @@ function git () {
 	else
 		if [[ $1 == "" ]]; then
 			# git ってだけうったときは status 表示
-			cat =(command git --no-pager branch -a --verbose --color) \
+			cat =(command git --no-pager branch-recent) \
 			    =(command git --no-pager diff --stat --color) \
 			    =(command git --no-pager status) \
 			    | $PAGER
