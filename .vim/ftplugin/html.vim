@@ -14,6 +14,9 @@ function! s:AutoReloadHTML(...)
 	silent exe "!autotesthtml.rb > /dev/null 2>&1 &"
 endfunction
 
-set dictionary=~/.vim/dict/html.dict
-set dictionary+=~/.vim/dict/css.dict
-set iskeyword+=-,:
+setlocal dictionary=~/.vim/dict/html.dict
+setlocal dictionary+=~/.vim/dict/css.dict
+setlocal iskeyword+=-,:
+
+setlocal path+=templates
+setlocal includeexpr=substitute(v:fname,'^\\/','','')

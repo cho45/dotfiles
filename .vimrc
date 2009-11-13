@@ -380,3 +380,7 @@ augroup BinaryXXD
 	autocmd BufWritePost * if &binary | silent %!xxd -g 1
 	autocmd BufWritePost * set nomod | endif
 augroup END
+
+autocmd BufWritePost */debuglet.js silent! execute '!ruby /Users/cho45/bin/debuglet.rb %'
+autocmd BufNewFile */debuglet.js silent! execute 'r!ruby /Users/cho45/bin/debuglet.rb'
+
