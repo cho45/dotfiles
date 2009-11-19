@@ -73,15 +73,15 @@ precmd () {
 
 	if [[ ${DYLD_INSERT_LIBRARIES:#libtsocks} != "" ]]; then
 		local proxy=$(command ps -ocommand= | grep "^ssh .*\-D *8081" | awk '{ print $NF }')
-		PROMPT_CMD_ADD="$PROMPT_CMD_ADD [35m%}[${proxy:-[31mDisconnected[35m}]%{[m%}:$cmd[1]"
+		PROMPT_CMD_ADD="$PROMPT_CMD_ADD [35m%}[${proxy:-[31mDisconnected[35m}]%{[m%}=$cmd[1]"
 
 		# どこの window が socks 経由になっているかわかったほうがいいので
-		echo -n "k:S:$prev\\"
+		echo -n "k:=:$prev\\"
 	fi
 
 	# update prompt
-	PROMPT="$PROMPT_EXIT$PROMPT_CWD$PROMPT_CWD_ADD
-$PROMPT_CMD_ADD$PROMPT_CMD"
+	PROMPT="$PROMPT_EXIT$PROMPT_CMD_ADD$PROMPT_CWD$PROMPT_CWD_ADD
+$PROMPT_CMD"
 	RPROMPT='%{[32m%}[%n@%m]%{[m%}'
 	PROMPT_CWD_ADD=""
 	PROMPT_CMD_ADD=""
@@ -169,4 +169,17 @@ tty > /tmp/screen-tty-$WINDOW
 h="${HOST%%.*}"
 if [[ -f "$HOME/.zsh/host-$h.zshrc" ]]; then
 	source "$HOME/.zsh/host-$h.zshrc"
+fi
+
+# screen 復帰
+if [[ -z "$WINDOW" ]]; then
+	SCREENS=$(screen -ls | grep -e '^	' | sed 's/^	\([^	]*\)	.*/\1/')
+	if [[ "$SCREENS" != "" ]]; then
+		echo -n "Attach screen?: [Yn]"
+		read -s -k 1 REPLY
+
+		if [[ $REPLY != "n" ]]; then
+			screen -d -R -S main
+		fi
+	fi
 fi

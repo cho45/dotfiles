@@ -1,9 +1,11 @@
-# vim:ft=zsh
+# vim:ft=zsh:
 echo "Mary!!"
 
 export LANG=ja_JP.UTF-8
 
-screen -X eval "escape ^yy"
+if [[ -n $WINDOW ]]; then
+	screen -X eval "escape ^yy"
+fi
 
 # use utf8 with pbcopy/pbpaste
 export __CF_USER_TEXT_ENCODING='0x1F5:0x08000100:14'
