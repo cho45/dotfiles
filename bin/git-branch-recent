@@ -1,35 +1,48 @@
 #!/usr/bin/env ruby
 
-branches = `git branch -a --no-abbrev --verbose`
-branches.gsub!(/^\*?\s+/, "")
+branches = `git branch -a`.gsub!(/^\*?\s+/, "").split(/\s+/)
 
-branches = branches.split(/\n/).map {|i| i.split(/\s+/, 3) }
+details = []
+Ref = Struct.new(:hash, :name, :time, :rtime, :author, :subject)
 
-branches = branches.map {|name, hash, desc|
-	time, author, rtime = *`git log -1 --pretty=format:'%ct\\0%an\\0%cr' #{hash}`.split(/\\0/)
-	[name, hash, desc, Time.at(time.to_i), author, rtime]
-}.sort_by { |_, _, _, time|
-	time
-}.last(10)
+IO.popen("-", "r+") do |io|
+	if io.nil?
+		exec "git", "show", "--pretty=format:%H%d%ct%cr%an%s", *branches
+	else
+		while l = io.gets
+			next unless l =~ /^[a-z0-9]{40}/
+			hash, refs, time, rtime, author, subject = * l.chomp.split(//)
+			refs.gsub!(/^\s*\(|\)\s*$/, '')
 
-remote_master = nil
-rtime_width = name_width = author_width = 0
-branches.each do |name,hash,_,_,author,rtime|
-	name_width   = name.size   if name.size   > name_width
-	author_width = author.size if author.size > author_width
-	rtime_width  = rtime.size  if rtime.size  > rtime_width
-	remote_master = hash if name == 'origin/master'
+			refs.split(/\s*,\s*/).each do |ref|
+				ref.gsub!(%r{refs/(remotes|heads)/}, '')
+				details.push Ref.new(hash, ref, time.to_i, rtime, author, subject)
+			end
+		end
+	end
 end
 
-branches.each {|name, hash, desc, time, author, rtime|
-	out = "\e[32m% -#{name_width}s\e[39m % #{rtime_width}s %s \e[31m% -#{author_width}s\e[39m %s" % [
-		name,
-		rtime,
-		hash[/^.{7}/],
-		author,
-		desc
-	]
-	puts (hash == remote_master) ? "\e[7m#{out}\e[m" : out
+details = details.sort_by {|ref| ref.time }.last(10)
+remote_master = nil
+rtime_width = name_width = author_width = 0
+details.each do |ref|
+	name_width    = ref.name.size   if ref.name.size   > name_width
+	author_width  = ref.author.size if ref.author.size > author_width
+	rtime_width   = ref.rtime.size  if ref.rtime.size  > rtime_width
+	remote_master = ref.hash        if ref.name == 'origin/master'
+end
+
+details.each {|ref|
+	ref.instance_eval {
+		out = "\e[32m% -#{name_width}s\e[39m % #{rtime_width}s %s \e[31m% -#{author_width}s\e[39m %s" % [
+			name,
+			rtime,
+			hash[/^.{7}/],
+			author,
+			subject
+		]
+		puts (hash == remote_master) ? "\e[7m#{out}\e[m" : out
+	}
 }
 
 
