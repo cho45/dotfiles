@@ -32,6 +32,11 @@ details.each do |ref|
 	remote_master = ref.hash        if ref.name == 'origin/master'
 end
 
+puts "There are %d branches. (remote:%d, local:%d)" % [
+	branches.size,
+	branches.grep(/\//).size,
+	branches.size - branches.grep(/\//).size
+]
 details.each {|ref|
 	ref.instance_eval {
 		out = "\e[32m% -#{name_width}s\e[39m % #{rtime_width}s %s \e[31m% -#{author_width}s\e[39m %s" % [
