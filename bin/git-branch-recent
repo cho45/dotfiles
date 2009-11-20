@@ -7,11 +7,11 @@ Ref = Struct.new(:hash, :name, :time, :rtime, :author, :subject)
 
 IO.popen("-", "r+") do |io|
 	if io.nil?
-		exec "git", "show", "--pretty=format:%H%d%ct%cr%an%s", *branches
+		exec "git", "show", "--pretty=format:%H\t%d\t%ct\t%cr\t%an\t%s", *branches
 	else
 		while l = io.gets
 			next unless l =~ /^[a-z0-9]{40}/
-			hash, refs, time, rtime, author, subject = * l.chomp.split(//)
+			hash, refs, time, rtime, author, subject = * l.chomp.split(/\t/)
 			refs.gsub!(/^\s*\(|\)\s*$/, '')
 
 			refs.split(/\s*,\s*/).each do |ref|
