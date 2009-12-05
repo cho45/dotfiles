@@ -217,30 +217,22 @@ function! s:good_width()
 	endif
 endfunction
 
+let g:fuf_modesDisable = ['mrucmd']
+let g:fuf_file_exclude = '\v\~$|\.(o|exe|bak|swp|gif|jpg|png)$|(^|[/\\])\.(hg|git|bzr)($|[/\\])'
+let g:fuf_mrufile_exclude = '\v\~$|\.bak$|\.swp|\.howm$|\.(gif|jpg|png)$'
+let g:fuf_mrufile_maxItem = 10000
+let g:fuf_enumeratingLimit = 20
+let g:fuf_keyPreview = '<C-]>'
+let g:fuf_previewHeight = 5
 
-let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{}, 'Dir':{}, 'MruFile':{}, 'MruCmd':{}, 'Bookmark':{}, 'Tag':{}, 'TaggedFile':{}}
-let g:FuzzyFinderOptions.Base.ignore_case = 1
-let g:FuzzyFinderOptions.File.abbrev_map  = {
-      \   '\C^VP' : [
-      \     '$VIMRUNTIME/plugin/',
-      \     '~/.vim/plugin/',
-      \     '$VIM/.vim/plugin/',
-      \     '$VIM/vimfiles/plugin/',
-      \   ],
-      \   '\C^VC' : [
-      \     '$VIMRUNTIME/colors/',
-      \     '~/.vim/colors/',
-      \     '$VIM/.vim/colors/',
-      \     '$VIM/vimfiles/colors/',
-      \   ],
-      \ }
-let g:FuzzyFinderOptions.MruFile.max_item = 5000
-
-nmap bg :FuzzyFinderBuffer<CR>
-nmap bG :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
-nmap gb :FuzzyFinderFile<CR>
-nmap br :FuzzyFinderMruFile<CR>
-nnoremap <silent> <C-]> :FuzzyFinderTag! <C-r>=expand('<cword>')<CR><CR> 
+nmap bg :FufBuffer<CR>
+nmap bG :FufFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
+"nmap gb :FufFile<CR>
+nmap gb :FufFile **/<CR>
+nmap br :FufMruFile<CR>
+nmap bq :FufQuickfix<CR>
+nmap bl :FufLine<CR>
+nnoremap <silent> <C-]> :FufTag! <C-r>=expand('<cword>')<CR><CR> 
 
 nmap <unique> g/ :exec ':vimgrep /' . getreg('/') . '/j %\|cwin'<CR>
 nmap ga :silent exec ':Ack ' . substitute(getreg('/'), '\v\\\<(.*)\\\>', "\\1", '')<CR>
