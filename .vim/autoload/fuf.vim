@@ -766,11 +766,11 @@ let s:bufNrFuf = -1
 "
 function s:openFufBuffer()
   if !bufexists(s:bufNrFuf)
-    topleft 1new
+    botright 1new
     silent file `='[fuf]'`
     let s:bufNrFuf = bufnr('%')
   elseif bufwinnr(s:bufNrFuf) == -1
-    topleft 1split
+    botright 1split
     execute 'silent ' . s:bufNrFuf . 'buffer'
     delete _
   elseif bufwinnr(s:bufNrFuf) != bufwinnr('%')
