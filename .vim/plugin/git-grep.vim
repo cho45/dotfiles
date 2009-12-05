@@ -9,7 +9,8 @@ function! s:GitGrep(...)
 	let args += a:000
 
 	cgetexpr system(join(args, ' '))
-	silent exec 'cwin'
+	"silent exec 'cwin'
+	exec 'FufQuickfix'
 endfunction
 
 
