@@ -69,7 +69,9 @@ precmd () {
 	echo -n "k:$prev\\"
 
 	# for git
-	update-git-status
+	if git rev-parse --is-inside-work-tree 1>/dev/null 2>&1 ; then
+		update-git-status
+	fi
 
 	if [[ ${DYLD_INSERT_LIBRARIES:#libtsocks} != "" ]]; then
 		local proxy=$(command ps -ocommand= | grep "^ssh .*\-D *8081" | awk '{ print $NF }')
@@ -94,9 +96,41 @@ chpwd () {
 
 # ~ (master) のように git レポジトリ以下では git のブランチを表示する
 update-git-status () {
-	local ret
-	ret=$(git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
-	if [ "$ret" != "" ]; then
+	local gitdir=$(git rev-parse --git-dir)
+	local ret=''
+
+	if   [[ -d "$gitdir/rebase-apply" ]]; then
+		local next=$(< $gitdir/rebase-apply/next)
+		local last=$(< $gitdir/rebase-apply/last)
+		if [[ -n $next && -n $last ]]; then
+			local curr=$[ $next - 1]
+		fi
+		ret="rebase[$curr/$last]"
+	elif [[ -d "$gitdir/rebase-merge" ]]; then
+		if [[ -f "$gitdir/rebase-merge/interactive" ]]; then
+			local left=$(grep '^[pes]' $git_dir/rebase-merge/git-rebase-todo | wc -l)
+			if [[ -n $left ]]; then
+				left=$[ $left + 1 ]
+			fi
+			ret="rebase[i, $left left]"
+		else
+			ret="rebase[m]"
+		fi
+	elif [[ -f "$gitdir/MERGE_HEAD" ]]; then
+		ret="merge[]"
+	elif [[ -f "$gitdir/BISECT_START" ]]; then
+		local start=$(< $gitdir/BISECT_START)
+		local bad=$(git rev-parse --verify refs/bisect/bad)
+		local good="$(git for-each-ref --format='^%(objectname)' "refs/bisect/good-*" | tr '\012' ' ')"
+		local skip=$(git for-each-ref --format='%(objectname)' "refs/bisect/skip-*" | tr '\012' ' ')
+		eval "$(git rev-list --bisect-vars "$good" "$bad" -- $(< $gitdir/BISECT_NAMES))"
+
+		ret="bisect[$start, $bisect_nr left]"
+	else
+		ret=$(git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
+	fi
+
+	if [[ -n $ret ]]; then
 		PROMPT_CWD_ADD="$PROMPT_CWD_ADD [32m%}($ret)%{[m%}"
 	fi
 }
@@ -119,7 +153,7 @@ function git () {
 		if [[ $1 == "" ]]; then
 			# git ってだけうったときは status 表示
 			cat =(command git --no-pager branch-recent) \
-			    =(command git --no-pager diff --stat --color) \
+			    =(command git --no-pager diff --stat --color-words) \
 			    =(command git --no-pager status) \
 			    | $PAGER
 		elif [[ $1 == "log" ]]; then

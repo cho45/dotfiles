@@ -206,6 +206,10 @@ noremap <F8> gg=G``
 nmap tw :exe "normal! i" . strftime("%Y-%m-%d\T%H:%M:%S+09:00")<CR>
 
 nnoremap <C-w><C-w> <C-w><C-w>:call <SID>good_width()<CR>
+nnoremap <C-w>h <C-w>h:call <SID>good_width()<CR>
+nnoremap <C-w>j <C-w>j:call <SID>good_width()<CR>
+nnoremap <C-w>k <C-w>k:call <SID>good_width()<CR>
+nnoremap <C-w>l <C-w>l:call <SID>good_width()<CR>
 
 function! s:good_width()
 	if winwidth(0) < 100

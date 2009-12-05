@@ -283,6 +283,12 @@ function cdcat () {
 	cdf "Makefile.PL"
 }
 
+function find_dsn () {
+	cdf "Capfile"
+	cat **/Config.pm | grep dbi:mysql:dbname=$1
+	cd -
+}
+
 function snatch () {
 	gdb -p $1 -batch -n -x =( echo -e "p (int)open(\"/proc/$$/fd/1\", 1)\np (int)dup2(\$1, 1)\np (int)dup2(\$1, 2)" )
 }
