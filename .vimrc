@@ -229,6 +229,7 @@ nmap bg :FufBuffer<CR>
 nmap bG :FufFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
 "nmap gb :FufFile<CR>
 nmap gb :FufFile **/<CR>
+nmap gg :call fuf#givenfile#launch('', 0, 'git>', split(system('git ls-files --exclude=".{gif,jpg,png}"'), '\n'))<CR>
 nmap br :FufMruFile<CR>
 nmap bq :FufQuickfix<CR>
 nmap bl :FufLine<CR>
