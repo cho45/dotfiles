@@ -1,4 +1,15 @@
 #!/usr/bin/env ruby
+=begin
+
+eg.
+
+# run worker proccess
+$ worker.rb =fetch-video.pl /tmp/video
+
+# queue proccess
+$ echo http://www.nicovideo.jp/watch/nm5253338 >> /tmp/video
+
+=end
 
 require 'fileutils'
 
