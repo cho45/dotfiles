@@ -1,0 +1,1 @@
+/home/cho45/coderepos/lang/perl/irssi/scripts/all.pl
