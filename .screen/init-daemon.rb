@@ -21,7 +21,7 @@ cd "app/mobirc"
 system("screen", "-t", "mobirc", "zsh", "-c", "DEBUG=1 ./mobirc")
 
 cd File.expand_path("~")
-cd "~/project/net-irc"
+cd "project/net-irc"
 system("screen")
 
 exec("irssi") # このプロセス window:0 は irssi に
