@@ -13,7 +13,7 @@ PROMPT_EXIT="%(?..exit %?
 )
 "
 PROMPT_CWD=" %{[33m%}%~%{[m%}"
-PROMPT_CMD="%{[32m%} / _ / X <%{[m%}%{[m%} "
+PROMPT_CMD="%{[32m%} | q ド _ リ|$ <%{[m%}%{[m%} "
 # precmd で設定される
 PROMPT_CWD_ADD=""
 
