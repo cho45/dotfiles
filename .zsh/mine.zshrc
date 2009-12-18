@@ -1,4 +1,4 @@
-# vim:set ft=zsh:
+# vim:set ft=zsh
 
 export GISTY_DIR="$HOME/sketch/gists"
 export PERL_AUTOINSTALL="--defaultdeps"
@@ -69,7 +69,7 @@ precmd () {
 	echo -n "k:$prev\\"
 
 	# for git
-	if git rev-parse --is-inside-work-tree 1>/dev/null 2>&1 ; then
+	if command git rev-parse --is-inside-work-tree 1>/dev/null 2>&1 ; then
 		update-git-status
 	fi
 
