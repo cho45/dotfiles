@@ -50,6 +50,8 @@ link ".vim", "~/.vim"
 link ".zshrc", "~/.zshrc"
 link ".zsh", "~/.zsh"
 
+link ".eclimrc", "~/.eclimrc"
+
 link ".irssi/scripts", "~/.irssi/scripts"
 
 link ".bashrc", "~/.bashrc"
