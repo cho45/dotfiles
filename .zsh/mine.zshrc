@@ -193,6 +193,24 @@ function socks () {
 	fi
 }
 
+function ssh () {
+	local COMMAND=${0##*/}
+	local PATH=/opt/local/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+
+	ssh-add -l > /dev/null 2>&1
+
+	if [ $? -ne 0 ]; then
+		keychain --timeout 10 $HOME/.ssh/id_dsa
+		if [ $? -eq 0 ]; then
+			source $HOME/.keychain/*-sh
+		fi
+	else
+		source $HOME/.keychain/*-sh
+	fi
+
+	/usr/bin/env $COMMAND ${@+"$@"}
+}
+
 # screen cd
 source $HOME/.zsh/cdd
 
