@@ -1,0 +1,3 @@
+new Runnable() { public void run () {
+	${cursor}
+} }

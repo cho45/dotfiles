@@ -1,0 +1,3 @@
+new Thread() { public void run () {
+	${cursor}
+} }.start();
