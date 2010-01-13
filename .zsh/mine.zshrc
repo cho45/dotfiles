@@ -96,7 +96,7 @@ chpwd () {
 
 # ~ (master) のように git レポジトリ以下では git のブランチを表示する
 update-git-status () {
-	local gitdir=$(git rev-parse --git-dir)
+	local gitdir=$(command git rev-parse --git-dir)
 	local ret=''
 
 	if   [[ -d "$gitdir/rebase-apply" ]]; then
@@ -120,14 +120,14 @@ update-git-status () {
 		ret="merge[]"
 	elif [[ -f "$gitdir/BISECT_START" ]]; then
 		local start=$(< $gitdir/BISECT_START)
-		local bad=$(git rev-parse --verify refs/bisect/bad)
-		local good="$(git for-each-ref --format='^%(objectname)' "refs/bisect/good-*" | tr '\012' ' ')"
-		local skip=$(git for-each-ref --format='%(objectname)' "refs/bisect/skip-*" | tr '\012' ' ')
-		eval "$(git rev-list --bisect-vars "$good" "$bad" -- $(< $gitdir/BISECT_NAMES))"
+		local bad=$(command git rev-parse --verify refs/bisect/bad)
+		local good="$(command git for-each-ref --format='^%(objectname)' "refs/bisect/good-*" | tr '\012' ' ')"
+		local skip=$(command git for-each-ref --format='%(objectname)' "refs/bisect/skip-*" | tr '\012' ' ')
+		eval "$(command git rev-list --bisect-vars "$good" "$bad" -- $(< $gitdir/BISECT_NAMES))"
 
 		ret="bisect[$start, $bisect_nr left]"
 	else
-		ret=$(git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
+		ret=$(command git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
 	fi
 
 	if [[ -n $ret ]]; then
@@ -191,24 +191,6 @@ function socks () {
 	else
 		. tsocks off
 	fi
-}
-
-function ssh () {
-	local COMMAND=${0##*/}
-	local PATH=/opt/local/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
-
-	ssh-add -l > /dev/null 2>&1
-
-	if [ $? -ne 0 ]; then
-		keychain --timeout 10 $HOME/.ssh/id_dsa
-		if [ $? -eq 0 ]; then
-			source $HOME/.keychain/*-sh
-		fi
-	else
-		source $HOME/.keychain/*-sh
-	fi
-
-	/usr/bin/env $COMMAND ${@+"$@"}
 }
 
 # screen cd

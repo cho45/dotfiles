@@ -1,1 +1,2 @@
+@SuppressWarnings("unused")
 private static final String TAG = "${cursor}";
