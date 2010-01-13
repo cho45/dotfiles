@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-branches = `git branch -a`.gsub!(/^\*?\s+/, "").split(/\s+/)
+branches = `git branch -a`.gsub!(/^\*?\s+|\(no branch\)\s*/, "").split(/\n/)
 
 details = []
 Ref = Struct.new(:hash, :name, :time, :rtime, :author, :subject)

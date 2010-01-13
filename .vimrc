@@ -220,7 +220,7 @@ endfunction
 let g:fuf_modesDisable = ['mrucmd']
 let g:fuf_file_exclude = '\v\~$|\.(o|exe|bak|swp|gif|jpg|png)$|(^|[/\\])\.(hg|git|bzr)($|[/\\])'
 let g:fuf_mrufile_exclude = '\v\~$|\.bak$|\.swp|\.howm$|\.(gif|jpg|png)$'
-let g:fuf_mrufile_maxItem = 10000
+let g:fuf_mrufile_maxItem = 500
 let g:fuf_enumeratingLimit = 20
 let g:fuf_keyPreview = '<C-]>'
 let g:fuf_previewHeight = 0
@@ -316,6 +316,28 @@ set lazyredraw
 inoremap <expr> <CR> pumvisible() ? "\<C-Y>\<CR>" : "\<CR>"
 
 let g:AutoComplPop_CompleteOption = '.,w,b,k'
+let g:AutoComplPop_Behavior = {
+      \   'java' : [
+      \     {
+      \       'command'  : "\<C-n>",
+      \       'pattern'  : '\k\k$',
+      \       'excluded' : '^$',
+      \       'repeat'   : 0,
+      \     },
+      \     {
+      \       'command'  : "\<C-x>\<C-u>",
+      \       'pattern'  : '\k\k$',
+      \       'excluded' : '^$',
+      \       'repeat'   : 0,
+      \     },
+      \     {
+      \       'command'  : "\<C-x>\<C-f>",
+      \       'pattern'  : (has('win32') || has('win64') ? '\f[/\\]\f*$' : '\f[/]\f*$'),
+      \       'excluded' : '[*/\\][/\\]\f*$\|[^[:print:]]\f*$',
+      \       'repeat'   : 1,
+      \     }
+      \   ]
+      \ }
 
 autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala

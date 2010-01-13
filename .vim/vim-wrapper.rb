@@ -33,8 +33,8 @@ struct block0
 
 require "pathname"
 
-#VIM = "/usr/local/vim7/bin/vim"
-VIM = "/usr/bin/vim"
+VIM = "/usr/local/vim7/bin/vim"
+#VIM = "/usr/bin/vim"
 
 begin
 	swap = Pathname.new("~/.vimrc").expand_path.read[/set directory=(.+)/, 1]

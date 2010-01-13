@@ -1,4 +1,4 @@
-# vim:set ft=zsh:
+# vim:set ft=zsh
 
 export GISTY_DIR="$HOME/sketch/gists"
 export PERL_AUTOINSTALL="--defaultdeps"
@@ -13,7 +13,7 @@ PROMPT_EXIT="%(?..exit %?
 )
 "
 PROMPT_CWD=" %{[33m%}%~%{[m%}"
-PROMPT_CMD="%{[32m%} / _ / X <%{[m%}%{[m%} "
+PROMPT_CMD="%{[32m%} | q ド _ リ|$ <%{[m%}%{[m%} "
 # precmd で設定される
 PROMPT_CWD_ADD=""
 
@@ -69,7 +69,7 @@ precmd () {
 	echo -n "k:$prev\\"
 
 	# for git
-	if git rev-parse --is-inside-work-tree 1>/dev/null 2>&1 ; then
+	if command git rev-parse --is-inside-work-tree 1>/dev/null 2>&1 ; then
 		update-git-status
 	fi
 
@@ -96,7 +96,7 @@ chpwd () {
 
 # ~ (master) のように git レポジトリ以下では git のブランチを表示する
 update-git-status () {
-	local gitdir=$(git rev-parse --git-dir)
+	local gitdir=$(command git rev-parse --git-dir)
 	local ret=''
 
 	if   [[ -d "$gitdir/rebase-apply" ]]; then
@@ -120,14 +120,14 @@ update-git-status () {
 		ret="merge[]"
 	elif [[ -f "$gitdir/BISECT_START" ]]; then
 		local start=$(< $gitdir/BISECT_START)
-		local bad=$(git rev-parse --verify refs/bisect/bad)
-		local good="$(git for-each-ref --format='^%(objectname)' "refs/bisect/good-*" | tr '\012' ' ')"
-		local skip=$(git for-each-ref --format='%(objectname)' "refs/bisect/skip-*" | tr '\012' ' ')
-		eval "$(git rev-list --bisect-vars "$good" "$bad" -- $(< $gitdir/BISECT_NAMES))"
+		local bad=$(command git rev-parse --verify refs/bisect/bad)
+		local good="$(command git for-each-ref --format='^%(objectname)' "refs/bisect/good-*" | tr '\012' ' ')"
+		local skip=$(command git for-each-ref --format='%(objectname)' "refs/bisect/skip-*" | tr '\012' ' ')
+		eval "$(command git rev-list --bisect-vars "$good" "$bad" -- $(< $gitdir/BISECT_NAMES))"
 
 		ret="bisect[$start, $bisect_nr left]"
 	else
-		ret=$(git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
+		ret=$(command git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
 	fi
 
 	if [[ -n $ret ]]; then

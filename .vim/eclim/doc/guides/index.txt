@@ -1,0 +1,27 @@
+*guides*
+
+
+Guides
+******
+
+
+Installing, Upgrading, Troubleshooting, etc.
+============================================
+
+- Installing / Upgrading (|guides-install|)
+
+- Uninstalling (|guides-uninstall|)
+
+- Troubleshooting (|guides-troubleshoot|)
+
+- Eclim Headless Server Guide (|guides-headless|)
+
+- Multiple Workspace Guide (|guides-multi-workspace|)
+
+
+Eclim Developers
+================
+
+- Eclim Developers Guide (|guides-development|)
+
+vim:ft=eclimhelp

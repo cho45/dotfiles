@@ -10,8 +10,8 @@ export FLEX_HOME=$HOME/sdk/flex4sdk
 PATHS=(
 	$HOME/bin
 	$HOME/project/commands/bin
-	$FLEX_HOME/bin
-	$HOME/sdk/android-sdk-mac_x86-1.5_r1/tools
+	$HOME/sdk/android/tools
+	$HOME/sdk/flex/bin
 	/usr/local/ruby1.9/bin
 	/usr/local/scala/bin
 	/usr/local/vim7/bin
