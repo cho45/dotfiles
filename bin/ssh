@@ -8,7 +8,7 @@ ssh-add -l > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
 	keychain --stop all
-	keychain --timeout 10 $HOME/.ssh/id_dsa
+	keychain --timeout 30 $HOME/.ssh/id_dsa
 	if [ $? -eq 0 ]; then
 		source $HOME/.keychain/*-sh
 	fi

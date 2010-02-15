@@ -204,16 +204,3 @@ h="${HOST%%.*}"
 if [[ -f "$HOME/.zsh/host-$h.zshrc" ]]; then
 	source "$HOME/.zsh/host-$h.zshrc"
 fi
-
-# screen 復帰
-if [[ -z "$WINDOW" ]]; then
-	SCREENS=$(screen -ls | grep -e '^	' | sed 's/^	\([^	]*\)	.*/\1/')
-	if [[ "$SCREENS" != "" ]]; then
-		echo -n "Attach screen?: [Yn]"
-		read -s -k 1 REPLY
-
-		if [[ $REPLY != "n" ]]; then
-			screen -d -R -S main
-		fi
-	fi
-fi
