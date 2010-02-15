@@ -1,5 +1,25 @@
 #!/usr/bin/env ruby
 
-ssid = `/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I`[/^\s*SSID: (.+)/, 1]
-system("killall ssh")
+ENV["HOME"] = "/Users/cho45"
 
+require "pathname"
+
+@ssid = `/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I`[/^\s*SSID: (.+)/, 1]
+
+def killall_ssh
+	system("killall ssh")
+end
+
+def set_screensaver_timeout
+	plist = Pathname.glob("#{ENV["HOME"]}/Library/Preferences/ByHost/com.apple.screensaver.*.plist")[0]
+	hash  =  plist.to_s[/\.([0-9A-F-]+)\.plist/, 1]
+	name  = "ByHost/com.apple.screensaver.#{hash}"
+	if @ssid == "SNEG"
+		system("sudo -u cho45 defaults write #{name} idleTime -int 0")
+	else
+		system("sudo -u cho45 defaults write #{name} idleTime -int 180")
+	end
+end
+
+killall_ssh
+set_screensaver_timeout
