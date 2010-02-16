@@ -9,14 +9,14 @@
     <array>
       <string>/bin/sh</string>
       <string>-c</string>
-      <string>exec ~/dotfiles/scripts/wifi_hook/run</string>
+      <string>exec /Users/cho45/dotfiles/scripts/wifi_hook/run</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string>/dev/null</string><!-- <string>/tmp/error</string> -->
+    <string>/var/log/wifi_switch</string>
     <key>StandardOutPath</key>
-    <string>/dev/null</string>
+    <string>/var/log/wifi_switch</string>
     <key>WatchPaths</key>
     <array>
       <string>/Library/Preferences/SystemConfiguration/com.apple.airport.preferences.plist</string>
