@@ -7,7 +7,9 @@ Ref = Struct.new(:hash, :name, :time, :rtime, :author, :subject)
 
 IO.popen("-", "r+") do |io|
 	if io.nil?
-		exec "git", "show", "--pretty=format:%H\t%d\t%ct\t%cr\t%an\t%s", *branches
+		args = [ "show", "--pretty=format:%H\t%d\t%ct\t%cr\t%an\t%s", *branches ]
+		args << "--"
+		exec "git", *args
 	else
 		while l = io.gets
 			next unless l =~ /^[a-z0-9]{40}/
