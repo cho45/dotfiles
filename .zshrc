@@ -174,7 +174,6 @@ abbreviations=(
 	"CV"    "lib/*/View/"       # Catalyst View
 	"CM"    "lib/*/Model/"      # Catalyst Model
 
-	"p"     "$HOME/project/"
 	"H"     "$HOME/project/Hatena-"
 
 	"HE"    "lib/**/Engine/"
