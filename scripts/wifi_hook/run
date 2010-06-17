@@ -3,11 +3,26 @@
 ENV["HOME"] = "/Users/cho45"
 
 require "pathname"
+require "logger"
 
+@log  = Logger.new(STDERR)
+@log.level = Logger::DEBUG
 @ssid = `/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I`[/^\s*SSID: (.+)/, 1]
 
+def sh(command)
+	command = 'sudo -u cho45 ' + command
+	@log.info command
+	system(command)
+end
+
 def killall_ssh
-	system("killall ssh")
+	sh("killall ssh")
+end
+
+def setup_tunnel
+	unless @ssid == "SNEG"
+		sh("ssh -o PreferredAuthentications=publickey -o ControlMaster=no -S none -D8081 -L3689:localhost:3689 -R9955:localhost:9955 -N -t -x lab.lowreal.net &")
+	end
 end
 
 def set_screensaver_timeout
@@ -15,11 +30,13 @@ def set_screensaver_timeout
 	hash  =  plist.to_s[/\.([0-9A-F-]+)\.plist/, 1]
 	name  = "ByHost/com.apple.screensaver.#{hash}"
 	if @ssid == "SNEG"
-		system("sudo -u cho45 defaults write #{name} idleTime -int 0")
+		sh("defaults write #{name} idleTime -int 0")
 	else
-		system("sudo -u cho45 defaults write #{name} idleTime -int 180")
+		sh("defaults write #{name} idleTime -int 180")
 	end
 end
 
 killall_ssh
+# setup_tunnel
 set_screensaver_timeout
+

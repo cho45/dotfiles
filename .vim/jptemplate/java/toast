@@ -1,3 +1,3 @@
-mHandler.post(new Runnable() { public void run () {
+runOnUiThread(new Runnable() { public void run () {
 	Toast.makeText(${cursor}.this, "", Toast.LENGTH_LONG).show();
 } });
