@@ -25,12 +25,14 @@ export PATH=${(j.:.)PATHS}
 
 unset PS1
 
+export MYSQL_PS1="(\u@\h) [\d]> "
 export PAGER="less --quit-if-one-screen --RAW-CONTROL-CHARS"
 export LESS='-X -i -P ?f%f:(stdin).  ?lb%lb?L/%L..  [?eEOF:?pb%pb\%..]'
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
 
 export PERL5LIB=lib:$HOME/lib/perl
+export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
 bindkey -e
 bindkey -D vicmd
@@ -174,7 +176,6 @@ abbreviations=(
 	"CV"    "lib/*/View/"       # Catalyst View
 	"CM"    "lib/*/Model/"      # Catalyst Model
 
-	"p"     "$HOME/project/"
 	"H"     "$HOME/project/Hatena-"
 
 	"HE"    "lib/**/Engine/"
@@ -191,6 +192,9 @@ abbreviations=(
 	# typo
 	"lkm"  "lm"
 	"it"  "git"
+	"gitp"  "git"
+
+	"mysql" "mysql -unobody -pnobody -h"
 )
 
 magic-abbrev-expand () {

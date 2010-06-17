@@ -74,7 +74,7 @@ precmd () {
 	fi
 
 	if [[ ${DYLD_INSERT_LIBRARIES:#libtsocks} != "" ]]; then
-		local proxy=$(command ps -ocommand= | grep "^ssh .*\-D *8081" | awk '{ print $NF }')
+		local proxy=$(command ps -ocommand= | grep "^ssh .*\-D *8081" | head -n 1 | awk '{ print $NF }')
 		PROMPT_CMD_ADD="$PROMPT_CMD_ADD [35m%}[${proxy:-[31mDisconnected[35m}]%{[m%}=$cmd[1]"
 
 		# どこの window が socks 経由になっているかわかったほうがいいので

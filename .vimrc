@@ -34,6 +34,8 @@ let g:Perl_AuthorRef       = ''
 let g:Perl_Email           = 'cho45@lowreal.net'
 let g:Perl_Company         = ''
 
+let g:user_zen_expandabbr_key = '<C-E>'
+
 let g:jpTemplateKey        = '<C-B>'
 
 let g:netrw_preview        = 1
@@ -93,7 +95,14 @@ set nrformats="hex"
 
 " ステータス表示用変数
 set laststatus=2
-set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']['.&ft.']'}%=%{GitBranch()}\ %l,%c%V%8P
+set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']['.&ft.']'}\ %=%{GitBranch()}\ %l,%c%V%8P
+
+function! CharacterCount()
+	redir @c
+	silent exe "normal g\<C-g>"
+	redir END
+	return matchstr(@c, '[0-9]* of [0-9]* Chars')
+endfunction
 
 set termencoding=utf-8
 set encoding=utf-8
@@ -158,7 +167,7 @@ function! s:git_prev_rev()
 		let path   = l[2]
 	endif
 
-	let output = system(printf("git log -n 2 --pretty=format:'%%h %%s' HEAD~1000..%s -- %s",
+	let output = system(printf("git log -n 2 --pretty=format:'%%h %%s' HEAD~100..%s -- %s",
 	\                          shellescape(commit),
 	\                          shellescape(path)))
 
