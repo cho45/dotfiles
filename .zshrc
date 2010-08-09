@@ -10,6 +10,7 @@ export FLEX_HOME=$HOME/sdk/flex4sdk
 PATHS=(
 	$HOME/bin
 	$HOME/project/commands/bin
+	$HOME/sdk/play
 	$HOME/sdk/android/tools
 	$HOME/sdk/flex/bin
 	/usr/local/ruby1.9/bin
@@ -33,6 +34,7 @@ export LANG=ja_JP.UTF-8
 
 export PERL5LIB=lib:$HOME/lib/perl
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+export NYTPROF=sigexit=int,hup:trace=2:start=no
 
 bindkey -e
 bindkey -D vicmd
