@@ -32,7 +32,7 @@ struct block0
 =end
 
 require "pathname"
-
+ENV["PERL5LIB"] = ENV["PERL5LIB"].split(/:/).unshift('t/lib').join(':')
 VIM = "/usr/local/vim7/bin/vim"
 #VIM = "/usr/bin/vim"
 
@@ -40,13 +40,12 @@ begin
 	swap = Pathname.new("~/.vimrc").expand_path.read[/set directory=(.+)/, 1]
 	swap = Pathname.new(swap).expand_path
 
-
 	# not consider byte order
 
 	MAGIC = "b0"
 
 	target = Pathname.new(ARGV[0]).realpath
-	swap = "#{swap + target.basename}.swp"
+	swap   = "#{swap + target.basename}.swp"
 
 	fname, pid = File.open(swap) { |f|
 		raise "not swap" unless f.read(2) == MAGIC
@@ -68,7 +67,15 @@ begin
 
 	raise "window not found" if winnum.empty?
 
-	exec "screen", "-X", "select", winnum
+	if winnum == ENV['WINDOW']
+		warn "vim may be run on background, try fg"
+		File.open("/tmp/screen-tty", "w") {|f| f.puts "fg" }
+		system "screen", "-X", "readbuf", "/tmp/screen-tty"
+		system "screen", "-X", "paste", "."
+		exit 1
+	else
+		exec "screen", "-X", "select", winnum
+	end
 
 rescue
 	exec VIM, *ARGV
