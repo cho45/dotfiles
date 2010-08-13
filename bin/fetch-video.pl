@@ -43,6 +43,9 @@ if ($res->is_success) {
 	my $tree = HTML::TreeBuilder::XPath->new_from_content($res->content);
 	my $title = $tree->findvalue("//h1");
 	say STDERR "Title: $title";
+
+	$title =~ s{[/:]}{_}g;
+
 	$name = "$title.$video_id";
 } else {
 	say STDERR "Unknown Title;";
