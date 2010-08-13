@@ -1,0 +1,2 @@
+while (my($k, $v) = splice ${cursor}, 0, 2) {
+}
