@@ -1,0 +1,10 @@
+#include <iostream>
+#include "boost/filesystem/operations.hpp"
+#define REP(i,n) for(int i=0;i<(int)n;++i)
+#define ALL(c) (c).begin(), (c).end()
+#define FOR(i,c) for(__typeof((c).begin())i=(c).begin();i!=(c).end();++i)
+#define DEBUG(x) std::cerr << #x << " = " << (x) << " (L" << __LINE__ << ")" << " " << __FILE__ << std::endl;
+
+int main (int argc, char *argv[]) {
+	${cursor}
+}
