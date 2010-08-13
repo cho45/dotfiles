@@ -10,6 +10,7 @@ export FLEX_HOME=$HOME/sdk/flex4sdk
 PATHS=(
 	$HOME/bin
 	$HOME/project/commands/bin
+	$HOME/sdk/play
 	$HOME/sdk/android/tools
 	$HOME/sdk/flex/bin
 	/usr/local/ruby1.9/bin
@@ -33,6 +34,7 @@ export LANG=ja_JP.UTF-8
 
 export PERL5LIB=lib:$HOME/lib/perl
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+export NYTPROF=sigexit=int,hup:trace=2:start=no
 
 bindkey -e
 bindkey -D vicmd
@@ -101,6 +103,8 @@ setopt cdable_vars
 setopt sh_word_split
 setopt ignore_eof
 
+setopt magic_equal_subst
+
 # 終了コード表示。冗長
 #setopt print_exit_value
 
@@ -116,6 +120,9 @@ zle -N predict-off
 bindkey '^X^Z' predict-on
 bindkey '^Z' predict-off
 zstyle ':predict' verbose true
+
+autoload -U url-quote-magic
+zle -N self-insert url-quote-magic
 
 # git の補完うざいし……
 compdef -d _git
@@ -170,11 +177,6 @@ typeset -A abbreviations
 abbreviations=(
 	"L"    "| \$PAGER"
 	"G"    "| grep"
-	"CC"    "lib/*/Controller/" # Catalyst Controller
-	"CS"    "lib/*/Schema/"     # Catalyst Schema
-	"CI"    "lib/*/I18N/"       # Catalyst I18N
-	"CV"    "lib/*/View/"       # Catalyst View
-	"CM"    "lib/*/Model/"      # Catalyst Model
 
 	"H"     "$HOME/project/Hatena-"
 
@@ -203,6 +205,12 @@ magic-abbrev-expand () {
 	LBUFFER+=${abbreviations[$MATCH]:-$MATCH}
 }
 
+# BK 
+magic-space () {
+	magic-abbrev-expand
+	zle self-insert
+}
+
 magic-abbrev-expand-and-insert () {
 	magic-abbrev-expand
 	zle self-insert
@@ -229,14 +237,16 @@ no-magic-abbrev-expand () {
 }
 
 zle -N magic-abbrev-expand
+zle -N magic-abbrev-expand-and-magic-space
 zle -N magic-abbrev-expand-and-insert
 zle -N magic-abbrev-expand-and-insert-complete
 zle -N magic-abbrev-expand-and-normal-complete
 zle -N magic-abbrev-expand-and-accept
 zle -N no-magic-abbrev-expand
+zle -N magic-space # BK
 bindkey "\r"  magic-abbrev-expand-and-accept # M-x RET できなくなる
 bindkey "^J"  accept-line # no magic
-bindkey " "   magic-abbrev-expand-and-insert
+bindkey " "   magic-space # BK
 bindkey "."   magic-abbrev-expand-and-insert
 bindkey "^I"  magic-abbrev-expand-and-normal-complete
 

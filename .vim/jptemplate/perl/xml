@@ -1,0 +1,16 @@
+
+use XML::LibXML;
+use LWP::Simple qw($ua);
+
+my $res = $ua->get($uri);
+my $doc = XML::LibXML->new->parse_string($res->content);
+my $xpc = XML::LibXML::XPathContext->new($doc->documentElement);
+$xpc->registerNs(dc  => 'http://purl.org/dc/elements/1.1/');
+$xpc->registerNs(rdf => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#');
+$xpc->registerNs(rss => 'http://purl.org/rss/1.0/');
+
+for my $result (@{ $xpc->findnodes('/rdf:RDF/rss:item') }) {
+	my $link = $xpc->findvalue('rss:link', $result);
+}
+
+

@@ -20,8 +20,12 @@ PROMPT_CWD_ADD=""
 alias svn='svnwrapper.rb'
 alias b='todo.pl editdump'
 
+desktop=0
+
 # for screen
 preexec () {
+	# osascript -e 'tell application "System Events" to key code 103'
+
 	# see [zsh-workers:13180]
 	# http://www.zsh.org/mla/workers/2000/msg03993.html
 	emulate -L zsh
@@ -67,6 +71,14 @@ preexec () {
 precmd () {
 	# Set title of screen window
 	echo -n "k:$prev\\"
+
+#	if [[ $prev == "ls" ]]; then
+#		osascript -e 'tell application "System Events" to key code 103'
+#		sleep 0.2
+#		osascript -e 'tell application "System Events" to key code 103'
+#	fi
+#
+	$(change-wallpaper.pl > /dev/null 2>&1 &)
 
 	# for git
 	if command git rev-parse --is-inside-work-tree 1>/dev/null 2>&1 ; then
@@ -196,8 +208,9 @@ function socks () {
 # screen cd
 source $HOME/.zsh/cdd
 
-# window num -> tty の対応ができるように
-tty > /tmp/screen-tty-$WINDOW
+if [[ -f "$HOME/.screen/screen2tty.inc.sh" ]]; then
+	source "$HOME/.screen/screen2tty.inc.sh"
+fi
 
 # ホストごとの設定を読みこむ
 h="${HOST%%.*}"

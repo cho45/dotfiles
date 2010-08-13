@@ -1,13 +1,1 @@
-#!/usr/bin/env ruby
-# pid2screen
-require "pathname"
-
-pid = ARGV[0]
-tty = `/bin/ps -o tty= -p #{pid}`.strip
-win = Pathname.glob("/tmp/screen-tty-*").find {|i| i.read[tty] }
-if tty.empty? || !win
-	exit 1
-else
-	puts win.to_s[/\d+$/]
-	exit 0
-end
+../.screen/pid2screen
