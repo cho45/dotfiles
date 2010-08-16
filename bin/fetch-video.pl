@@ -57,7 +57,7 @@ my $url = $client->prepare_download($video_id);
 my $is_low = ($url =~ /low/);
 if ($is_low) {
 	say STDERR "! Low-Mode";
-	exit 1 unless $opts->{lowmode};
+	exit 1 unless $opts->{allow_low};
 }
 
 my $res = $client->user_agent->request( HTTP::Request->new( GET => $url ), sub {
