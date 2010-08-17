@@ -17,6 +17,15 @@ require 'fileutils'
 @file     = ARGV.shift
 FileUtils.touch @file
 
+Thread.start do
+	while l = gets
+		File.open(@file, "a") do |f|
+			f.flock File::LOCK_EX
+			f.puts l
+		end
+	end
+end
+
 loop do
 	if File.size(@file) > 1
 		exec = File.open(@file, "r+") { |f|

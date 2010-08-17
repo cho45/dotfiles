@@ -15,16 +15,17 @@ $VERSION = "0.01";
 	changed     => "2002-03-04T22:47+0100"
 );
 
+my $prev_text = "";
 sub sig_printtext {
 	my ($dest, $text, $stripped) = @_;
 
 	if (($dest->{level} & (MSGLEVEL_HILIGHT|MSGLEVEL_MSGS)) &&
 		($dest->{level} & MSGLEVEL_NOHILIGHT) == 0) {
+		return if $text eq $prev_text;
+		$prev_text = $text;
 
 		my $name = do {
-			my $tmp = $text;
-			$tmp =~ s/\x04.//g;
-			($tmp =~ /<([^>]+)>/)[1]
+			($stripped =~ /<([^>]+)>/)[1]
 		};
 		return if $name =~ /cho45/;
 

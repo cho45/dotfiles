@@ -98,14 +98,18 @@ sub notify_sig {
 }
 
 
+our $prev_text = "";
 sub sig_printtext {
     my ($dest, $text, $stripped) = @_;
-    $stripped =~ s/\s/ /g;
-
-    return if $stripped =~ /<[@ +~]+cho45>/;
-    return if $stripped =~ / \* cho45/;
 
     if ( $dest->{level} & MSGLEVEL_HILIGHT ) {
+        return if $text eq $prev_text;
+
+        $stripped =~ s/\s/ /g;
+        return if $stripped =~ /<[@ +~]+cho45>/;
+        return if $stripped =~ / \* cho45/;
+        $prev_text = $text;
+
         my $pid = fork;
         if ($pid) {
             Irssi::pidwait_add($pid);
