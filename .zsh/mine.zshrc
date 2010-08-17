@@ -177,8 +177,8 @@ function git () {
 			command git log -p ${@[2, -1]}
 		elif [[ $1 == "pull" ]]; then
 			if [[ ( -x '.git/pull-chain' ) ]]; then
-				asyncrun ./.git/pull-chain
 				command git $@
+				asyncrun ./.git/pull-chain
 			else
 				command git $@
 			fi
