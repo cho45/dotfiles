@@ -3,6 +3,7 @@
 require "drb/drb"
 require "thread"
 require "logger"
+require "timeout"
 
 class Backtick
 	NAME = "screen/backtick"
@@ -15,7 +16,7 @@ class Backtick
 		@logger = Logger.new(File.expand_path('~/.screen/backtick.log'))
 		@logger.level = Logger::DEBUG
 		`/bin/ps -x -o pid=pid,command=comand`.split(/\n/).map {|i| i.strip.split(/\s+/) }.each {|pid, command|
-			system "kill", pid if command.include?(NAME)
+			Process.kill(:INT, pid.to_i) if command.include?(NAME)
 		}
 		$stdout.sync = true
 		$0 = NAME
@@ -119,20 +120,22 @@ class Backtick
 			Dir.chdir(env["PWD"]) do
 				popen3(command) do |stdin, stdout, stderr|
 					stdin.close
-					out = Thread.start do
-						stdout.each do |l|
-							@logger.debug l.chomp
-							puts l.gsub(/[^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]\s]/n, "#")
+					timeout(120) do
+						out = Thread.start do
+							stdout.each do |l|
+								@logger.debug l.chomp
+								puts l.gsub(/[^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]\s]/n, "#")
+							end
 						end
-					end
-					err = Thread.start do
-						stderr.each do |l|
-							@logger.debug l.chomp
-							puts l.gsub(/[^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]\s]/n, "#")
+						err = Thread.start do
+							stderr.each do |l|
+								@logger.debug l.chomp
+								puts l.gsub(/[^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]\s]/n, "#")
+							end
 						end
+						out.join
+						err.join
 					end
-					out.join(60)
-					err.join(60)
 				end
 			end
 		rescue Exception => e
@@ -166,8 +169,9 @@ class Backtick
 			pw[1].sync = true
 			yield pw[1], pr[0], pr[0]
 		ensure
-			Process.waitpid(pid)
 			[pw[1], pr[0], pe[0]].each {|p| p.close unless p.closed? }
+			Process.kill(:INT, pid)
+			Process.waitpid(pid)
 		end
 	end
 end
