@@ -1,67 +1,75 @@
 #!/usr/bin/ruby
 
-require "open3"
 require "drb/drb"
 require "thread"
-NAME = "AsyncRunDRb/screen"
+require "logger"
 
-`/bin/ps -x -o pid=pid,command=comand`.split(/\n/).map {|i| i.strip.split(/\s+/) }.each {|pid, command|
-	system "kill", pid if command.include?(NAME)
-}
-$0 = NAME
+class Backtick
+	NAME = "screen/backtick"
 
-# system("screen", "-X", "eval", 'hardstatus alwayslastline "%-w %{.r.}%{!}%n%f%t%{dd} %+w"')
+	def self.instance
+		@@instance ||= self.new
+	end
 
-$stdout.sync = true
-
-class AsyncRun
 	def initialize
-		@queue = Queue.new
-		Thread.start do
+		@logger = Logger.new(File.expand_path('~/.screen/backtick.log'))
+		@logger.level = Logger::DEBUG
+		`/bin/ps -x -o pid=pid,command=comand`.split(/\n/).map {|i| i.strip.split(/\s+/) }.each {|pid, command|
+			system "kill", pid if command.include?(NAME)
+		}
+		$stdout.sync = true
+		$0 = NAME
+	end
+
+	def start_async_service
+		@asyncrun = AsyncRun.new(@logger)
+		DRb.start_service("druby://localhost:9999", @asyncrun)
+		@logger.info "start_service: #{DRb.uri}"
+	end
+
+	def start
+		start_async_service
+
+		case RUBY_PLATFORM
+		when /linux/
+			stats = []
+			prev_net = network
+			prev_cpu = cpu_stat
+
 			loop do
-				run_queue
+				sleep 1
+				next if @asyncrun.running
+
+				# network
+				now = network
+				stats << [now[0] - prev_net[0], now[1] - prev_net[1]]
+				stats = stats.last(10)
+
+				down, up = stats.inject {|r,i| [r[0]+i[0], r[1]+i[1]] }.map {|i|
+					i.to_f / stats.size / 1024
+				}
+				prev_net = now
+
+				s = 00
+				# cpu
+				now = cpu_stat
+				t = prev_cpu.zip(now)
+				total = t.inject(0) {|r,(pr,nw)| r + pr - nw}
+				t.pop
+				load  = t.inject(0) {|r,(pr,nw)| r + pr - nw} / total.to_f * 100
+				load  = load.abs
+
+				puts "%.1f%% d:% 5.1fKB/s u:% 5.1fKB/s" % [load, down, up]
+
+				prev_cpu = now
+			end
+		else
+			loop do
+				sleep 1
 			end
 		end
 	end
 
-	def add_queue(env, command)
-		@queue << [env, command]
-	end
-
-	def run_queue
-		$0 = "#{NAME} waiting..."
-		env, command = @queue.pop
-		$0 = "#{NAME} #{command}"
-		prev_env = ENV.to_hash
-		ENV.replace(env)
-		ENV["LANG"] = "C"
-		Dir.chdir(env["PWD"]) do
-			Open3.popen3(command) do |stdin, stdout, stderr|
-				stdin.close
-				out = Thread.start do
-					stdout.each do |l|
-						puts l.gsub(/[^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]\s]/n, "#")
-					end
-				end
-				err = Thread.start do
-					stderr.each do |l|
-						puts l.gsub(/[^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]\s]/n, "#")
-					end
-				end
-				out.join
-				err.join
-			end
-		end
-	ensure
-		ENV.replace(prev_env)
-	end
-end
-
-DRb.start_service("druby://localhost:9999", AsyncRun.new)
-puts DRb.uri
-
-case RUBY_PLATFORM
-when /linux/
 	def network
 		s = File.readlines("/proc/net/dev").detect {|i| i[/^\s*eth0/]}.split(/:|\s+/)
 		[s[2].to_i, s[10].to_i]
@@ -72,39 +80,97 @@ when /linux/
 		s.collect {|i| i.to_i}
 	end
 
-	stats = []
-	prev_net = network
-	prev_cpu = cpu_stat
 
+	class AsyncRun
+		def initialize(logger)
+			@queue   = Queue.new
+			@running = false
+			@logger  = logger
 
-	loop do
-		sleep 1
+			Thread.start do
+				@logger.info "start run_queue thread"
+				loop do
+					$0 = "#{NAME} waiting..."
+					@logger.info "waiting queue"
+					env, command = @queue.pop
+					@logger.info "dequeue: #{command}"
+					@running = true
+					run_queue(env, command)
+					@running = false
+				end
+			end
+		end
 
-		# network
-		now = network
-		stats << [now[0] - prev_net[0], now[1] - prev_net[1]]
-		stats = stats.last(10)
+		def add_queue(env, command)
+			@logger.info "enqueue: #{command}"
+			@queue << [env, command]
+			true
+		end
 
-		down, up = stats.inject {|r,i| [r[0]+i[0], r[1]+i[1]] }.map {|i|
-			i.to_f / stats.size / 1024
-		}
-		prev_net = now
+		def running
+			@running
+		end
 
-		s = 00
-		# cpu
-		now = cpu_stat
-		t = prev_cpu.zip(now)
-		total = t.inject(0) {|r,(pr,nw)| r + pr - nw}
-		t.pop
-		load  = t.inject(0) {|r,(pr,nw)| r + pr - nw} / total.to_f * 100
-		load  = load.abs
+		def run_queue(env, command)
+			$0 = "#{NAME} #{command}"
+			prev_env = ENV.to_hash
+			ENV.replace(env)
+			ENV["LANG"] = "C"
+			Dir.chdir(env["PWD"]) do
+				popen3(command) do |stdin, stdout, stderr|
+					stdin.close
+					out = Thread.start do
+						stdout.each do |l|
+							@logger.debug l.chomp
+							puts l.gsub(/[^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]\s]/n, "#")
+						end
+					end
+					err = Thread.start do
+						stderr.each do |l|
+							@logger.debug l.chomp
+							puts l.gsub(/[^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]\s]/n, "#")
+						end
+					end
+					out.join(60)
+					err.join(60)
+				end
+			end
+		rescue Exception => e
+			@logger.error e.inspect
+		ensure
+			ENV.replace(prev_env)
+		end
 
-		puts "%.1f%% d:% 5.1fKB/s u:% 5.1fKB/s" % [load, down, up]
+		def popen3(command)
+			pw = IO.pipe
+			pr = IO.pipe
+			pe = IO.pipe
+			pid = fork {
+				pw[1].close
+				STDIN.reopen(pw[0])
+				pw[0].close
 
-		prev_cpu = now
-	end
-when /darwin/
-	loop do
-		sleep 1
+				pr[0].close
+				STDOUT.reopen(pr[1])
+				pr[1].close
+
+				pe[0].close
+				STDERR.reopen(pe[1])
+				pe[1].close
+
+				exec(command)
+			}
+			pw[0].close
+			pr[1].close
+			pe[1].close
+			pw[1].sync = true
+			yield pw[1], pr[0], pr[0]
+		ensure
+			Process.waitpid(pid)
+			[pw[1], pr[0], pe[0]].each {|p| p.close unless p.closed? }
+		end
 	end
 end
+
+Backtick.instance.start
+
