@@ -1,4 +1,4 @@
-# vim:set ft=zsh
+# vim:set ft=zsh:
 
 export GISTY_DIR="$HOME/sketch/gists"
 export PERL_AUTOINSTALL="--defaultdeps"
@@ -152,6 +152,10 @@ function n () {
 	screen -X eval "chdir $PWD" "screen" "chdir"
 }
 
+function l () {
+	screen tail -n 100 -f $HOME/.screen/backtick.log
+}
+
 function git () {
 	if [[ -e '.svn' ]]; then
 		if [[ $1 == "log" ]]; then
@@ -164,13 +168,20 @@ function git () {
 	else
 		if [[ $1 == "" ]]; then
 			# git ってだけうったときは status 表示
-			cat =(command git --no-pager branch-recent) \
-			    =(command git --no-pager diff --stat --color-words) \
-			    =(command git --no-pager status) \
-			    | $PAGER
+			command git --no-pager branch-recent && \
+			command git --no-pager diff --stat --color-words && \
+			command git --no-pager status \
+			| $PAGER
 		elif [[ $1 == "log" ]]; then
 			# 常に diff を表示してほしい
 			command git log -p ${@[2, -1]}
+		elif [[ $1 == "pull" ]]; then
+			if [[ ( -x '.git/pull-chain' ) ]]; then
+				asyncrun ./.git/pull-chain
+				command git $@
+			else
+				command git $@
+			fi
 		else
 			command git $@
 		fi

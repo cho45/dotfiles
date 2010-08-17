@@ -192,9 +192,10 @@ abbreviations=(
 	"HEAD^^^^^" "HEAD\\^\\^\\^\\^\\^"
 
 	# typo
-	"lkm"  "lm"
-	"it"  "git"
+	"lkm"   "lm"
+	"it"    "git"
 	"gitp"  "git"
+	"ush"   "push"
 
 	"mysql" "mysql -unobody -pnobody -h"
 )
