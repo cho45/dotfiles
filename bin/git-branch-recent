@@ -109,7 +109,11 @@ class GitRecentCommand
 		branches = refs.reject {|r| r.directory? }.sort_by {|r| r.mtime }.last(@opts[:max_num]).map {|r|
 			ref = r.read.chomp
 			if name = ref[/ref: (.+)/, 1]
-				(dot_git + name).read.chomp
+				begin
+					(dot_git + name).read.chomp
+				rescue
+					`git rev-parse #{name}`.chomp
+				end
 			else
 				ref
 			end

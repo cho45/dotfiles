@@ -1,0 +1,5 @@
+${name} = function () { this.init.apply(this, arguments) };
+${name}.prototype = {
+	init : function () {
+	}
+};

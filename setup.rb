@@ -71,7 +71,7 @@ link "git/.gitignore", "~/.gitignore"
 cp ".gemrc", "~/.gemrc" unless Pathname.new("~/.gemrc").expand_path.exist?
 
 if RUBY_PLATFORM =~ /darwin/
-	link "/Applications/Firefox.app/Contents/MacOS/firefox", "~/bin"
+	link "/Applications/Firefox.app/Contents/MacOS/firefox-bin", "~/bin/firefox"
 	link "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "~/bin/chrome"
 end
 

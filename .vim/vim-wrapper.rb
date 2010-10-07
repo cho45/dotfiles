@@ -32,7 +32,7 @@ struct block0
 =end
 
 require "pathname"
-ENV["PERL5LIB"] = ENV["PERL5LIB"].split(/:/).unshift('t/lib').join(':')
+ENV["PERL5LIB"] = (ENV["PERL5LIB"] || "").split(/:/).unshift('t/lib').join(':')
 VIM = "/usr/local/vim7/bin/vim"
 #VIM = "/usr/bin/vim"
 

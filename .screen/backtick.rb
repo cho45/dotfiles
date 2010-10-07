@@ -6,26 +6,42 @@ require "logger"
 require "timeout"
 
 class Backtick
-	NAME = "screen/backtick"
+	NAME = "backtick"
+
+	attr_reader :logger
 
 	def self.instance
 		@@instance ||= self.new
 	end
 
 	def initialize
-		@logger = Logger.new(File.expand_path('~/.screen/backtick.log'))
-		@logger.level = Logger::DEBUG
-		`/bin/ps -x -o pid=pid,command=comand`.split(/\n/).map {|i| i.strip.split(/\s+/) }.each {|pid, command|
-			Process.kill(:INT, pid.to_i) if command.include?(NAME)
-		}
 		$stdout.sync = true
-		$0 = NAME
+		@logger       = $stdout.tty?? Logger.new($stdout) : Logger.new(File.expand_path('~/.screen/backtick.log'))
+		@logger.level = Logger::DEBUG
+		@logger.info ENV.inspect
+		self.status   = ''
 	end
 
 	def start_async_service
-		@asyncrun = AsyncRun.new(@logger)
+		`/bin/ps -x -o pid=pid,command=comand`.split(/\n/).map {|i| i.strip.split(/\s+/) }.each {|pid, command|
+			pid = pid.to_i
+			next if pid == Process.pid
+			Process.kill(:INT, pid) if command.include?(self.header)
+		}
+
+		@asyncrun = AsyncRun.new(self)
 		DRb.start_service("druby://localhost:9999", @asyncrun)
 		@logger.info "start_service: #{DRb.uri}"
+	end
+
+	def status=(new)
+		status = "#{self.header} #{new}"
+		@logger.info "status: #{status}"
+		$0 = status
+	end
+
+	def header
+		"#{NAME}"
 	end
 
 	def start
@@ -83,17 +99,19 @@ class Backtick
 
 
 	class AsyncRun
-		def initialize(logger)
-			@queue   = Queue.new
-			@running = false
-			@logger  = logger
+		def initialize(backtick)
+			@queue    = Queue.new
+			@running  = false
+			@backtick = backtick
+			@logger   = backtick.logger
 
 			Thread.start do
 				@logger.info "start run_queue thread"
 				loop do
-					$0 = "#{NAME} waiting..."
+					backtick.status = "waiting..."
 					@logger.info "waiting queue"
 					env, command = @queue.pop
+					backtick.status = "running: #{command}"
 					@logger.info "dequeue: #{command}"
 					@running = true
 					run_queue(env, command)
@@ -113,7 +131,6 @@ class Backtick
 		end
 
 		def run_queue(env, command)
-			$0 = "#{NAME} #{command}"
 			prev_env = ENV.to_hash
 			ENV.replace(env)
 			ENV["LANG"] = "C"

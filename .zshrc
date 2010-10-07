@@ -196,6 +196,7 @@ abbreviations=(
 	"it"    "git"
 	"gitp"  "git"
 	"ush"   "push"
+	"sipp"  "server_ips"
 
 	"mysql" "mysql -unobody -pnobody -h"
 )
@@ -306,6 +307,10 @@ function find_dsn () {
 
 function snatch () {
 	gdb -p $1 -batch -n -x =( echo -e "p (int)open(\"/proc/$$/fd/1\", 1)\np (int)dup2(\$1, 1)\np (int)dup2(\$1, 2)" )
+}
+
+function gres () {
+	vim -c "argdo %s/$1/$2/gce | update" ${@[3, -1]}
 }
 
 if [ -f "$HOME/.zsh/mine.zshrc" ]

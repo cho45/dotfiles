@@ -30,4 +30,5 @@ JPATH=/System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Classes
 export CLASSPATH=.:$JPATH/classes.jar
 
 export JAVA_HOME=/Library/Java/Home
+export GIT=/opt/local/bin/git
 

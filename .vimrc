@@ -22,6 +22,7 @@ set listchars=tab:>.
 set list
 
 set directory=~/swp
+
 let g:hatena_user          = 'cho45'
 let g:hatena_group_name    = 'subtech'
 
@@ -93,6 +94,9 @@ set splitbelow
 
 set nrformats="hex"
 
+set undofile
+set undodir=~/swp
+
 " ステータス表示用変数
 set laststatus=2
 set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']['.&ft.']'}\ %=%{GitBranch()}\ %l,%c%V%8P
@@ -153,6 +157,7 @@ map <silent> sP :call YanktmpPaste_P()<CR>
 nmap <silent> sr :redraw!<CR>
 
 nmap <silent> eo :e %:h<CR>
+nnoremap e3 :s/?\s*\((.\{-1,})\\|\S\+\)\s*:\s*\((.\{-1,})\\|\S\+\)/? \2 : \1/<CR>
 
 " nmap <silent> eg :e git:HEAD^:%<CR>
 nnoremap <silent> eg :<C-u>call <SID>git_prev_rev()<CR>
@@ -410,4 +415,16 @@ augroup END
 
 autocmd BufWritePost */debuglet.js silent! execute '!ruby /Users/cho45/bin/debuglet.rb %'
 autocmd BufNewFile */debuglet.js silent! execute 'r!ruby /Users/cho45/bin/debuglet.rb'
+
+
+function! GitWeb()
+	let git_output = substitute(system('git config --get remote.origin.url'), '\n*$', '', '')
+	let repos = substitute(git_output, 'git@192.168.2.181:/var/git', '', '')
+	let commit = substitute(system('git name-rev --name-only HEAD'), '\n*$', '', '')
+
+	let repos = substitute(repos, '\(.git\)*$', '.git', '')
+
+	call system('open http://repository01.host.h:5001/gitweb.cgi' . repos . '/blob/' . commit . ':' . expand('%') . '#l' . line('.'))
+endfunction
+command! GitWeb call GitWeb()
 
