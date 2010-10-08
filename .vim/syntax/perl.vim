@@ -199,6 +199,7 @@ syn cluster perlInterpMatch	contains=@perlInterpSlash,perlVarSlash
 
 " Shell commands
 syn region  perlShellCommand	matchgroup=perlMatchStartEnd start="`" end="`" contains=@perlInterpDQ keepend
+syn region  perlShellCommand	matchgroup=perlMatchStartEnd start="<" end=">" contains=@perlInterpDQ keepend
 
 " Constants
 "
