@@ -81,9 +81,7 @@ precmd () {
 	$(change-wallpaper.pl > /dev/null 2>&1 &)
 
 	# for git
-	if command git rev-parse --is-inside-work-tree 1>/dev/null 2>&1 ; then
-		update-git-status
-	fi
+	update-git-status
 
 	if [[ ${DYLD_INSERT_LIBRARIES:#libtsocks} != "" ]]; then
 		local proxy=$(command ps -ocommand= | grep "^ssh .*\-D *8081" | head -n 1 | awk '{ print $NF }')
@@ -108,42 +106,43 @@ chpwd () {
 
 # ~ (master) のように git レポジトリ以下では git のブランチを表示する
 update-git-status () {
-	local gitdir="$(command git rev-parse --git-dir)"
-	local ret=''
-
-	if   [[ -d "$gitdir/rebase-apply" ]]; then
-		local next=$(< $gitdir/rebase-apply/next)
-		local last=$(< $gitdir/rebase-apply/last)
-		if [[ -n $next && -n $last ]]; then
-			local curr=$[ $next - 1]
-		fi
-		ret="rebase[$curr/$last]"
-	elif [[ -d "$gitdir/rebase-merge" ]]; then
-		if [[ -f "$gitdir/rebase-merge/interactive" ]]; then
-			local left=$(grep '^[pes]' $git_dir/rebase-merge/git-rebase-todo | wc -l)
-			if [[ -n $left ]]; then
-				left=$[ $left + 1 ]
+	local gitdir="$(command git rev-parse --git-dir 2>/dev/null)"
+	if [[ $gitdir != "" ]]; then
+		local ret=''
+		if   [[ -d "$gitdir/rebase-apply" ]]; then
+			local next=$(< $gitdir/rebase-apply/next)
+			local last=$(< $gitdir/rebase-apply/last)
+			if [[ -n $next && -n $last ]]; then
+				local curr=$[ $next - 1]
 			fi
-			ret="rebase[i, $left left]"
+			ret="rebase[$curr/$last]"
+		elif [[ -d "$gitdir/rebase-merge" ]]; then
+			if [[ -f "$gitdir/rebase-merge/interactive" ]]; then
+				local left=$(grep '^[pes]' $git_dir/rebase-merge/git-rebase-todo | wc -l)
+				if [[ -n $left ]]; then
+					left=$[ $left + 1 ]
+				fi
+				ret="rebase[i, $left left]"
+			else
+				ret="rebase[m]"
+			fi
+		elif [[ -f "$gitdir/MERGE_HEAD" ]]; then
+			ret="merge[]"
+		elif [[ -f "$gitdir/BISECT_START" ]]; then
+			local start=$(< $gitdir/BISECT_START)
+			local bad=$(command git rev-parse --verify refs/bisect/bad)
+			local good="$(command git for-each-ref --format='^%(objectname)' "refs/bisect/good-*" | tr '\012' ' ')"
+			local skip=$(command git for-each-ref --format='%(objectname)' "refs/bisect/skip-*" | tr '\012' ' ')
+			eval "$(command git rev-list --bisect-vars "$good" "$bad" -- $(< $gitdir/BISECT_NAMES))"
+
+			ret="bisect[$start, $bisect_nr left]"
 		else
-			ret="rebase[m]"
+			ret=$(command git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
 		fi
-	elif [[ -f "$gitdir/MERGE_HEAD" ]]; then
-		ret="merge[]"
-	elif [[ -f "$gitdir/BISECT_START" ]]; then
-		local start=$(< $gitdir/BISECT_START)
-		local bad=$(command git rev-parse --verify refs/bisect/bad)
-		local good="$(command git for-each-ref --format='^%(objectname)' "refs/bisect/good-*" | tr '\012' ' ')"
-		local skip=$(command git for-each-ref --format='%(objectname)' "refs/bisect/skip-*" | tr '\012' ' ')
-		eval "$(command git rev-list --bisect-vars "$good" "$bad" -- $(< $gitdir/BISECT_NAMES))"
 
-		ret="bisect[$start, $bisect_nr left]"
-	else
-		ret=$(command git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
-	fi
-
-	if [[ -n $ret ]]; then
-		PROMPT_CWD_ADD="$PROMPT_CWD_ADD [32m%}($ret)%{[m%}"
+		if [[ -n $ret ]]; then
+			PROMPT_CWD_ADD="$PROMPT_CWD_ADD [32m%}($ret)%{[m%}"
+		fi
 	fi
 }
 
