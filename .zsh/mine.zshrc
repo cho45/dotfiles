@@ -108,7 +108,7 @@ chpwd () {
 
 # ~ (master) のように git レポジトリ以下では git のブランチを表示する
 update-git-status () {
-	local gitdir=$(command git rev-parse --git-dir)
+	local gitdir="$(command git rev-parse --git-dir)"
 	local ret=''
 
 	if   [[ -d "$gitdir/rebase-apply" ]]; then
