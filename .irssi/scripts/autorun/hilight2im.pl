@@ -38,11 +38,7 @@ sub notify {
 
     my ($channel) = ($message =~ /(#[^\s:<>]+)/);
 
-    my $uri = URI->new('http://lab.lowreal.net/keitairc/');
-    $uri->query_form(
-        channel => "$channel",
-        auto    => 1,
-    );
+    my $uri = URI->new("http://irssw.lab.lowreal.net/$channel");
 
     my $subject = $message;
     my $body = join("\n", $message, $uri);
