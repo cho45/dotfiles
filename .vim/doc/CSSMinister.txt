@@ -1,0 +1,97 @@
+*CSSMinister.txt*           CSS Color Converter 
+
+==============================================================================
+1.Contents                                *CSSMinister* *CSSMinister-contents*
+
+    1.Contents     |CSSMinister-contents|
+    2.Overview     |CSSMinister-overview|
+    3.Mappings     |CSSMinister-mappings|
+    4.Changelog    |CSSMinister-changelog| 
+    5.Contact      |CSSMinister-contact| 
+
+==============================================================================
+2.Overview                                              *CSSMinister-overview*
+
+CSSMinister lets you convert colors in your CSS, Less, or Sass stylesheets. 
+You can switch to and fro hex, RGB, and HSL formats through the mappings 
+defined in this plugin.
+
+==============================================================================
+3.Mappings                                              *CSSMinister-mappings*
+
+CSSMinister defines the following mappings:
+
+[count],xr |CSSMinisterHexToRGB|
+Hex to RGB conversion for the next matching color on the current line.
+
+[count],xh |CSSMinisterHexToHSL|
+Hex to HSL conversion for the next matching color on the current line.
+
+[count],rx |CSSMinisterRGBToHex|
+RGB to hex conversion for the next matching color on the current line.
+
+[count],rh |CSSMinisterRGBToHSL|
+RGB to HSL conversion for the next matching color on the current line.
+
+[count],hx |CSSMinisterHSLToHex|
+HSL to hex conversion for the next matching color on the current line.
+
+[count],hr |CSSMinisterHSLToRGB|
+HSL to RGB conversion for the next matching color on the current line.
+
+[count],kx |CSSMinisterKeywordToHex|
+HTML4 color keyword to hex conversion for the next matching color on 
+the current line.
+
+[count],kr |CSSMinisterKeywordToRGB|
+HTML4 color keyword to RGB conversion for the next matching color on 
+the current line.
+
+[count],kh |CSSMinisterKeywordToHSL|
+HTML4 color keyword to HSL conversion for the next matching color on 
+the current line.
+
+The following mappings operate on all colors in the current buffer:
+
+,axr |CSSMinisterHexToRGBAll|
+Converts all hex color values to their RGB counterparts.
+
+,axh |CSSMinisterHexToHSLAll|
+Converts all hex color values to their HSL counterparts.
+
+,arx |CSSMinisterRGBToHexAll|
+Converts all RGB color values to their hex counterparts.
+
+,arh |CSSMinisterRGBToHSLAll|
+Converts all RGB color values to their HSL counterparts.
+
+,ahx |CSSMinisterHSLToHexAll|
+Converts all HSL color values to their hex counterparts.
+
+,ahr |CSSMinisterHSLToRGBAll|
+Converts all HSL color values to their RGB counterparts.
+
+,akx |CSSMinisterKeywordToHexAll|
+Converts all HTML4 color keyword values to their hex counterparts.
+
+,akr |CSSMinisterKeywordToRGBAll|
+Converts all HTML4 color keyword values to their RGB counterparts.
+
+,akh |CSSMinisterKeywordToHSLAll|
+Converts all HTML4 color keyword values to their HSL counterparts.
+
+==============================================================================
+4.Changelog                                            *CSSMinister-changelog*
+
+0.2.1
+    - Fixed broken color keyword regex
+0.2.0
+    - convert any HTML4 color keyword to its hexadecimal/RGB/HSL equivalent
+
+==============================================================================
+5.Contact                                                *CSSMinister-contact*
+
+Suggestions, improvements, and criticism are all welcome. Feel free to 
+contact me at kuroi_kenshi96 at yahoo dot com.
+
+vim:tw=78:ts=8:ft=help:norl:
