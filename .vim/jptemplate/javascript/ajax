@@ -1,0 +1,11 @@
+$.ajax({
+	url: "",
+	type : "GET",
+	data : {},
+	dataType: 'json|jsonp',
+	success : function (data, status, xhr) {
+	},
+	complete : function (xhr, status) {
+	}
+});
+
