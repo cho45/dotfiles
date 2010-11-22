@@ -184,14 +184,18 @@ function! s:git_prev_rev()
 	endif
 
 	let commits = split(output, "\n")
-	let prev    = commits[1]
-	let [commit_id, subject] = matchlist(prev, '^\(\S*\)\s\(.*\)$')[1:2]
+	if len(commits) > 1
+		let prev    = commits[1]
+		let [commit_id, subject] = matchlist(prev, '^\(\S*\)\s\(.*\)$')[1:2]
 
-	let cursor = getpos(".")
-	silent edit `=printf('git:%s:%s', commit_id, path)`
-	call setpos('.', cursor)
+		let cursor = getpos(".")
+		silent edit `=printf('git:%s:%s', commit_id, path)`
+		call setpos('.', cursor)
 
-	echo subject
+		echo subject
+	else
+		echo 'no more revisions'
+	endif
 endfunction
 
 " cmode
@@ -210,12 +214,6 @@ cmap <ESC>l <Right>
 
 " execute script
 nmap ,e :call ShebangExecute()<CR>
-
-" indent whole buffer
-noremap <F8> gg=G``
-
-" xml close tag comp
-" autocmd FileType html,xhtml,xml :inoremap </ </<C-X><C-O>
 
 " insert timestamp
 nmap tw :exe "normal! i" . strftime("%Y-%m-%d\T%H:%M:%S+09:00")<CR>
@@ -396,13 +394,6 @@ iabbr tihs this
 iabbr thsi this
 iabbr crete create
 iabbr funciton function
-
-function! EditRRGGBBbyHSV(hsv, delta)
-	let a = 123
-	let b = "456"
-	" do something ...
-endfunction
-
 
 augroup BinaryXXD
 	autocmd!
