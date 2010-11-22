@@ -1,5 +1,9 @@
 
 syntax on
+filetype plugin on
+filetype indent on
+
+call pathogen#runtime_append_all_bundles()
 
 if &term =~ "xterm-256color"
 	colorscheme desert256
@@ -119,9 +123,6 @@ set viminfo+=!
 set nowrap
 set sidescroll=5
 set listchars+=precedes:<,extends:>
-
-filetype plugin on
-filetype indent on
 
 " mapping
 
