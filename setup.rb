@@ -32,7 +32,6 @@ cd "~".expand
 
 if "dotfiles".expand.exist?
 	cd "dotfiles"
-	sh "git pull"
 else
 	sh "git clone git@github.com:cho45/dotfiles.git dotfiles"
 	cd "dotfiles"
