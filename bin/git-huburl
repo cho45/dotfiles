@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+name, branch = *%x{git config -l}.match(%r{^remote.origin.url=git@github.com:([^/]+)/([^.]+).git}).captures
+path = %x{git rev-parse --show-prefix}.chomp
+
+huburl = "http://github.com/#{name}/#{branch}/tree/master/#{path}"
+
+if $0 =~ %r|/github$|
+	system 'open', huburl
+else
+	puts huburl
+end
