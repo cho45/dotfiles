@@ -234,7 +234,7 @@ let g:fuf_modesDisable = ['mrucmd']
 let g:fuf_file_exclude = '\v\~$|\.(o|exe|bak|swp|gif|jpg|png)$|(^|[/\\])\.(hg|git|bzr)($|[/\\])'
 let g:fuf_mrufile_exclude = '\v\~$|\.bak$|\.swp|\.howm$|\.(gif|jpg|png)$'
 let g:fuf_mrufile_maxItem = 500
-let g:fuf_enumeratingLimit = 20
+let g:fuf_enumeratingLimit = 50
 let g:fuf_keyPreview = '<C-]>'
 let g:fuf_previewHeight = 0
 
@@ -419,4 +419,9 @@ function! GitWeb()
 	call system('open http://repository01.host.h:5001/gitweb.cgi' . repos . '/blob/' . commit . ':' . expand('%') . '#l' . line('.'))
 endfunction
 command! GitWeb call GitWeb()
+
+
+
+command! Bookmark call fuf#script#launch('', 0, 'B\!>', 'perl', $HOME . '/.vim/bookmarks.pl', 0)
+command! Music call fuf#script#launch('', 0, 'iTunes>', 'perl', $HOME . '/.vim/itunes.pl', 1)
 

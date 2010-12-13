@@ -1,6 +1,6 @@
 # vim:set ft=zsh:
-# ~/.zshrc はサーバなどに転送して単体で使えるように
-# 自分管理のマシンなどは ~/.zsh/mine.zshrc に追加の設定をする
+# ~/.zshrc is standalone for copy to remote server as a file
+# ~/.zsh/mine.zshrc is located on local machines
 
 stty intr 
 
@@ -35,6 +35,7 @@ export LANG=ja_JP.UTF-8
 export PERL5LIB=lib:$HOME/lib/perl
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 export NYTPROF=sigexit=int,hup:trace=2:start=no
+export PERL_CPANM_OPT="--verbose --sudo --prompt --mirror http://cpan.cpantesters.org"
 
 bindkey -e
 bindkey -D vicmd
@@ -45,70 +46,31 @@ zle -N help!
 
 autoload zargs
 
-# 日本語用
 setopt print_eight_bit
-
-# 補完キー連打で候補移動
 setopt auto_menu
-
-# ディレクトリ名だけで cd
 #setopt auto_cd
-
-# コマンド名スペルチェック
 setopt correct
-
-# 
 setopt auto_name_dirs
-
-# ヒストリは追記
-# setopt append_history
-
-# シェルのプロセスごとに履歴を共有
+#setopt append_history
 setopt share_history
-
-# 実行時にディレクトリのスラッシュ外す
 setopt auto_remove_slash
-
-# 括弧とか補完
 setopt auto_param_keys
-
-# ヒストリを詳しく
 setopt extended_history
-
-# 連続する同じコマンドは記録しない
 setopt hist_ignore_dups
-
-# スペースから始まるコマンドは記録しない
 setopt hist_ignore_space
-
-# すごいプロンプト
 setopt prompt_subst
-
-# 同じディレクトリなら pushd しない
 setopt pushd_ignore_dups
-
 setopt auto_pushd
-
-# 高機能な glob
 setopt extended_glob
-
-# 補完候補のファイルタイプ表示
 setopt list_types
-
-# うるさい
 setopt no_beep
-
 setopt always_last_prompt
 setopt cdable_vars
 setopt sh_word_split
 setopt ignore_eof
-
 setopt magic_equal_subst
-
-# 終了コード表示。冗長
 #setopt print_exit_value
 
-# 補完
 autoload -U compinit
 compinit -u
 zstyle ':completion:*:default' menu select=1
@@ -124,13 +86,12 @@ zstyle ':predict' verbose true
 autoload -U url-quote-magic
 zle -N self-insert url-quote-magic
 
-# git の補完うざいし……
+# to heavy git completion
 compdef -d _git
 compdef -d git
 
-# プロンプトの設定。
-# 終了ステータスが 0 でなければ終了ステータスを表示する。
-# 自分の環境の場合は mine.zshrc で上書きされる。
+# show exit status
+# (override at mine.zshrc)
 PROMPT_EXIT="%(?..exit %?
 )
 "
@@ -159,13 +120,11 @@ alias ..='cd ..'
 alias wget='noglob wget --no-check-certificate'
 
 alias :q=exit
-alias sudo='sudo env PATH=$PATH'
 
 if [ `uname` = "Darwin" ]; then
-	alias nopaste='curl -F file=@- nopaste.com/a >&1 > >(pbcopy) > >(open `cat`) '
-	alias nonopaste='pbpaste | nopaste'
+	alias nopaste='curl --form paste_code=@- pastebin.com/api_public.php >&1 > >(pbcopy) > >(open `cat`) '
 else
-	alias nopaste='curl -F file=@- nopaste.com/a'
+	alias nopaste='curl --data paste_code=@- pastebin.com/api_public.php'
 fi
 
 autoload -U edit-command-line
@@ -318,11 +277,8 @@ then
 	source "$HOME/.zsh/mine.zshrc"
 fi
 
-function scalatmpl () {
-	mvn org.apache.maven.plugins:maven-archetype-plugin:1.0-alpha-7:create \
-	-DarchetypeGroupId=org.scala-tools.archetypes \
-	-DarchetypeArtifactId=scala-archetype-simple \
-	-DarchetypeVersion=1.1 \
-	-DremoteRepositories=http://scala-tools.org/repo-releases \
-	-DgroupId=$1 -DartifactId=$2
-}
+if [ -f "$HOME/perl5/perlbrew/etc/bashrc" ]
+then
+	source $HOME/perl5/perlbrew/etc/bashrc
+fi
+
