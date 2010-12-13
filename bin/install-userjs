@@ -1,0 +1,90 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+use opts;
+use Perl6::Say;
+use File::Temp ();
+use Path::Class;
+use Mac::FSEvents;
+use Term::ANSIColor;
+
+opts my $app => { isa => 'Str', default => 'Firefox' };
+
+my $target = file(shift @ARGV)->absolute;
+exit 1 unless -f $target;
+my $html   = do { local $/; <DATA> };
+my $fh = File::Temp->new(SUFFIX => '.html');
+$html =~ s{\$path}{$target};
+$fh->print($html);
+$fh->close;
+
+system('open', '-a', $app, $fh->filename);
+
+my $fs = Mac::FSEvents->new({
+	path => "$ENV{HOME}/Library/Application Support/Firefox/Profiles/",
+});
+
+$fs->watch;
+
+my $installed;
+WATCH: while ( my @events = $fs->read_events ) {
+	for my $event (@events) {
+		$installed = [ grep { /\.user\.js$/ } dir($event->path)->children ]->[0] and last WATCH;
+	}
+}
+
+$fs->stop;
+
+if ($installed) {
+	say "Notice event:";
+	say colored ['green'], $target;
+	say "is installed as";
+	say colored ['green'], $installed;
+	say "\n";
+	say "Replace";
+	say colored ['green'], $installed;
+	say "to symlink of";
+	say colored ['green'], $target;
+	system('ln', '-sf', $target, $installed);
+	say "Done";
+	exit 0;
+} else {
+	exit 1;
+}
+
+__END__
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Install User Script</title>
+		<script type="text/javascript">
+			location.href = 'file://$path';
+		</script>
+		<style>
+			html, body {
+				background: #fff;
+			}
+			#message {
+				background: #efefef;
+				padding: 1em;
+				font-size: 300%;
+				color: #666;
+				font-weight: bold;
+				text-align: center;
+			}
+			a:link,
+			a:visited,
+			a:hover {
+				text-decoration: none;
+				color: #666;
+			}
+		</style>
+	</head>
+	<body>
+		<p id="message"><a href="file://$path">Complete the install progress<br/>and close this page.</a></p>
+		<script type="text/javascript">
+			window.close();
+		</script>
+	</body>
+</html>
