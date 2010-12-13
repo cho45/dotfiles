@@ -1,7 +1,13 @@
 #!/usr/bin/env ruby
 
+require 'pathname'
+
 name, branch = *%x{git config -l}.match(%r{^remote.origin.url=git@github.com:([^/]+)/([^.]+).git}).captures
-path = %x{git rev-parse --show-prefix}.chomp
+# path = %x{git rev-parse --show-prefix}.chomp
+
+root = Pathname.new("#{Dir.pwd}/#{%x{git rev-parse --git-dir}}").cleanpath.parent
+want = Pathname.new("#{Dir.pwd}/#{ARGV[0] || ''}").cleanpath
+path =  want.relative_path_from(root)
 
 huburl = "http://github.com/#{name}/#{branch}/tree/master/#{path}"
 
