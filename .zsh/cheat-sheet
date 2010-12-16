@@ -1,7 +1,7 @@
 PROCESS SUBSTITUTION
     =( list ) # list の出力を一時ファイルにし、ファイル名に置換
-    <( list ) #
-    >( list ) # list に出力を渡す
+    <( list ) # list の出力とのパイプを作り、fd 名に置換
+    >( list ) # list の入力とのパイプを作り、fd 名に置換
 
 LOOP
     for i in *; do; echo $i; done;

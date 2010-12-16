@@ -5,22 +5,18 @@ filetype indent on
 
 call pathogen#runtime_append_all_bundles()
 
-if &term =~ "xterm-256color"
-	colorscheme desert256
-	" omini..
-	highlight Pmenu ctermbg=8
-	highlight PmenuSel ctermbg=12
-	highlight PmenuSbar ctermbg=0
-endif
-
-highlight ZenkakuSpace ctermbg=6
-match ZenkakuSpace /\s\+$\|　/
-
 "ポップアップ補完メニュー色設定（通常の項目、選択されている項目、スクロールバー、スクロールバーのつまみ部分）
 highlight Pmenu ctermbg=6 guibg=#4c745a
 highlight PmenuSel ctermbg=3 guibg=#d4b979
 highlight PmenuSbar ctermbg=0 guibg=#333333
 "highlight PmenuThumb ctermbg=0 guibg=Red
+
+if &term =~ "xterm-256color"
+	colorscheme desert256mod
+endif
+
+highlight ZenkakuSpace ctermbg=6
+match ZenkakuSpace /\s\+$\|　/
 
 set listchars=tab:>.
 set list

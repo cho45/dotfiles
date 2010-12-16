@@ -11,7 +11,7 @@ path =  want.relative_path_from(root)
 
 huburl = "http://github.com/#{name}/#{branch}/tree/master/#{path}"
 
-if $0 =~ %r|/github$|
+if $0 =~ %r|/github$| && system('which', 'open')
 	system 'open', huburl
 else
 	puts huburl

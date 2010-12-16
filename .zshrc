@@ -16,6 +16,7 @@ PATHS=(
 	/usr/local/ruby1.9/bin
 	/usr/local/scala/bin
 	/usr/local/vim7/bin
+	/usr/local/tscreen/bin
 	/usr/local/screen/bin
 	/opt/local/sbin
 	/opt/local/bin
@@ -139,11 +140,6 @@ abbreviations=(
 
 	"H"     "$HOME/project/Hatena-"
 
-	"HE"    "lib/**/Engine/"
-	"HM"    "lib/**/MoCo/"
-	"HA"    "lib/**/App/"
-	"HC"    "lib/**/Config.pm"
-
 	"HEAD^"     "HEAD\\^"
 	"HEAD^^"    "HEAD\\^\\^"
 	"HEAD^^^"   "HEAD\\^\\^\\^"
@@ -250,19 +246,6 @@ function cdf () {
 		num=$(($num + 1))
 	done
 }
-function cdrake () {
-	cdf "Rakefile"
-}
-
-function cdcat () {
-	cdf "Makefile.PL"
-}
-
-function find_dsn () {
-	cdf "Capfile"
-	cat **/Config.pm | grep dbi:mysql:dbname=$1
-	cd -
-}
 
 function snatch () {
 	gdb -p $1 -batch -n -x =( echo -e "p (int)open(\"/proc/$$/fd/1\", 1)\np (int)dup2(\$1, 1)\np (int)dup2(\$1, 2)" )
@@ -272,12 +255,17 @@ function gres () {
 	vim -c "argdo %s/$1/$2/gce | update" ${@[3, -1]}
 }
 
-if [ -f "$HOME/.zsh/mine.zshrc" ]
+if which tscreen > /dev/null
+then
+	alias screen=tscreen
+fi
+
+if [[ -f "$HOME/.zsh/mine.zshrc" ]]
 then
 	source "$HOME/.zsh/mine.zshrc"
 fi
 
-if [ -f "$HOME/perl5/perlbrew/etc/bashrc" ]
+if [[ -f "$HOME/perl5/perlbrew/etc/bashrc" ]]
 then
 	source $HOME/perl5/perlbrew/etc/bashrc
 fi

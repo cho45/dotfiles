@@ -1,8 +1,5 @@
 # vim:set ft=zsh:
 
-export GISTY_DIR="$HOME/sketch/gists"
-export PERL_AUTOINSTALL="--defaultdeps"
-
 cheat-sheet () { zle -M "`cat ~/.zsh/cheat-sheet`" }
 zle -N cheat-sheet
 # C-[ :cheat-sheet
@@ -78,8 +75,6 @@ precmd () {
 #		osascript -e 'tell application "System Events" to key code 103'
 #	fi
 #
-	$(change-wallpaper.pl > /dev/null 2>&1 &)
-
 	# for git
 	update-git-status
 
@@ -185,18 +180,6 @@ function git () {
 			command git $@
 		fi
 	fi
-}
-
-function gistysearch () {
-	local pwd
-	pwd=$PWD
-	cd $GISTY_DIR
-	for i in *(/); do
-		cd $i
-		git grep "$1" | sed "s/^/$i: /"
-		cd - >/dev/null
-	done
-	cd $pwd
 }
 
 function anco () {
