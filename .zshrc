@@ -255,11 +255,6 @@ function gres () {
 	vim -c "argdo %s/$1/$2/gce | update" ${@[3, -1]}
 }
 
-if which tscreen > /dev/null
-then
-	alias screen=tscreen
-fi
-
 if [[ -f "$HOME/.zsh/mine.zshrc" ]]
 then
 	source "$HOME/.zsh/mine.zshrc"

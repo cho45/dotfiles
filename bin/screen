@@ -1,0 +1,4 @@
+#!/bin/sh
+exec tscreen ${@+"$@"}
+screens=$(which -a screen | grep -v $0)
+exec $screens ${@+"$@"}
