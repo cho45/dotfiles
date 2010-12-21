@@ -1,0 +1,5 @@
+--langdef=templatetoolkit
+--langmap=templatetoolkit:.tt.html.htm
+--regex-templatetoolkit=/\bBLOCK\s+(\w+)/\1/b,Block/
+--regex-templatetoolkit=/\bMACRO\s+(\w+)/\1/m,Macro/
+

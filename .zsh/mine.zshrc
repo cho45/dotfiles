@@ -15,9 +15,6 @@ PROMPT_CMD="%{[32m%} | q ド _ リ|$ <%{[m%}%{[m%} "
 PROMPT_CWD_ADD=""
 
 alias svn='svnwrapper.rb'
-alias b='todo.pl editdump'
-
-desktop=0
 
 # for screen
 preexec () {

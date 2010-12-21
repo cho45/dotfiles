@@ -263,7 +263,7 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
     call <SID>X("Search", "f5deb3", "cd853f", "")
     call <SID>X("SpecialKey", "666666", "", "")
     call <SID>X("StatusLine", "222222", "ffffff", "reverse")
-    call <SID>X("StatusLineNC", "cccccc", "000000", "reverse")
+    call <SID>X("StatusLineNC", "222222", "999999", "reverse")
     call <SID>X("Title", "53c3ba", "", "")
     call <SID>X("Visual", "c79320", "ffffff", "reverse")
     "VisualNOS

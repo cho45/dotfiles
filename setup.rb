@@ -45,6 +45,7 @@ end
 link ".vimrc", "~/.vimrc"
 link ".gvimrc", "~/.gvimrc"
 link ".vim", "~/.vim"
+link ".nanorc", "~/.nanorc"
 
 link ".zshrc", "~/.zshrc"
 link ".zsh", "~/.zsh"

@@ -8,8 +8,23 @@ set tabsize 4
 set morespace
 set smooth
 set undo
+set historylog
+set whitespace "> "
 
-## Here is an example for Perl.
+bind ^H left all
+bind ^J down all
+bind ^K up all
+bind ^L right all
+bind ^F endpara all
+bind ^B beginpara all
+bind ^U undo all
+bind ^R redo all
+bind ^A home all
+bind ^E end all
+bind M-Space mark all
+bind ^I indent all
+bind ^Y copytext all
+
 ##
 syntax "perl" "\.p[lm]$"
 header "^#!.*/perl[-0-9._]*"
@@ -22,3 +37,45 @@ color white start="(^use| = new)" end=";"
 color green "#.*"
 color yellow start="<< 'STOP'" end="STOP"
 
+syntax "javascript" "\.js$"
+icolor red "[0-9]+" "0x[0-9a-f]+" "true" "false"
+color magenta "\<(if|else|for|while|function|instanceof|null|return|try|catch|finally|new|var|with|typeof)\>"
+color yellow ""(\\.|[^"])*"" "'(\\.|[^'])*'"
+color brightblue  "//.*"
+color brightblue start="/\*" end="\*/"
+
+##
+syntax "html" "\.html$"
+color blue start="<" end=">"
+color red "&[^;[[:space:]]]*;"
+
+##
+syntax "css" "\.css$"
+color brightred     "."
+color brightyellow  start="\{" end="\}"
+color brightwhite   start=":" end="([;^\{]|$)"
+color brightblue    ":active|:focus|:hover|:link|:visited|:link|:after|:before|$"
+color brightblue    start="\/\*" end="\\*/"
+color green         ";|:|\{|\}"
+
+##
+syntax "sh" "\.sh$"
+header "^#!.*/(ba|k|pdk)?sh[-0-9_]*"
+icolor brightgreen "^[0-9A-Z_]+\(\)"
+color green "\<(case|do|done|elif|else|esac|exit|fi|for|function|if|in|local|read|return|select|shift|then|time|until|while)\>"
+color green "(\{|\}|\(|\)|\;|\]|\[|`|\\|\$|<|>|!|=|&|\|)"
+color green "-[Ldefgruwx]\>"
+color green "-(eq|ne|gt|lt|ge|le|s|n|z)\>"
+color brightblue "\<(cat|cd|chmod|chown|cp|echo|env|export|grep|install|let|ln|make|mkdir|mv|rm|sed|set|tar|touch|umask|unset)\>"
+icolor brightred "\$\{?[0-9A-Z_!@#$*?-]+\}?"
+color cyan "(^|[[:space:]])#.*$"
+color brightyellow ""(\\.|[^"])*"" "'(\\.|[^'])*'"
+color ,green "[[:space:]]+$"
+
+##
+syntax "makefile" "Makefile[^/]*$"
+color red "[:=]"
+color magenta "\<(if|ifeq|else|endif)\>"
+color blue "\$+[{(][a-zA-Z0-9_-]+[})]"
+color brightblue "^[^ 	]+:"
+color green "#.*$"
