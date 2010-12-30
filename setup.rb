@@ -49,6 +49,7 @@ link ".nanorc", "~/.nanorc"
 
 link ".zshrc", "~/.zshrc"
 link ".zsh", "~/.zsh"
+link ".ctags", "~/.ctags"
 
 link ".eclimrc", "~/.eclimrc"
 

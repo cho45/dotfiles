@@ -3,8 +3,6 @@
 	email = cho45@lowreal.net
 
 [alias]
-	psuh    = push
-	puhs    = push
 	st      = status
 	di      = diff
 	co      = checkout

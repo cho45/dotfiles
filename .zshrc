@@ -133,14 +133,16 @@ abbreviations=(
 	"HEAD^^^^"  "HEAD\\^\\^\\^\\^\\^"
 	"HEAD^^^^^" "HEAD\\^\\^\\^\\^\\^"
 
+	"sipp"  "server_ips"
+	"mysql" "mysql -unobody -pnobody -h"
+
 	# typo
 	"lkm"   "lm"
 	"it"    "git"
 	"gitp"  "git"
 	"ush"   "push"
-	"sipp"  "server_ips"
-
-	"mysql" "mysql -unobody -pnobody -h"
+	"psuh"  "push"
+	"puhs"  "push"
 )
 
 function magic-abbrev-expand () {
