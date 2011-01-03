@@ -38,6 +38,10 @@ export PERL_CPANM_OPT="--verbose --sudo --prompt --mirror http://cpan.cpantester
 export RIDGE_ENV=test
 export FLEX_HOME=$HOME/sdk/flex4sdk
 
+bindkey -e
+bindkey -D vicmd
+bindkey -r '^X^V'
+
 ## modules
 autoload zargs
 
@@ -63,10 +67,6 @@ zle -N predict-off
 bindkey '^X^Z' predict-on
 bindkey '^Z' predict-off
 zstyle ':predict' verbose true
-
-bindkey -e
-bindkey -D vicmd
-bindkey -r '^X^V'
 
 ## setopt
 setopt print_eight_bit
