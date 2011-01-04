@@ -16,27 +16,24 @@ def sh(command)
 end
 
 def killall_ssh
-	sh("killall ssh")
+	sh "killall ssh"
 end
 
-def setup_tunnel
-	unless @ssid == "SNEG"
-		sh("ssh -o PreferredAuthentications=publickey -o ControlMaster=no -S none -D8081 -L3689:localhost:3689 -R9955:localhost:9955 -N -t -x lab.lowreal.net &")
-	end
-end
-
-def set_screensaver_timeout
+def set_screensaver_timeout(n)
 	plist = Pathname.glob("#{ENV["HOME"]}/Library/Preferences/ByHost/com.apple.screensaver.*.plist")[0]
-	hash  =  plist.to_s[/\.([0-9A-F-]+)\.plist/, 1]
+	hash  = plist.to_s[/\.([0-9A-F-]+)\.plist/, 1]
 	name  = "ByHost/com.apple.screensaver.#{hash}"
-	if @ssid == "SNEG"
-		sh("defaults write #{name} idleTime -int 0")
-	else
-		sh("defaults write #{name} idleTime -int 180")
-	end
+	sh "defaults write #{name} idleTime -int #{n}"
 end
+
+## execution
 
 killall_ssh
-# setup_tunnel
-set_screensaver_timeout
+
+case @ssid
+when "SNEG"
+	set_screensaver_timeout(0)
+else
+	set_screensaver_timeout(180)
+end
 

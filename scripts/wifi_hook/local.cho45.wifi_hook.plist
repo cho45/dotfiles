@@ -19,7 +19,8 @@
     <string>/var/log/wifi_hook</string>
     <key>WatchPaths</key>
     <array>
-      <string>/Library/Preferences/SystemConfiguration/com.apple.airport.preferences.plist</string>
+      <!--string>/Library/Preferences/SystemConfiguration/com.apple.airport.preferences.plist</string-->
+      <string>/Library/Preferences/SystemConfiguration</string>
     </array>
   </dict>
 </plist>
