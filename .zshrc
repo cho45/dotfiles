@@ -248,6 +248,14 @@ function gres () {
 	vim -c "argdo %s/$1/$2/gce | update" ${@[3, -1]}
 }
 
+# infinitely execute the command
+# ssh -o PreferredAuthentications=publickey ....
+function oo () {
+	while :; do;
+		${@[1, -1]}
+	done
+}
+
 # Load extra rc
 
 if [[ -f "$HOME/.zsh/mine.zshrc" ]]; then

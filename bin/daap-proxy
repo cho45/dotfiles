@@ -1,2 +1,2 @@
 #!/bin/sh
-dns-sd -P "DAAP"  _daap._tcp local 3689 localhost.local. 127.0.0.1 RemoteDAAP
+dns-sd -P "DAAP"  _daap._tcp local 3689 Fiona-DAAP.local. 127.0.0.1 RemoteDAAP
