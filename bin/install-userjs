@@ -19,7 +19,11 @@ $html =~ s{\$path}{$target};
 $fh->print($html);
 $fh->close;
 
-system('open', '-a', $app, $fh->filename);
+if ($app eq 'Firefox') {
+	system('open', $fh->filename);
+} else {
+	system('open', '-a', $app, $fh->filename);
+}
 
 my $fs = Mac::FSEvents->new({
 	path => "$ENV{HOME}/Library/Application Support/Firefox/Profiles/",
@@ -30,6 +34,7 @@ $fs->watch;
 my $installed;
 WATCH: while ( my @events = $fs->read_events ) {
 	for my $event (@events) {
+		next unless $event->path =~ qr{gm_scripts/[^/]+/};
 		$installed = [ grep { /\.user\.js$/ } dir($event->path)->children ]->[0] and last WATCH;
 	}
 }
