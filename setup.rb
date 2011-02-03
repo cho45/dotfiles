@@ -69,7 +69,7 @@ link ".gdbinit", "~/.gdbinit"
 link "git/.gitconfig", "~/.gitconfig"
 link "git/.gitignore", "~/.gitignore"
 
-cp ".gemrc", "~/.gemrc" unless Pathname.new("~/.gemrc").expand_path.exist?
+cp ".gemrc", "~/.gemrc".expand unless Pathname.new("~/.gemrc").expand_path.exist?
 
 if RUBY_PLATFORM =~ /darwin/
 	link "/Applications/Firefox.app/Contents/MacOS/firefox-bin", "~/bin/firefox"
