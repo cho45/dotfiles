@@ -152,7 +152,7 @@ for Vim and place your mappings there (:help ftplugin-name).
 - Perform a context sensitive search for the element under the cursor
   using <enter>.
 
-  See |:FindByContext| for more info.
+  See :FindByContext for more info.
 
   >
      " avoid overwriting <cr> mapping in 'command-line' buffer (:h cmdwin).

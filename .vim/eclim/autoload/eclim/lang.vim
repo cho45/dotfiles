@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -28,9 +28,9 @@
   let s:validate_command = '-command <type>_validate -p "<project>" -f "<file>"'
 " }}}
 
-" CodeComplete(command, findstart, base) {{{
+" CodeComplete(command, findstart, base, [options]) {{{
 " Handles code completion.
-function! eclim#lang#CodeComplete(command, findstart, base)
+function! eclim#lang#CodeComplete(command, findstart, base, ...)
   if a:findstart
     " update the file before vim makes any changes.
     call eclim#util#ExecWithoutAutocmds('silent update')
@@ -61,13 +61,19 @@ function! eclim#lang#CodeComplete(command, findstart, base)
 
     let offset = eclim#util#GetOffset() + len(a:base)
     let project = eclim#project#util#GetCurrentProjectName()
-    let filename = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+    let file = eclim#project#util#GetProjectRelativeFilePath()
 
     let command = a:command
     let command = substitute(command, '<project>', project, '')
-    let command = substitute(command, '<file>', filename, '')
+    let command = substitute(command, '<file>', file, '')
     let command = substitute(command, '<offset>', offset, '')
     let command = substitute(command, '<encoding>', eclim#util#GetEncoding(), '')
+    if a:0
+      let options = a:1
+      if has_key(options, 'layout')
+        let command = substitute(command, '<layout>', options.layout, '')
+      endif
+    endif
 
     let completions = []
     let results = split(eclim#ExecuteEclim(command), '\n')
@@ -98,6 +104,7 @@ function! eclim#lang#CodeComplete(command, findstart, base)
           \ 'word': word,
           \ 'menu': menu,
           \ 'info': info,
+          \ 'dup': 1
         \ }
 
       call add(completions, dict)
@@ -144,7 +151,7 @@ function! eclim#lang#Search(command, singleResultAction, argline)
     " update the file.
     call eclim#util#ExecWithoutAutocmds('silent update')
 
-    let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
+    let file = eclim#project#util#GetProjectRelativeFilePath()
     let position = eclim#util#GetCurrentElementPosition()
     let offset = substitute(position, '\(.*\);\(.*\)', '\1', '')
     let length = substitute(position, '\(.*\);\(.*\)', '\2', '')
@@ -207,7 +214,7 @@ endfunction " }}}
 function! eclim#lang#UpdateSrcFile(lang, validate)
   let project = eclim#project#util#GetCurrentProjectName()
   if project != ""
-    let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
+    let file = eclim#project#util#GetProjectRelativeFilePath()
     let command = s:update_command
     let command = substitute(command, '<lang>', a:lang, '')
     let command = substitute(command, '<project>', project, '')
@@ -245,7 +252,7 @@ function! eclim#lang#Validate(type, on_save)
   endif
 
   let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#project#util#GetProjectRelativeFilePath(expand("%:p"))
+  let file = eclim#project#util#GetProjectRelativeFilePath()
   let command = s:validate_command
   let command = substitute(command, '<type>', a:type, '')
   let command = substitute(command, '<project>', project, '')

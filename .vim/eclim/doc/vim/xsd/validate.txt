@@ -10,7 +10,7 @@ location list (:help location-list) and their corresponding line
 number noted via Vim's sign functionality.
 
 If you do not want your xsd files validated automatically when saved,
-you can set the |g:EclimXsdValidate| variable described in the
+you can set the g:EclimXsdValidate variable described in the
 configuration section below.
 
 *:Validate_xsd*

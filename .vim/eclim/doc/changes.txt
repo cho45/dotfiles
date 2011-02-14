@@ -1,6 +1,153 @@
 History of Changes
 ******************
 
+*1.6.1*
+
+
+1.6.1 (2010-10-23)
+==================
+
+Bug Fixes:
+   - Fix for |:ProjectProblems| command when any filters have been set
+     from the eclipse gui.
+
+   - Merge in JRuby's improvements to nailgun's build scripts to
+     increase compatibility with more platforms.
+
+   - Update the installer and eclimd to not use the eclipse binary and
+     instead run the launcher jar directly.  Removes the need to
+     locate the binary which varies by platform and some eclipse
+     distributions, and fixes issues with options located in the
+     eclipse.ini that are only supported by the IDE app.
+
+   - Various other bug fixes.
+
+Eclim:
+   - Add workspace locking to prevent colliding with other running
+     eclipse instances on the same workspace.
+
+Common:
+   - Added a |:TreeTab| command like |:ProjectTab| but for any
+     arbitrary directory.
+
+   - Added a |:BuffersToggle| command to toggle whether the eclim
+     buffers windows is open or closed.
+
+   - Refactored Vcs (|vim-common-vcs|) support, including a new
+     |:VcsLog| layout.
+
+     Note: Support for cvs and subversion have been discontinued.
+
+Python:
+   - Upgraded included rope version to 0.9.3.
+
+   - Improved the detection of the completion entries types.
+
+Php:
+   - Fixed validating php files in eclipse 3.6.1.
+
+*1.6.0*
+
+
+1.6.0 (Aug. 01, 2010)
+=====================
+
+Bug Fixes:
+   - Several bug fixes for eclipse 3.6 (Helios) compatability.
+
+   - Various other bug fixes.
+
+Eclipse:
+   - Eclim now requires the latest version of eclipse (Helios, 3.6).
+
+Common:
+   - |:ProjectTree| now supports eclipse resource links.
+
+*1.5.8*
+
+
+1.5.8 (Jun. 26, 2010)
+=====================
+
+Bug Fixes:
+   - Fixed possible NPE during installation when one or more eclim
+     dependent eclipse features needs to be upgraded.
+
+   - Fixed code completion and search for php as well as search for
+     ruby, all of which were all affected by dltk module caching
+     introduced in galileo SR2.
+
+*1.5.7*
+
+
+1.5.7 (Jun. 20, 2010)
+=====================
+
+Bug Fixes:
+   - Fixed launching of MacVim from the eclipse gui.
+
+   - Various other bug fixes.
+
+Installer:
+   - The installer has undergone some extensive changes to make it
+     more reliable and to better support various environments.
+
+*1.5.6*
+
+
+1.5.6 (Mar. 06, 2010)
+=====================
+
+Bug Fixes:
+   - Avoid possible gvim crashes when launched from the eclipse gui by
+     disabling documentListen events if the current gvim version
+     doesn't include the patch which resolves the crash.
+
+   - Various bug fixes.
+
+Common:
+   - Added a |:ProjectTab| command providing the ability to work on
+     one or more projects each with a dedicated vim tab.
+
+   - Added a |:Tcd| command to mimic :lcd but local to the tab instead
+     of the window.
+
+   - Added branch info to the footer of the project tree when using
+     mercurial or git.
+
+Install:
+   - Added support for automated installs (|install-automated|).
+
+Eclim:
+   - Added initial support for using eclim via vim in cygwin.
+
+   - The eclimd log file has been moved to:
+     <workspace>/.metadata/.log.eclimd
+
+   - Added support for specifying that gvim should be refocused after
+     executing an eclipse keybinding from vim using
+     eclim#vimplugin#FeedKeys (|feedkeys|).
+
+   - Moved user local eclim resources (templates, taglist scripts,
+     etc) from ${vimfiles}/eclim/resources to ~/.eclim/resources.
+
+     Note: The eclim installer will move your existing files from the old
+       location to the new location, but you may want to back those
+       files up just in case.
+
+*1.5.5*
+
+
+1.5.5 (Feb. 22, 2010)
+=====================
+
+Bug Fixes:
+   - Fixed error using :ProjectTree if the project name has non-word
+     characters in it.
+
+Install:
+   - Fixed issue downloading content.jar from eclipse update site.
+
 *1.5.4*
 
 
@@ -76,19 +223,19 @@ Bug Fixes:
    - Various bug fixes.
 
 Eclim:
-   - Added |:ProjectRename| and |:ProjectMove| commands to allow
-     renaming and moving of projects.
+   - Added :ProjectRename and :ProjectMove commands to allow renaming
+     and moving of projects.
 
-   - Added |:ProjectProblems| command to populate vim's quickfix with
-     a list of all eclipse build errors and warnings for the current
-     and all related projects.
+   - Added :ProjectProblems command to populate vim's quickfix with a
+     list of all eclipse build errors and warnings for the current and
+     all related projects.
 
      Note: To have problems reported for java projects created via eclim,
        you may need to recreate your java projects to ensure that the
        java builder is properly added.  As of eclim 1.5.2, eclim's
        java project creation now adds the java builder.
 
-   - Added |:HistoryDiffNext| and |:HistoryDiffPrev| commands to view
+   - Added :HistoryDiffNext and :HistoryDiffPrev commands to view
      history diffs while navigating the history stack.
 
    - Abbreviation support removed in favor of any one of the third
@@ -100,14 +247,14 @@ Eclim:
      (|eclimd-extdir|).
 
 Java:
-   - Updated |:JavaImpl|, |:JavaDelegate|, and |:JUnitImpl| to better
+   - Updated :JavaImpl, :JavaDelegate, and |:JUnitImpl| to better
      support generics.
 
    - Updated |:JUnitImpl| to support junit 4 method signatures.
 
-   - Updated |:JavaImport| and |:JavaImportSort| to honor eclipse's
-     import order preference and added the ability to edit that
-     preference via |:ProjectSettings| and |:EclimSettings|.
+   - Updated :JavaImport and :JavaImportSort to honor eclipse's import
+     order preference and added the ability to edit that preference
+     via :ProjectSettings and :EclimSettings.
 
    - Added initial refactoring (|vim-java-refactor|) support.
 
@@ -139,7 +286,7 @@ Eclim:
 C/C++:
    - Fixed :CSearch results on Windows platforms.
 
-   3. Re-implemented c/c++ project creation.
+   - Re-implemented c/c++ project creation.
 
      Note: If you created any c or c++ projects via eclim (as opposed to
        creating the project via the eclipse project wizard), then you
@@ -176,7 +323,7 @@ Ruby:
 
 Java:
    - Added ability to configure java indentation globally via
-     |:EclimSettings| or per project using |:ProjectSettings|.
+     :EclimSettings or per project using :ProjectSettings.
 
 *1.4.9*
 
@@ -211,14 +358,14 @@ Bug Fixes:
    - Various other bug fixes.
 
 Eclim:
-   - Added |:ProjectImport| command.
+   - Added :ProjectImport command.
 
 Maven
    - Switched repository searching to a new (hopefully more
      dependable) site.
 
 Python:
-   - Added |:PythonSearchContext|.
+   - Added :PythonSearchContext.
 
 *1.4.7*
 
@@ -311,11 +458,11 @@ Php:
 
 Vcs:
    - Added option to set the split orientation
-     (|g:EclimVcsDiffOrientation|) (horizontal or vertical) used when
+     (|g-eclimvcsdifforientation|) (horizontal or vertical) used when
      executing diffs.
 
    - Added option to allow users to change the pattern
-     (|g:EclimVcsTrackerIdPatterns|) used to match tracker ticket
+     (|g-eclimvcstrackeridpatterns|) used to match tracker ticket
      numbers in :VcsLog.
 
 *1.4.3*
@@ -341,7 +488,7 @@ Python:
    - Added support for finding an element definition
      (|vim-python-search|).
 
-   - Improved |:PyLint| support.
+   - Improved :PyLint support.
 
 *1.4.2*
 
@@ -378,13 +525,13 @@ Bug Fixes:
    - Various other bug fixes.
 
 Eclim:
-   - Added commands |:EclimDisable| and |:EclimEnable| to temporarily
+   - Added commands :EclimDisable and :EclimEnable to temporarily
      disable, and then re-enable, communication with eclimd.
 
 Java:
-   - Added |:JavaFormat| command contributed by Anton Sharonov.
+   - Added :JavaFormat command contributed by Anton Sharonov.
 
-   - Added |:Checkstyle| support.
+   - Added :Checkstyle support.
 
 *1.4.0*
 
@@ -410,12 +557,12 @@ Bug Fixes:
 
 Eclim:
    - Added translation of html docs to vim doc format accessable via
-     |:EclimHelp| and |:EclimHelpGrep|.
+     :EclimHelp and :EclimHelpGrep.
 
-   - Added |:Todo| and |:ProjectTodo|.
+   - Added :Todo and :ProjectTodo.
 
-   - Added |:TrackerTicket| for viewing tickets by id in your web
-     based tracking system.
+   - Added :TrackerTicket for viewing tickets by id in your web based
+     tracking system.
 
    - Renamed setting org.eclim.project.vcs.tracker to
      org.eclim.project.tracker.
@@ -440,11 +587,10 @@ Vcs:
      :VcsWeb* (|vcs-web|) commands
 
 Vim:
-   - Added |:Only| as a configurable alternative to vim's :only
-     command.
+   - Added :Only as a configurable alternative to vim's :only command.
 
-   - Added |:OtherWorkingCopyDiff|, |:OtherWorkingCopyEdit|,
-     |:OtherWorkingCopySplit|, and |:OtherWorkingCopyTabopen|.
+   - Added :OtherWorkingCopyDiff, :OtherWorkingCopyEdit,
+     :OtherWorkingCopySplit, and :OtherWorkingCopyTabopen.
 
 *1.3.5*
 
@@ -467,7 +613,7 @@ Html:
 
 Vcs:
    - Added support for limiting the number of log entries returned by
-     |:VcsLog| (limits to 50 entries by default).
+     :VcsLog (limits to 50 entries by default).
 
    - Updated :VcsLog, :VcsChangeSet, etc. to support cvs and hg where
      applicable.
@@ -487,7 +633,7 @@ Bug Fixes:
    - Various other bug fixes.
 
 Eclim:
-   - Added |:ProjectInfo|.
+   - Added :ProjectInfo.
 
    - Added an eclim/after directory to vim's runtime path for any user
      scripts to be sourced after eclim.
@@ -524,14 +670,13 @@ Bug Fixes:
 
 Eclim:
    - Added commands to view or manipulate project natures:
-     |:ProjectNatures|, |:ProjectNatureAdd|, and
-     |:ProjectNatureRemove|.
+     :ProjectNatures, :ProjectNatureAdd, and :ProjectNatureRemove.
 
 Css:
    - Added css validation (|vim-css-validate|).
 
 Html:
-   - Added |:BrowserOpen|
+   - Added :BrowserOpen
 
 Html / Xml:
    - Added auto completion of end tags when typing '</'. This can be
@@ -557,14 +702,14 @@ Python:
      python compiler.
 
    - Added support for pylint (http://www.logilab.org/857) using new
-     |:PyLint| command.
+     :PyLint command.
 
 Vcs:
-   - Added |:VcsInfo|, :ViewvcAnnotate, :ViewvcChangeSet, and
+   - Added :VcsInfo, :ViewvcAnnotate, :ViewvcChangeSet, and
      :ViewvcDiff.
 
 Vcs (subversion):
-   - Added |:VcsLog|, |:VcsChangeSet|, |:VcsDiff|, and |:VcsCat|.
+   - Added :VcsLog, :VcsDiff, and :VcsCat.
 
 Vim:
    - Added vim window maximize and minimize (|vim-common-maximize|)
@@ -572,11 +717,10 @@ Vim:
 
    - Added an alternate implementation of taglist (|taglisttoo|).
 
-   - Added command |:Buffers|.
+   - Added command :Buffers.
 
-   - Added |:VimgrepRelative|, |:VimgrepAddRelative|,
-     |:LvimgrepRelative|, |:LvimgrepAddRelative|, |:CdRelative|, and
-     |:LcdRelative|.
+   - Added :VimgrepRelative, :VimgrepAddRelative, :LvimgrepRelative,
+     :LvimgrepAddRelative, :CdRelative, and :LcdRelative.
 
 *1.3.1*
 
@@ -619,19 +763,19 @@ Eclim:
      longer performs an automatic project refresh.  What this means
      for you is that any time you perform an action that results in
      any file additions, deletions, or changes, like a svn / cvs
-     update, you should issue a |:ProjectRefresh| to ensure that
-     eclipse and eclim are updated with the latest version of the
-     files on disk.
+     update, you should issue a :ProjectRefresh to ensure that eclipse
+     and eclim are updated with the latest version of the files on
+     disk.
 
-   - |:ProjectCreate| now supports optional -p argument for specifying
+   - :ProjectCreate now supports optional -p argument for specifying
      the project name to use.
 
-   - Created new command |:ProjectRefreshAll| to support refreshing
-     all projects at once, and modified |:ProjectRefresh| to only
-     refresh the current project if no project names are supplied.
+   - Created new command :ProjectRefreshAll to support refreshing all
+     projects at once, and modified :ProjectRefresh to only refresh
+     the current project if no project names are supplied.
 
-   - Added |:ProjectGrep|, |:ProjectGrepAdd|, |:ProjectLGrep|, and
-     |:ProjectLGrepAdd|.
+   - Added :ProjectGrep, :ProjectGrepAdd, :ProjectLGrep, and
+     :ProjectLGrepAdd.
 
    - Added support for buffer local variable b:EclimLocationListFilter
      which can contain a list of regular expression patterns used to
@@ -672,24 +816,23 @@ Python:
      (|vim-python-regex|).
 
 Django:
-   - Added Django manage.py (|djangomanage|), |:DjangoFind|,
-     |:DjangoTemplateOpen|, |:DjangoViewOpen|, and
-     |:DjangoContextOpen|.
+   - Added Django manage.py (|djangomanage|), :DjangoFind,
+     :DjangoTemplateOpen, :DjangoViewOpen, and :DjangoContextOpen.
 
 WebXml:
    - Added web.xml file validation (|vim-java-webxml-validate|).
 
 Vim:
-   - Added |:ArgsRelative|, |:ArgAddRelative|, |:ReadRelative|.
+   - Added :ArgsRelative, :ArgAddRelative, :ReadRelative.
 
-   - Added |:Sign|, |:Signs|, |:SignClearUser|, |:SignClearAll|.
+   - Added :Sign, :Signs, :SignClearUser, :SignClearAll.
 
 Vcs:
-   - Added |:VcsAnnotate| and :Viewvc.
+   - Added :VcsAnnotate and :Viewvc.
 
 Wsdl:
-   - Added wsdl validation (|vim-wsdl-validate|).  Requires the
-     eclipse wst (http://eclipse.org/webtools/main.php) plugin.
+   - Added wsdl validation.  Requires the eclipse wst
+     (http://eclipse.org/webtools/main.php) plugin.
 
 Xsd:
    - Added xsd validation (|vim-xsd-validate|).  Requires the eclipse

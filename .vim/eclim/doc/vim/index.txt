@@ -41,7 +41,7 @@ other categories.
 
 - :EclimSettings - Allows you to view / edit the global settings
   (|vim-settings|). For project level settings see the
-  |:ProjectSettings| command on the project documentation page
+  :ProjectSettings command on the project documentation page
   (|vim-common-project|).
 
 *:EclimDisable*

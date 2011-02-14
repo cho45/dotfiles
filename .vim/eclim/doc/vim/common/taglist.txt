@@ -262,13 +262,15 @@ Enhancements
 - Supports denoting tags based on their visibiltiy (+public, -private,
   *static, #protected).
 
+- Echoing of the current tag while scrolling through the taglist
+  window, which is helpful if the tag name doesn't fit in the width of
+  taglist window.
+
 Unimplemented features:
 
 - Drop down list in gvim with the list of tags.
 
 - Tag re-sorting
-
-- Vim session support
 
 - Support for tags for more than one file in the taglist window.
 
@@ -307,5 +309,17 @@ some of the same configuration variables:
        \ }
 
   <
+
+
+Configuration
+=============
+
+Vim Variables For TlistToo
+
+*g:EclimTaglistEcho*
+
+- g:EclimTaglistEcho (Default: 1) - If set to a non 0 values, when
+  moving the cursor in the taglist window, the name of the tag under
+  the cursor will be echoed to the vim command line.
 
 vim:ft=eclimhelp

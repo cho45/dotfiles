@@ -4,6 +4,33 @@
 Common
 ******
 
+- Eclipse Projects ()
+  - Tracker (#tracker)
+- Eclim & Taglist ()
+  - Taglist Enhancement (#taglist-enhancement)
+  - Writing the Groovy Script (#writing-the-groovy-script)
+  - Configuration (#configuration)
+  - TaglistToo: Alternate taglist implementation
+    (#taglisttoo-alternate-taglist-implementation)
+  - Configuration (#id1)
+- Utility Commands ()
+- Version Control System Commands ()
+  - Vcs Commands (#vcs-commands)
+  - Vcs Web Commands (#vcs-web-commands)
+  - Configuration (#configuration)
+  - Vcs Editor Support (#vcs-editor-support)
+- Local History ()
+  - Configuration (#configuration)
+- Web Lookup Commands ()
+  - OpenUrl (#openurl)
+  - Configuration (#configuration)
+  - Web Search Commands (#web-search-commands)
+- Window Maximize / Minimize ()
+  - Maximize (#maximize)
+  - Minimize (#minimize)
+  - Configuration (#configuration)
+- Archive Viewer ()
+  - Configuration (#configuration)
 - Eclipse Projects (|vim-common-project|)
 
 - Eclim & Taglist (|vim-common-taglist|)

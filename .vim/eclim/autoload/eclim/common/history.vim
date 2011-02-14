@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ function! eclim#common#history#AddHistory()
   endif
 
   let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+  let file = eclim#project#util#GetProjectRelativeFilePath()
   let command = s:command_add
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
@@ -59,7 +59,7 @@ function! eclim#common#history#History()
   endif
 
   let project = eclim#project#util#GetCurrentProjectName()
-  let file = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+  let file = eclim#project#util#GetProjectRelativeFilePath()
   let command = s:command_list
   let command = substitute(command, '<project>', project, '')
   let command = substitute(command, '<file>', file, '')
@@ -137,7 +137,7 @@ function s:View(...)
   if eclim#util#GoToBufferWindow(current)
     let filetype = &ft
     let project = eclim#project#util#GetCurrentProjectName()
-    let file = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+    let file = eclim#project#util#GetProjectRelativeFilePath()
     let command = s:command_revision
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
@@ -153,12 +153,15 @@ function s:View(...)
     setlocal modifiable
     setlocal noreadonly
 
-    let saved = @"
-    let @" = result
-    silent 1,$delete _
-    silent put "
-    silent 1,1delete _
-    let @" = saved
+    let temp = tempname()
+    call writefile(split(result, '\n'), temp)
+    try
+      silent 1,$delete _
+      silent read ++edit `=temp`
+      silent 1,1delete _
+    finally
+      call delete(temp)
+    endtry
 
     exec 'setlocal filetype=' . filetype
     setlocal nomodified
@@ -239,7 +242,7 @@ function s:Revert()
   let revision = b:history_revisions[line('.') - 1]
   if eclim#util#GoToBufferWindow(current)
     let project = eclim#project#util#GetCurrentProjectName()
-    let file = eclim#project#util#GetProjectRelativeFilePath(expand('%:p'))
+    let file = eclim#project#util#GetProjectRelativeFilePath()
     let command = s:command_revision
     let command = substitute(command, '<project>', project, '')
     let command = substitute(command, '<file>', file, '')
@@ -249,12 +252,24 @@ function s:Revert()
       return
     endif
 
-    let saved = @"
-    let @" = result
-    silent 1,$delete _
-    silent put "
-    silent 1,1delete _
-    let @" = saved
+    let ff = &ff
+    let temp = tempname()
+    call writefile(split(result, '\n'), temp)
+    try
+      silent 1,$delete _
+      silent read ++edit `=temp`
+      silent 1,1delete _
+    finally
+      call delete(temp)
+    endtry
+
+    if ff != &ff
+      call eclim#util#EchoWarning(
+        \ "Warning: the file format is being reverted from '" . ff . "' to '" .
+        \ &ff . "'. Using vim's undo will not restore the previous format so " .
+        \ "if you choose to undo the reverting of this file, you will need to " .
+        \ "manually set the file format back to " . ff . " (set ff=" . ff . ").")
+    endif
   endif
 endfunction " }}}
 

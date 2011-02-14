@@ -9,7 +9,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ function! eclim#ExecuteEclim(command, ...)
   " eclimd appears to be down, so exit early if in an autocmd
   if !g:eclimd_running && expand('<amatch>') != ''
     " check for file created by eclimd to signal that it is running.
-    if !filereadable(expand('~/.eclim/.eclimd_instances'))
+    if !eclim#EclimAvailable()
       return
     endif
   endif
@@ -69,9 +69,11 @@ function! eclim#ExecuteEclim(command, ...)
   let command = a:command
 
   " encode special characters
-  " http://www.cs.net/lucid/ascii.htm
-  let command = substitute(command, '*', '%2A', 'g')
+  " http://www.w3schools.com/TAGS/ref_urlencode.asp
+  let command = substitute(command, '\*', '%2A', 'g')
   let command = substitute(command, '\$', '%24', 'g')
+  let command = substitute(command, '<', '%3C', 'g')
+  let command = substitute(command, '>', '%3E', 'g')
 
   " execute the command.
   let port = len(a:000) > 0 ? a:000[0] : eclim#client#nailgun#GetNgPort()
@@ -79,12 +81,14 @@ function! eclim#ExecuteEclim(command, ...)
   let result = substitute(result, '\n$', '', '')
 
   " not sure this is the best place to handle this, but when using the python
-  " client, the result has a trailing ctrl-m on windows.
-  if has('win32') || has('win64')
+  " client, the result has a trailing ctrl-m on windows.  also account for
+  " running under cygwin vim.
+  if has('win32') || has('win64') || has('win32unix')
     let result = substitute(result, "\<c-m>$", '', '')
   endif
 
-  call eclim#util#Echo(' ')
+  " an echo during startup causes an annoying issue with vim.
+  "call eclim#util#Echo(' ')
 
   " check for errors
   let error = ''
@@ -110,7 +114,12 @@ function! eclim#ExecuteEclim(command, ...)
       else
         let error = error . "\n" .
           \ 'while executing command (port: ' . port . '): ' . command
-        call eclim#util#EchoError(error)
+        " if we are not in an autocmd, echo the error, otherwise just log it.
+        if expand('<amatch>') == ''
+          call eclim#util#EchoError(error)
+        else
+          call eclim#util#EchoDebug(error)
+        endif
       endif
     endif
     return
@@ -137,7 +146,10 @@ endfunction " }}}
 
 " EclimAvailable() {{{
 function! eclim#EclimAvailable()
-  return filereadable(expand('~/.eclim/.eclimd_instances'))
+  let instances = has('win32unix') ?
+    \ eclim#cygwin#WindowsHome() . '/.eclim/.eclimd_instances' :
+    \ expand('~/.eclim/.eclimd_instances')
+  return filereadable(instances)
 endfunction " }}}
 
 " PatchEclim(file, revision) {{{
@@ -167,8 +179,8 @@ function! eclim#PingEclim(echo, ...)
     endif
     let port = eclim#client#nailgun#GetNgPort(workspace)
   else
-    let workspace = eclim#eclipse#GetWorkspaceDir()
-    let port = eclim#client#nailgun#GetNgPort()
+    let workspace = eclim#eclipse#ChooseWorkspace()
+    let port = eclim#client#nailgun#GetNgPort(workspace)
   endif
 
   if a:echo
@@ -223,6 +235,10 @@ function! eclim#SaveSettings(command, project, ...)
   "if &modified
     let tempfile = substitute(tempname(), '\', '/', 'g')
     silent exec 'write! ' . escape(tempfile, ' ')
+
+    if has('win32unix')
+      let tempfile = eclim#cygwin#WindowsPath(tempfile)
+    endif
 
     let command = a:command
     let command = substitute(command, '<project>', a:project, '')

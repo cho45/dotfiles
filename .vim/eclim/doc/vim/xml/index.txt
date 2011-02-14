@@ -4,6 +4,12 @@
 Xml
 ***
 
+- Xml Code Completion ()
+  - Configuration (#configuration)
+- Xml Definition Lookup ()
+- Xml Validation ()
+  - Configuration (#configuration)
+- Xml Format ()
 - Xml Code Completion (|vim-xml-complete|)
 
 - Xml Definition Lookup (|vim-xml-definition|)
