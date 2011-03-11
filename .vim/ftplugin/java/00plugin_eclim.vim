@@ -100,7 +100,7 @@ function! EclimBaseDir()
   if !exists("g:EclimBaseDir")
     let savewig = &wildignore
     set wildignore=""
-    let file = findfile('plugin/eclim.vim', escape(&runtimepath, ' '))
+    let file = findfile('ftplugin/java/00plugin_eclim.vim', escape(&runtimepath, ' '))
     let &wildignore = savewig
 
     if file == ''
@@ -109,7 +109,7 @@ function! EclimBaseDir()
       let g:EclimBaseDir = ''
       return g:EclimBaseDir
     endif
-    let basedir = substitute(fnamemodify(file, ':p:h:h'), '\', '/', 'g')
+    let basedir = substitute(fnamemodify(file, ':p:h:h:h'), '\', '/', 'g')
 
     let g:EclimBaseDir = escape(basedir, ' ')
   endif
