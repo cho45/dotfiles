@@ -1,14 +1,8 @@
 #!/usr/bin/env perl
 
+use utf8;
 use strict;
 use warnings;
-
-use Data::Dumper;
-sub p ($) { warn Dumper shift }
-
-use Perl6::Say;
-
-use lib glob 'modules/*/lib';
-use lib 'lib';
+use lib lib => glob 'modules/*/lib';
 
 

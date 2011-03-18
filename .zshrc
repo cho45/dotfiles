@@ -9,6 +9,7 @@ PATHS=(
 	$HOME/project/commands/bin
 	$HOME/sdk/play
 	$HOME/sdk/android/tools
+	$HOME/sdk/android/platform-tools
 	$HOME/sdk/flex/bin
 	/usr/local/ruby1.9/bin
 	/usr/local/scala/bin
@@ -42,6 +43,9 @@ export _JAVA_OPTIONS="-Duser.language=en -Dfile.language=UTF-8"
 bindkey -e
 bindkey -D vicmd
 bindkey -r '^X^V'
+
+bindkey '^R' history-incremental-pattern-search-backward
+bindkey '^S' history-incremental-pattern-search-forward
 
 ## modules
 autoload zargs

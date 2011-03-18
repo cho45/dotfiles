@@ -8,38 +8,66 @@ use File::Temp ();
 use Path::Class;
 use Mac::FSEvents;
 use Term::ANSIColor;
+use Twiggy::Server;
+use Plack::App::File;
+use Test::TCP;
 
 opts my $app => { isa => 'Str', default => 'Firefox' };
-
 my $target = file(shift @ARGV)->absolute;
 exit 1 unless -f $target;
+my $name   = $target->basename;
 my $html   = do { local $/; <DATA> };
-my $fh = File::Temp->new(SUFFIX => '.html');
-$html =~ s{\$path}{$target};
-$fh->print($html);
-$fh->close;
+$html =~ s{\$name}{$name};
+
+my $port = Test::TCP::empty_port();
+my $server = Twiggy::Server->new(
+	host => '127.0.0.1',
+	port => $port,
+);
+
+$server->register_service(sub {
+	my $env = shift;
+	my $handler = {
+		'/' => sub {
+			[200, [ 'Content-Type' => 'text/html' ], [ $html ] ];
+		},
+		"/$name" => sub {
+			Plack::App::File->new(file => $target)->to_app->($env);
+		},
+	}->{$env->{PATH_INFO}};
+
+	$handler ? $handler->() : [404, ['Content-Type' => 'text/plain'], ['not found']];
+});
+
 
 if ($app eq 'Firefox') {
-	system('open', $fh->filename);
+	system('open', "http://127.0.0.1:$port/");
 } else {
-	system('open', '-a', $app, $fh->filename);
+	system('open', '-a', "http://127.0.0.1:$port/");
 }
 
 my $fs = Mac::FSEvents->new({
 	path => "$ENV{HOME}/Library/Application Support/Firefox/Profiles/",
 });
 
-$fs->watch;
+my $cv = AnyEvent->condvar;
+my $watch; $watch = AnyEvent->io(
+	fh   => $fs->watch,
+	poll => 'r',
+	cb   => sub {
+		for my $event ($fs->read_events) {
+			next unless $event->path =~ qr{gm_scripts/[^/]+/};
+			my $installed = [ grep { /\.user\.js$/ } dir($event->path)->children ]->[0];
+			if ($installed) {
+				$fs->stop;
+				undef $watch;
+				$cv->send($installed);
+			};
+		}
+	},
+);
 
-my $installed;
-WATCH: while ( my @events = $fs->read_events ) {
-	for my $event (@events) {
-		next unless $event->path =~ qr{gm_scripts/[^/]+/};
-		$installed = [ grep { /\.user\.js$/ } dir($event->path)->children ]->[0] and last WATCH;
-	}
-}
-
-$fs->stop;
+my $installed = $cv->recv;
 
 if ($installed) {
 	say "Notice event:";
@@ -64,7 +92,7 @@ __END__
 	<head>
 		<title>Install User Script</title>
 		<script type="text/javascript">
-			location.href = 'file://$path';
+			location.href = '$name';
 		</script>
 		<style>
 			html, body {
@@ -87,7 +115,7 @@ __END__
 		</style>
 	</head>
 	<body>
-		<p id="message"><a href="file://$path">Complete the install progress<br/>and close this page.</a></p>
+		<p id="message"><a href="$name">Complete the install progress<br/>and close this page.</a></p>
 		<script type="text/javascript">
 			window.close();
 		</script>
