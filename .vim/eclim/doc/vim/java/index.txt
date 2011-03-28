@@ -73,8 +73,6 @@ Java
 - TestNG ()
 - Logging ()
   - Configuration (#configuration)
-- Regex Testing ()
-  - Configuration (#configuration)
 - Java Tools Integration ()
 
 Ant
@@ -147,8 +145,6 @@ Java
 - TestNG (|vim-java-testng|)
 
 - Logging (|vim-java-logging|)
-
-- Regex Testing (|vim-java-regex|)
 
 - Java Tools Integration (|vim-java-tools|)
 

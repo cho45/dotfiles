@@ -31,7 +31,8 @@ Welcome to Eclim
   - Editing your project's settings (#editing-your-project-s-settings)
   - Maven Users (#maven-users)
 - History of Changes ()
-  - 1.6.1 (2010-10-23) (#id1)
+  - 1.6.2 (2011-02-26) (#id1)
+  - 1.6.1 (2010-10-23) (#id3)
   - 1.6.0 (Aug. 01, 2010) (#aug-01-2010)
   - 1.5.8 (Jun. 26, 2010) (#jun-26-2010)
   - 1.5.7 (Jun. 20, 2010) (#jun-20-2010)
@@ -45,7 +46,7 @@ Welcome to Eclim
   - 1.4.9 (Jun. 14, 2009) (#jun-14-2009)
   - 1.4.8 (May 30, 2009) (#may-30-2009)
   - 1.4.7 (May 02, 2009) (#may-02-2009)
-  - 1.4.6 (May 02, 2009) (#id16)
+  - 1.4.6 (May 02, 2009) (#id18)
   - 1.4.5 (Apr. 04, 2009) (#apr-04-2009)
   - 1.4.4 (Jan. 10, 2009) (#jan-10-2009)
   - 1.4.3 (Nov. 15, 2008) (#nov-15-2008)
@@ -80,7 +81,6 @@ Welcome to Eclim
     - Java Mappings (#java-mappings)
     - Php Mappings (#php-mappings)
     - Python Mappings (#python-mappings)
-    - Vim Script Mappings (#vim-script-mappings)
   - Cheatsheet ()
     - Global Commands (#global-commands)
     - Project Commands (#project-commands)
@@ -98,11 +98,9 @@ Welcome to Eclim
     - Php Commands (#php-commands)
     - Python Commands (#python-commands)
     - Ruby Commands (#ruby-commands)
-    - Vim Commands (#vim-commands)
     - WebXml Commands (#webxml-commands)
     - Xml Commands (#xml-commands)
     - Xsd Commands (#xsd-commands)
-    - Version Control Commands (#version-control-commands)
     - Misc. Commands (#misc-commands)
   - FAQ ()
     - How do I tell eclim which eclipse workspace to use?
@@ -119,32 +117,13 @@ Welcome to Eclim
       (#how-can-i-run-eclimd-on-a-truly-headless-server)
   - Common ()
     - Eclipse Projects ()
-      - Tracker (#tracker)
-    - Eclim & Taglist ()
-      - Taglist Enhancement (#taglist-enhancement)
-      - Writing the Groovy Script (#writing-the-groovy-script)
-      - Configuration (#configuration)
-      - TaglistToo: Alternate taglist implementation
-        (#taglisttoo-alternate-taglist-implementation)
-      - Configuration (#id1)
     - Utility Commands ()
-    - Version Control System Commands ()
-      - Vcs Commands (#vcs-commands)
-      - Vcs Web Commands (#vcs-web-commands)
-      - Configuration (#configuration)
-      - Vcs Editor Support (#vcs-editor-support)
     - Local History ()
       - Configuration (#configuration)
     - Web Lookup Commands ()
       - OpenUrl (#openurl)
       - Configuration (#configuration)
       - Web Search Commands (#web-search-commands)
-    - Window Maximize / Minimize ()
-      - Maximize (#maximize)
-      - Minimize (#minimize)
-      - Configuration (#configuration)
-    - Archive Viewer ()
-      - Configuration (#configuration)
   - C/C++ ()
     - C/C++ Project Configuration ()
     - C/C++ Code Completion ()
@@ -167,7 +146,6 @@ Welcome to Eclim
       - Configuration (#configuration)
   - Html ()
     - Html Code Completion ()
-      - Configuration (#configuration)
     - Html File Validation ()
       - Configuration (#configuration)
     - Html File Utils ()
@@ -241,8 +219,6 @@ Welcome to Eclim
     - TestNG ()
     - Logging ()
       - Configuration (#configuration)
-    - Regex Testing ()
-      - Configuration (#configuration)
     - Java Tools Integration ()
     - Ant (#ant)
     - Maven (#maven)
@@ -268,8 +244,6 @@ Welcome to Eclim
     - Python Search ()
       - Element Search (#element-search)
       - Configuration (#configuration)
-    - Python Regex Testing ()
-      - Configuration (#configuration)
     - Django ()
       - Django manage.py (#django-manage-py)
       - Configuration (#configuration)
@@ -286,13 +260,8 @@ Welcome to Eclim
       - Pattern Search (#pattern-search)
       - Element Search (#element-search)
       - Configuration (#configuration)
-  - Vim ()
-    - Vim Find ()
-      - Configuration (#configuration)
-    - Vim Doc ()
   - Xml ()
     - Xml Code Completion ()
-      - Configuration (#configuration)
     - Xml Definition Lookup ()
     - Xml Validation ()
       - Configuration (#configuration)
@@ -351,12 +320,10 @@ Welcome to Eclim
       - Log4j 指令集 (#log4j)
       - Maven 指令集 (#maven)
       - Python 指令集 (#python)
-      - Vim 指令集 (#vim)
       - WebXml 指令集 (#webxml)
       - Xml 指令集 (#xml)
       - Xsd 指令集 (#xsd)
-      - 版本控制指令集 (#id2)
-      - 其他指令集 (#id3)
+      - 其他指令集 (#id2)
 - Development Docs ()
   - Eclim Architecture ()
 *overview*
@@ -433,17 +400,26 @@ News
 ====
 
 
+2011-02-26
+----------
+
+Eclim 1.6.2 (|id1|) is now available.
+This is mostly a bug fix release, but please note that a handful of vim
+features have been broken out into separate projects and are no longer shipped
+with eclim.
+
+
 2010-10-23
 ----------
 
-Eclim 1.6.1 (|id1|) is now available.
-This is mostely a bug fix release with a few minor features tossed in.
+Eclim 1.6.1 (|id3|) is now available.
+This is mostly a bug fix release with a few minor features tossed in.
 
 
 2010-08-01
 ----------
 
-Eclim 1.6.0 (|id3|) is now available.
+Eclim 1.6.0 (|id5|) is now available.
 The most notable changes are:
 
 - Eclim has been upgraded to support Eclipse 3.6 (Helios).
@@ -454,7 +430,7 @@ The most notable changes are:
 2010-06-26
 ----------
 
-Eclim 1.5.8 (|id4|) is now available.
+Eclim 1.5.8 (|id6|) is now available.
 This is a bug fix release for the installer as well as some php and ruby
 features.
 
@@ -462,53 +438,53 @@ features.
 2010-06-20
 ----------
 
-Eclim 1.5.7 (|id5|) is now available.
+Eclim 1.5.7 (|id7|) is now available.
 The main focus of this release is bug fixes and improving the installer.
 
 
 2010-03-06
 ----------
 
-Eclim 1.5.6 (|id6|) is now available.
+Eclim 1.5.6 (|id8|) is now available.
 
 
 2010-02-22
 ----------
 
-Eclim 1.5.5 (|id7|) is now available.
+Eclim 1.5.5 (|id9|) is now available.
 This is a bug fix release for the eclim installer.
 
 
 2009-12-18
 ----------
 
-Eclim 1.5.4 (|id8|) is now available.
+Eclim 1.5.4 (|id10|) is now available.
 This is primarily a bug fix release for OSX users.
 
 
 2009-12-12
 ----------
 
-Eclim 1.5.3 (|id9|) is now available.
+Eclim 1.5.3 (|id11|) is now available.
 
 
 2009-08-30
 ----------
 
-Eclim 1.5.2 (|id10|) is now available.
+Eclim 1.5.2 (|id12|) is now available.
 
 
 2009-07-18
 ----------
 
-Eclim 1.5.1 (|id11|) is now available.
+Eclim 1.5.1 (|id13|) is now available.
 This is primarily a bug fix release
 
 
 2009-07-12
 ----------
 
-Eclim 1.5.0 (|id12|) is now available.
+Eclim 1.5.0 (|id14|) is now available.
 The most notable changes are:
 
 - Eclim has been upgraded to support Eclipse 3.5 (Galileo).
@@ -522,21 +498,21 @@ The most notable changes are:
 2009-06-14
 ----------
 
-Eclim 1.4.9 (|id13|) is now available.
+Eclim 1.4.9 (|id15|) is now available.
 This is primarily a bug fix release, with a few refinements.
 
 
 2009-05-30
 ----------
 
-Eclim 1.4.8 (|id14|) is now available.
+Eclim 1.4.8 (|id16|) is now available.
 This is primarily a bug fix release with a few enhancements.
 
 
 2009-05-02
 ----------
 
-Eclim 1.4.7 (|id15|) is now available.
+Eclim 1.4.7 (|id17|) is now available.
 This is a bug fix release which resolves an installation on unix based
 operating systems.
 
@@ -544,7 +520,7 @@ operating systems.
 2009-05-02
 ----------
 
-Eclim 1.4.6 (|id16|) is now available.
+Eclim 1.4.6 (|id18|) is now available.
 The major highlight of this release is support for c/c++ using the
 eclipse cdt (http://eclipse.org/cdt/) plugin.
 
@@ -552,14 +528,14 @@ eclipse cdt (http://eclipse.org/cdt/) plugin.
 2009-04-04
 ----------
 
-Eclim 1.4.5 (|id18|) is now available.
+Eclim 1.4.5 (|id20|) is now available.
 This is primarily a bug fix release.
 
 
 2009-01-10
 ----------
 
-Eclim 1.4.4 (|id19|) is now available.
+Eclim 1.4.4 (|id21|) is now available.
 Highlights of this release include:
 
 - re-enabled php support
@@ -572,7 +548,7 @@ Highlights of this release include:
 2008-11-15
 ----------
 
-Eclim 1.4.3 (|id20|) is now available.
+Eclim 1.4.3 (|id22|) is now available.
 This release focuses on updating the installer to support ganymede's p2 for
 upgrading / installing external dependencies and adding additional python
 support.
@@ -581,14 +557,14 @@ support.
 2008-09-30
 ----------
 
-Eclim 1.4.2 (|id21|) is now available.
+Eclim 1.4.2 (|id23|) is now available.
 This is primary a bug fix release.
 
 
 2008-08-24
 ----------
 
-Eclim 1.4.1 (|id22|) is now available.
+Eclim 1.4.1 (|id24|) is now available.
 This is primary a bug fix release, but there are some new features included
 as well.
 
@@ -596,7 +572,7 @@ as well.
 2008-07-27
 ----------
 
-Eclim 1.4.0 (|id23|) is now available.
+Eclim 1.4.0 (|id25|) is now available.
 Please note that eclim now requires the latest version of eclipse (http://eclipse.org)
 (Ganymede, 3.4.x).
 
@@ -614,15 +590,15 @@ other GPL projects in the future.
 2008-03-11
 ----------
 
-Eclim 1.3.5 (|id24|) is now available.
-You can view the release notes (|id24|) for
+Eclim 1.3.5 (|id26|) is now available.
+You can view the release notes (|id26|) for
 more info.
 
 
 2008-02-05
 ----------
 
-Eclim 1.3.4 (|id25|) is now available.
+Eclim 1.3.4 (|id27|) is now available.
 This release fixes a few minor bugs, improves the installer to account for
 eclipse installs with per user plugin locations, and adds php support.
 
@@ -630,7 +606,7 @@ eclipse installs with per user plugin locations, and adds php support.
 2007-12-15
 ----------
 
-Eclim 1.3.3 (|id26|) is now available.
+Eclim 1.3.3 (|id28|) is now available.
 This release fixes some installer issues.  If you have already installed
 1.3.2, then there is no need to upgrade to 1.3.3.
 
@@ -638,20 +614,20 @@ This release fixes some installer issues.  If you have already installed
 2007-12-04
 ----------
 
-Eclim 1.3.2 (|id27|) is now available.
+Eclim 1.3.2 (|id29|) is now available.
 
 
 2007-07-13
 ----------
 
-Eclim 1.3.1 (|id28|) is now available.
+Eclim 1.3.1 (|id30|) is now available.
 This is only a bug fix release.
 
 
 2007-07-01
 ----------
 
-Eclim 1.3.0 (|id29|) is now available.
+Eclim 1.3.0 (|id31|) is now available.
 The most notable changes are:
 
 - Eclim has been upgraded to support Eclipse 3.3.
@@ -664,6 +640,6 @@ The most notable changes are:
 - New functionality based on and requiring the eclipse wst
   (http://eclipse.org/webtools/).
 
-- Many more changes (|id29|).
+- Many more changes (|id31|).
 
 vim:ft=eclimhelp

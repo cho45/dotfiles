@@ -17,12 +17,10 @@ Translations
     - Log4j 指令集 (#log4j)
     - Maven 指令集 (#maven)
     - Python 指令集 (#python)
-    - Vim 指令集 (#vim)
     - WebXml 指令集 (#webxml)
     - Xml 指令集 (#xml)
     - Xsd 指令集 (#xsd)
-    - 版本控制指令集 (#id2)
-    - 其他指令集 (#id3)
+    - 其他指令集 (#id2)
 - Traditional Chinese (|translations-zh-tw-index|)
 
 vim:ft=eclimhelp
