@@ -161,24 +161,6 @@ may use Vim's command line completion to complete the project name.
 
   Echo info about the current or supplied project.
 
-  *g:EclimProjectStatusLine*
-  Eclim supports displaying info about the current project in vim's
-  status line by adding a call to
-  eclim#project#util#ProjectStatusLine() to your statusline option:
-
-  >
-     set statusline=%<%f\ %M\ %h%r%=%-10.(%l,%c%V\ %{eclim#project#util#ProjectStatusLine()}%)\ %P
-
-  <
-
-  By default, this will just include the project name, but you can
-  customize the output by setting g:EclimProjectStatusLine:
-
-  >
-     let g:EclimProjectStatusLine = 'eclim(p=${name}, n=${natures})'
-
-  <
-
 *:ProjectOpen*
 
 - :ProjectOpen [<project>]
@@ -353,7 +335,7 @@ may use Vim's command line completion to complete the project name.
     will be echoed as you move the cursor around.
 
   *g:EclimProjectTreeSharedInstance*
-  - g:EclimProjectTreeSharedInstance (Default: 1)
+  - g:EclimProjectTreeSharedInstance (Default: 0)
 
     When non 0, a tree instance with the same list of projects will be
     shared across vim tabs.  This allows you to have the same project
@@ -431,8 +413,8 @@ may use Vim's command line completion to complete the project name.
 - :ProjectTodo
 
   Searches all the source files in the project (those with extensions
-  included in |g:EclimTodoSearchExtensions|) for the fixme / todo
-  pattern (defined by |g:EclimTodoSearchPattern|) and adds all
+  included in g:EclimTodoSearchExtensions) for the fixme / todo
+  pattern (defined by g:EclimTodoSearchPattern) and adds all
   occurrences to the current location list.
 
 *:Todo*
@@ -470,5 +452,38 @@ may use Vim's command line completion to complete the project name.
 
     Defines a list of file extensions that will be searched for the
     todo / fixme entries.
+
+
+Tracker
+=======
+
+*:TrackerTicket*
+
+- :TrackerTicket <ticket_id>
+
+  Opens the supplied ticket via your web browser for the configured
+  tracking system configured via org.eclim.project.tracker.
+
+  Configuration
+
+  Eclim Settings
+
+  *org.eclim.project.tracker*
+  - org.eclim.project.tracker Url used to view tickets in your ticket
+    tracking software. This url supports the '<id>' placeholder which
+    will be replaced with the ticket id.
+
+    Ex. An example setting for a Trac installation:
+
+    >
+       org.eclim.project.tracker=http://somedomain.com/trac/ticket/<id>
+
+    <
+
+    In addition to being used by :TrackerTicket, this setting is also
+    used in conjunction with :VcsLog to enable linking of ticket ids
+    of the form #ticket_id (#1234) found in user supplied commit
+    comments.  You may also specify other patterns to match by setting
+    the g:EclimVcsTrackerIdPatterns variable.
 
 vim:ft=eclimhelp

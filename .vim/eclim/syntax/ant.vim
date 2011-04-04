@@ -6,7 +6,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -50,15 +50,12 @@ syn keyword antElement resourcecount resourcesmatch
 " ant 1.7 misc elements
 syn keyword antElement preserveintarget service
 
-function! s:InitUserSyntax()
-  if exists("g:AntSyntaxElements")
-    let elements = string(g:AntSyntaxElements)
-    let elements = substitute(elements, '\[\(.*\)\]', '\1', '')
-    let elements = substitute(elements, ',', '', 'g')
-    let elements = substitute(elements, "'", '', 'g')
-    exec 'syn keyword antElement ' . elements
-  endif
-endfunction
-call s:InitUserSyntax()
+if exists("g:AntSyntaxElements")
+  let elements = string(g:AntSyntaxElements)
+  let elements = substitute(elements, '\[\(.*\)\]', '\1', '')
+  let elements = substitute(elements, ',', '', 'g')
+  let elements = substitute(elements, "'", '', 'g')
+  exec 'syn keyword antElement ' . elements
+endif
 
 " vim:ft=vim:fdm=marker

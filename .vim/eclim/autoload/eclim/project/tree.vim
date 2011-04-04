@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -77,7 +77,6 @@ function! eclim#project#tree#ProjectTree(...)
     if dir != ''
       call add(dirs, dir)
     else
-      call eclim#util#EchoWarning('Project not found: ' . name)
       call remove(names_copy, name)
     endif
     let index += 1
@@ -291,15 +290,10 @@ function! s:InfoLine()
       exec lnum . ',' . lnum . 'delete _'
     endif
 
-    let GetInfo = function('vcs#util#GetInfo')
-    try
-      let info = GetInfo(b:roots[0])
-      if info != ''
-        call append(line('$') - 1, '" ' . info)
-      endif
-    catch /E117/
-      " noop if the function wasn't found
-    endtry
+    let info = eclim#vcs#util#GetInfo(b:roots[0])
+    if info != ''
+      call append(line('$') - 1, '" ' . info)
+    endif
   endif
   call setpos('.', pos)
   setlocal nomodifiable
@@ -357,8 +351,8 @@ function! eclim#project#tree#ProjectTreeSettings()
   call eclim#tree#RegisterDirAction(function('eclim#project#tree#InjectLinkedResources'))
 
   if exists('s:TreeSettingsFunction')
-    let l:Settings = function(s:TreeSettingsFunction)
-    call l:Settings()
+    let Settings = function(s:TreeSettingsFunction)
+    call Settings()
   endif
 
   augroup eclim_tree

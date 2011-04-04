@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2009  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -63,13 +63,11 @@ endif
 " set make program and error format accordingly.
 if g:EclimJavaCompilerAutoDetect
   " use ant settings
-  if eclim#util#Findfile('build.xml', '.;') != '' &&
-   \ eclim#util#CompilerExists('eclim_ant')
+  if eclim#util#Findfile('build.xml', '.;') != ''
     compiler eclim_ant
 
   " use mvn settings
-  elseif eclim#util#Findfile('pom.xml', '.;') != '' &&
-   \     eclim#util#CompilerExists('eclim_mvn')
+  elseif eclim#util#Findfile('pom.xml', '.;') != ''
     compiler eclim_mvn
 
     if !g:EclimMakeLCD && !exists('g:EclimMakeLCDWarning')
@@ -81,8 +79,7 @@ if g:EclimJavaCompilerAutoDetect
     endif
 
   " use maven settings
-  elseif eclim#util#Findfile('project.xml', '.;') != '' &&
-   \     eclim#util#CompilerExists('eclim_maven')
+  elseif eclim#util#Findfile('project.xml', '.;') != ''
     compiler eclim_maven
 
   " use standard jikes if available
@@ -164,6 +161,10 @@ if exists(":Java") != 2
 endif
 if exists(":JavaListInstalls") != 2
   command -buffer -nargs=* JavaListInstalls :call eclim#java#util#ListInstalls()
+endif
+
+if !exists(":JavaRegex")
+  command -buffer JavaRegex :call eclim#regex#OpenTestWindow('java')
 endif
 
 if !exists(":JavaConstructor")

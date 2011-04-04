@@ -5,6 +5,7 @@ Html
 ****
 
 - Html Code Completion ()
+  - Configuration (#configuration)
 - Html File Validation ()
   - Configuration (#configuration)
 - Html File Utils ()

@@ -10,6 +10,8 @@ Python
 - Python Search ()
   - Element Search (#element-search)
   - Configuration (#configuration)
+- Python Regex Testing ()
+  - Configuration (#configuration)
 - Django ()
   - Django manage.py (#django-manage-py)
   - Configuration (#configuration)
@@ -21,6 +23,8 @@ Python
 - Python Code Completion (|vim-python-complete|)
 
 - Python Search (|vim-python-search|)
+
+- Python Regex Testing (|vim-python-regex|)
 
 - Django (|vim-python-django|)
 
@@ -59,7 +63,7 @@ Functionality Utilizing Rope
 
    - find element definition (|vim-python-search|)
 
-   - |:PyLint|
+   - :PyLint
 
 Configuration
 

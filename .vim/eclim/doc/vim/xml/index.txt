@@ -5,6 +5,7 @@ Xml
 ***
 
 - Xml Code Completion ()
+  - Configuration (#configuration)
 - Xml Definition Lookup ()
 - Xml Validation ()
   - Configuration (#configuration)

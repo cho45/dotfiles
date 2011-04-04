@@ -48,10 +48,10 @@ Executing javac
 To compile your project's source code, you may use the :Javac command,
 which will run javac on all source files found in your project's src
 directories as configured by your .classpath file.  You may use the
-|org.eclim.java.compile.sourcepath| setting described below, if you
-wish to alter which directories are used.  The resulting class files
-will be written to the output path as defined in your project's
-.classpath file.
+org.eclim.java.compile.sourcepath setting described below, if you wish
+to alter which directories are used.  The resulting class files will
+be written to the output path as defined in your project's .classpath
+file.
 
 Note: Please note that this command is not intended to be a full
   replacement for javac support provided by more comprehensive build

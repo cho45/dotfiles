@@ -30,7 +30,6 @@
   let s:update_command = '-command java_src_update -p "<project>" -f "<file>"'
   let s:command_src_exists = '-command java_src_exists -f "<file>"'
   let s:command_list_installs = '-command java_list_installs'
-  let s:command_read_class = '-command java_class_prototype -c <class>'
 
   let s:import_pattern = '^\s*import\_s\+<import>\_s*;'
 " }}}
@@ -349,12 +348,34 @@ function! eclim#java#util#Java(classname, args)
     endfor
   endif
 
-  let results = split(eclim#util#Exec(command, 1), "\n")
-  call eclim#util#TempWindow('[Java Output]', results)
-  let b:project = project
+  call eclim#util#TempWindow('[Java Output]', [])
 
-  if exists(":Java") != 2
-    command -buffer -nargs=* Java :call eclim#java#util#Java('', <q-args>)
+  let outfile = g:EclimTempDir . '/eclim_java_output.txt'
+
+  if has('win32') || has('win64') || has('win32unix')
+    if executable('tee')
+      let command .= ' ^| tee "' . eclim#cygwin#CygwinPath(outfile) . '" 2>&1"'
+    else
+      let command .= ' >"' . outfile . '" 2>&1"'
+    endif
+  else
+    let command .= ' 2>&1| tee "' . outfile . '"'
+  endif
+
+  " ensure the temp window was opened (test for empty window vs dealing with
+  " all the escaping necessary to test against buffer name).
+  if len(getline(1)) == 0 && line('$') == 1
+    call eclim#util#Exec(command)
+    setlocal modifiable noreadonly
+    exec 'silent read ' . escape(outfile, ' ')
+    1,1delete _
+    $,$delete _
+    setlocal nomodifiable readonly
+    let b:project = project
+
+    if exists(":Java") != 2
+      command -buffer -nargs=* Java :call eclim#java#util#Java('', <q-args>)
+    endif
   endif
 endfunction " }}}
 
@@ -369,35 +390,6 @@ function! eclim#java#util#ListInstalls()
     return
   endif
   call eclim#util#Echo(join(installs, "\n"))
-endfunction " }}}
-
-" ReadClassPrototype() {{{
-" Function for BufReadCmd autocmd which generates a prototype for a class
-" file.
-function! eclim#java#util#ReadClassPrototype()
-  let file = substitute(expand('%:p'), '\', '/', 'g')
-  let command = s:command_read_class
-  let command = substitute(command, '<class>', expand('%:t:r'), '')
-  let command .= ' -f "' . file . '"'
-
-  let file = eclim#ExecuteEclim(command)
-  if string(file) != '0'
-    let bufnum = bufnr('%')
-    if has('win32unix')
-      let file = eclim#cygwin#CygwinPath(file)
-    endif
-    silent exec "keepjumps edit! " . escape(file, ' ')
-
-    exec 'bdelete ' . bufnum
-
-    silent exec "doautocmd BufReadPre " . file
-    silent exec "doautocmd BufReadPost " . file
-
-    call eclim#util#DelayedCommand('set ft=java')
-    setlocal readonly
-    setlocal nomodifiable
-    setlocal noswapfile
-  endif
 endfunction " }}}
 
 " CommandCompleteProject(argLead, cmdLine, cursorPos) {{{

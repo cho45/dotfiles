@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -28,10 +28,6 @@ endif
 
 if !exists('g:EclimTodoSearchExtensions')
   let g:EclimTodoSearchExtensions = ['java', 'py', 'php', 'jsp', 'xml', 'html']
-endif
-
-if !exists('g:EclimProjectStatusLine')
-  let g:EclimProjectStatusLine = '${name}'
 endif
 " }}}
 
@@ -124,8 +120,8 @@ function! eclim#project#util#ProjectCreate(args)
   for nature in natureIds
     exec 'runtime autoload/eclim/' . nature . '/project.vim'
     try
-      let l:ProjectPre = function('eclim#' . nature . '#project#ProjectCreatePre')
-      if !l:ProjectPre(folder)
+      let ProjectPre = function('eclim#' . nature . '#project#ProjectCreatePre')
+      if !ProjectPre(folder)
         return
       endif
     catch /E\(117\|700\):.*/
@@ -143,8 +139,8 @@ function! eclim#project#util#ProjectCreate(args)
   " execute any post-project creation hooks
   for nature in natureIds
     try
-      let l:ProjectPost = function('eclim#' . nature . '#project#ProjectCreatePost')
-      call l:ProjectPost(folder)
+      let ProjectPost = function('eclim#' . nature . '#project#ProjectCreatePost')
+      call ProjectPost(folder)
     catch /E\(117\|700\):.*/
       " ignore
     endtry
@@ -392,32 +388,6 @@ function! eclim#project#util#ProjectInfo(project)
   endif
 endfunction " }}}
 
-" ProjectStatusLine() {{{
-" Includes status information for the current file to VIM status
-function! eclim#project#util#ProjectStatusLine()
-  let project = eclim#project#util#GetProject(expand('%:p'))
-  if !empty(project)
-    let status = g:EclimProjectStatusLine
-    while status =~ '\${\w\+}'
-      let m = matchstr(status, '\${\w\+}')
-      let key = substitute(m, '^\${\(\w\+\)}', '\1', '')
-      let val = ''
-      if has_key(project, key)
-        let type = type(project[key])
-        if type == 1
-          let val = project[key]
-        elseif type == 3
-          let val = join(project[key], ',')
-        else
-          let val = string(project[key])
-        endif
-      endif
-      let status = substitute(status, m, val, 'g')
-    endwhile
-    return status
-  endif
-endfunction " }}}
-
 " ProjectOpen(name) {{{
 " Open the requested project.
 function! eclim#project#util#ProjectOpen(name)
@@ -648,16 +618,12 @@ function! eclim#project#util#TreeTab(title, dir)
   if winnr('$') > 1 || expand('%') != '' ||
    \ &modified || line('$') != 1 || getline(1) != ''
     tablast | tabnew
-    if dir == eclim#UserHome()
+    if dir == expand('~')
       tabmove 0
     endif
   endif
-  let name = dir
-  if len(name) > 30
-    let name = fnamemodify(dir, ':t') . ': ' . dir
-  endif
   call eclim#common#util#Tcd(dir)
-  call eclim#project#tree#ProjectTreeOpen([name], [dir], a:title)
+  call eclim#project#tree#ProjectTreeOpen([dir], [dir], a:title)
 endfunction " }}}
 
 " Todo() {{{
@@ -778,13 +744,27 @@ function! eclim#project#util#GetProjects()
       let results = split(result, "\n")
       let projects = []
       for line in results
-        let project = eval(line)
-        let project['workspace'] = workspace
+        let name = substitute(line, '\(.\{-}\):.*', '\1', '')
+        let paths = split(substitute(line, '.\{-}:\(.*\)', '\1', ''), ',')
         if has('win32unix')
-          let project['path'] = eclim#cygwin#CygwinPath(project['path'])
-          call map(project['links'], 'eclim#cygwin#CygwinPath(v:val)')
+          let paths[0] = eclim#cygwin#CygwinPath(paths[0])
         endif
-        call add(projects, project)
+
+        let links = {}
+        for p in paths[1:]
+          let linkname = substitute(p, '\(.\{-}\):.*', '\1', '')
+          let linkpath = substitute(p, '.\{-}:\(.*\)', '\1', '')
+          if has('win32unix')
+            let linkpath = eclim#cygwin#CygwinPath(linkpath)
+          endif
+          let links[linkname] = linkpath
+        endfor
+        call add(projects, {
+            \ 'workspace': workspace,
+            \ 'name': name,
+            \ 'path': paths[0],
+            \ 'links': links,
+          \ })
       endfor
       let s:workspace_projects[workspace] = projects
     endfor
