@@ -165,6 +165,8 @@ function! s:Init()
   runtime! eclim/after/plugin/*.vim
 endfunction " }}}
 
-call <SID>Init()
+if $ECIM
+  call <SID>Init()
+endif
 
 " vim:ft=vim:fdm=marker
