@@ -404,7 +404,6 @@ augroup END
 autocmd BufWritePost */debuglet.js silent! execute '!ruby /Users/cho45/bin/debuglet.rb %'
 autocmd BufNewFile */debuglet.js silent! execute 'r!ruby /Users/cho45/bin/debuglet.rb'
 
-
 function! GitWeb()
 	let git_output = substitute(system('git config --get remote.origin.url'), '\n*$', '', '')
 	let repos = substitute(git_output, 'git@192.168.2.181:/var/git', '', '')
@@ -415,8 +414,6 @@ function! GitWeb()
 	call system('open http://repository01.host.h:5001/gitweb.cgi' . repos . '/blob/' . commit . ':' . expand('%') . '#l' . line('.'))
 endfunction
 command! GitWeb call GitWeb()
-
-
 
 command! Bookmark call fuf#script#launch('', 0, 'B\!>', 'perl', $HOME . '/.vim/bookmarks.pl', 0)
 command! Music call fuf#script#launch('', 0, 'iTunes>', 'perl', $HOME . '/.vim/itunes.pl', 1)
