@@ -11,6 +11,8 @@ if [ $? -ne 0 ]; then
 	keychain --quiet --timeout 30 $HOME/.ssh/id_dsa
 	if [ $? -eq 0 ]; then
 		. $HOME/.keychain/*-sh
+	else
+		exit 1
 	fi
 fi
 

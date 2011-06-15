@@ -124,3 +124,18 @@ compctl -K _cdd cdd
 functions _cdd() {
   reply=(`grep -v "^$WINDOW:" "$CDD_PWD_FILE"`)
 }
+
+function screen-cd () {
+  local MATCH
+  LBUFFER=${LBUFFER%%(#m)[0-9]#}
+  local -A arg
+  arg=$MATCH
+  if grep "^$arg:" "$CDD_PWD_FILE" > /dev/null 2>&1 ;then
+    local -A res
+    res=`grep "^$arg:" "$CDD_PWD_FILE"|sed -e "s/^$arg://;"|tr -d "\n"`
+    LBUFFER+=$res
+  fi
+}
+zle -N screen-cd
+bindkey "^Xi" screen-cd
+

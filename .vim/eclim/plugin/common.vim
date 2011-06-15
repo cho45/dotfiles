@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -43,9 +43,11 @@ endif
 if g:EclimArchiveViewerEnabled
   " disable tar.vim autocmds... tar.vim is now included w/ vim7
   let g:loaded_tarPlugin = 1
+  silent! autocmd! tar
 
   " disable zipPlugin.vim autocmds... zipPlugin.vim is now included w/ vim7
   let g:loaded_zipPlugin = 1
+  silent! autocmd! zip
 endif
 " }}}
 
@@ -121,6 +123,7 @@ endif
 
 if !exists(":Buffers")
   command Buffers :call eclim#common#buffers#Buffers()
+  command BuffersToggle :call eclim#common#buffers#BuffersToggle()
 endif
 
 if !exists(":Only")
@@ -163,6 +166,8 @@ if !exists(":SwapTypedArguments")
 endif
 if !exists(":LocateFile")
   command -nargs=? LocateFile :call eclim#common#locate#LocateFile('', '<args>')
+  command -nargs=? LocateBuffer
+    \ :call eclim#common#locate#LocateFile('', '<args>', 'buffers')
 endif
 
 if !exists(":QuickFixClear")
@@ -197,6 +202,10 @@ endif
 if !exists(":LcdRelative")
   command -nargs=1 -complete=customlist,eclim#common#util#CommandCompleteRelativeDirs
     \ LcdRelative :exec 'lcd ' . expand('%:p:h') . '/<args>'
+endif
+
+if !exists(":Tcd")
+  command -nargs=1 -complete=dir Tcd :call eclim#common#util#Tcd('<args>')
 endif
 
 if !exists(":History")

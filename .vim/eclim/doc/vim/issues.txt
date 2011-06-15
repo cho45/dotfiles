@@ -28,7 +28,7 @@ issues, it does have its drawbacks:
   Until that change is made to vim, you can still revert your file
   using the local history (|vim-common-history|) support.
 
-7. Formatting (tabs vs. spaces):
+- Formatting (tabs vs. spaces):
 
   When inserting new code eclim will always use tabs and the
   corresponding Vim plugin will issue a :retab on the new code so that
@@ -46,8 +46,8 @@ issues, it does have its drawbacks:
 
   Using vim:
 
-  1. Open the eclim settings (global: |:EclimSettings| or project
-     level: |:ProjectSettings|)
+  1. Open the eclim settings (global: :EclimSettings or project level:
+     :ProjectSettings)
 
   2. Edit the indentation settings to match your vim options:
 

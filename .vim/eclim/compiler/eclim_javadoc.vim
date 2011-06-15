@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -29,12 +29,15 @@ let current_compiler = "eclim_javadoc"
 
 let port = eclim#client#nailgun#GetNgPort()
 let command = eclim#client#nailgun#GetEclimCommand()
-if !(has('win32') || has('win64'))
+if !(has('win32') || has('win64') || has('win32unix'))
   let command = substitute(command, '"', '', 'g')
 endif
-let command = escape(command, ' "')
-let command .= '\ -Dnailgun.server.port=' . port
-exec 'CompilerSet makeprg=' . command . '\ -command\ javadoc\ $*'
+let command .= ' --nailgun-port ' . port
+let command .= ' -command javadoc $*'
+if has('win32') || has('win64') || has('win32unix')
+  let command .= ' "'
+endif
+exec 'CompilerSet makeprg=' . escape(command, ' "')
 
 exec 'CompilerSet errorformat=' .
   \ '\%A%.%#[javadoc]\ %f:%l:\ %m,' .

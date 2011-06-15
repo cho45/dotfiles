@@ -1,5 +1,6 @@
-package skel.pm;
+package ;
 
+use utf8;
 use strict;
 use warnings;
 
@@ -8,6 +9,3 @@ use warnings;
 
 1;
 __END__
-
-
-

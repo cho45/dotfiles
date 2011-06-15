@@ -56,14 +56,14 @@ Note: In this guide we keep VimClojure as self contained as possible
    Linux, BSD, OSX:
 
    >
-      $ mkdir ~/.vim/eclim/resources/ext/vimclojure
-      $ cp {build/vimclojure.jar,lib/clojure*.jar} ~/.vim/eclim/resources/ext/vimclojure
+      $ mkdir ~/.eclim/resources/ext/vimclojure
+      $ cp {build/vimclojure.jar,lib/clojure*.jar} ~/.eclim/resources/ext/vimclojure
 
    <
 
    Windows users, your can just create the
-   %HOME%\vimfiles\eclim\resources\ext\vimclojure directory and copy
-   the jar files from the build and lib dirs via Windows Explorer.
+   %HOME%\.eclim\resources\ext\vimclojure directory and copy the jar
+   files from the build and lib dirs via Windows Explorer.
 
 5. Lastely, configure vim:
 

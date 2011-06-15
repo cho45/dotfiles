@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+=begin
+Write following to your .zshrc
+source .screen/screen2tty.inc.sh
+=end
 
 require "pathname"
 

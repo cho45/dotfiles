@@ -45,23 +45,32 @@ begin
 	MAGIC = "b0"
 
 	target = Pathname.new(ARGV[0]).realpath
-	swap   = "#{swap + target.basename}.swp"
 
-	fname, pid = File.open(swap) { |f|
-		raise "not swap" unless f.read(2) == MAGIC
-		version   = f.read(10).unpack("A*")
-		page_size = f.read(4)
-		mtime     = f.read(4).unpack("L")[0]
-		inode     = f.read(4).unpack("L")[0]
-		pid       = f.read(4).unpack("L")[0]
-		uname     = f.read(40).unpack("A*")[0]
-		hname     = f.read(40).unpack("A*")[0]
-		fname     = f.read(898).unpack("A*")[0]
-		[fname, pid]
-	}
+	pid = nil
+	("swa".."swp").reverse_each do |suffix|
+		swap   = Pathname.new("#{swap + target.basename}.#{suffix}")
+		next unless swap.exist?
+
+		fname, _pid = swap.open { |f|
+			raise "not swap" unless f.read(2) == MAGIC
+			version   = f.read(10).unpack("A*")
+			page_size = f.read(4)
+			mtime     = f.read(4).unpack("L")[0]
+			inode     = f.read(4).unpack("L")[0]
+			_pid      = f.read(4).unpack("L")[0]
+			uname     = f.read(40).unpack("A*")[0]
+			hname     = f.read(40).unpack("A*")[0]
+			fname     = f.read(898).unpack("A*")[0]
+			[fname, _pid]
+		}
+
+		next unless _pid
+		next unless target.realpath == Pathname.new(fname).expand_path.realpath
+
+		pid = _pid
+	end
 
 	raise "swap not found" unless pid
-	raise "swap not found" unless target.realpath == Pathname.new(fname).expand_path.realpath
 
 	winnum = `pid2screen #{pid}`.strip
 
@@ -77,7 +86,7 @@ begin
 		exec "screen", "-X", "select", winnum
 	end
 
-rescue
+rescue => e
 	exec VIM, *ARGV
 end
 

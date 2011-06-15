@@ -9,6 +9,7 @@ PATHS=(
 	$HOME/project/commands/bin
 	$HOME/sdk/play
 	$HOME/sdk/android/tools
+	$HOME/sdk/android/platform-tools
 	$HOME/sdk/flex/bin
 	/usr/local/ruby1.9/bin
 	/usr/local/scala/bin
@@ -37,10 +38,14 @@ export NYTPROF=sigexit=int,hup:trace=2:start=no
 export PERL_CPANM_OPT="--verbose --sudo --prompt --mirror http://cpan.cpantesters.org"
 export RIDGE_ENV=test
 export FLEX_HOME=$HOME/sdk/flex4sdk
+export _JAVA_OPTIONS="-Duser.language=en -Dfile.language=UTF-8"
 
 bindkey -e
 bindkey -D vicmd
 bindkey -r '^X^V'
+
+bindkey '^R' history-incremental-pattern-search-backward
+bindkey '^S' history-incremental-pattern-search-forward
 
 ## modules
 autoload zargs
@@ -115,7 +120,7 @@ PROMPT_L="
 PROMPT="$PROMPT_EXIT$PROMPT_CWD$PROMPT_L"
 RPROMPT='%{[32m%}[%n@%m]%{[m%}'
 
-HISTSIZE=9999999
+HISTSIZE=1000
 HISTFILE=~/.zsh_history
 SAVEHIST=9999999
 

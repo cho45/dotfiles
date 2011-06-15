@@ -14,9 +14,11 @@ following requirements.
 - Java Development Kit
   (http://java.sun.com/javase/downloads/index.html) 1.5 or greater
 
-- Eclipse 3.5.x (Galileo) (http://eclipse.org/downloads/index.php)
+- Eclipse 3.6.x (Helios) (http://eclipse.org/downloads/index.php)
 
 - Vim 7.1.x (http://www.vim.org/download.php)
+
+- Mac and Linux users must also have make and gcc installed.
 
   Minimum Vim Settings: In order for eclim to function properly, there
   is a minimum set of vim options that must be enabled in your vimrc
@@ -54,38 +56,30 @@ Eclim Graphical Installer
 =========================
 
 
-Step 1: Download the eclim installer for your platform.
--------------------------------------------------------
-
-- Linux / Mac / BSD (and other unix based systems): eclim_version.sh (
-  http://sourceforge.net/project/platformdownload.php?group_id=145869&
-  sel_platform=15823)
-
-- Windows: eclim_version.exe (http://sourceforge.net/project/platformd
-  ownload.php?group_id=145869&sel_platform=15821)
-
-
-Step 2: Run the installer.
---------------------------
+Step 1: Download and run the installer.
+---------------------------------------
 
 Note: If you have eclipse running, please close it prior to starting the
   installation procedure.
 
-- Linux / Mac / BSD (and other unix based systems): You can start the
-  installer by running the script you downloaded (note: you may have
-  to make it executable first).
+- First download the installer:  eclim_<version>.jar (http://sourcefor
+  ge.net/project/platformdownload.php?group_id=145869)
+
+- Next run the installer:
 
   >
-     $ chmod 755 eclim_version.sh
-     $ ./eclim_version.sh
+     $ java -jar eclim_<version>.jar
 
   <
+
+  Windows and OSX users should be able to simply double click on the
+  jar file to start the installer.
 
   Note: If you are behind a proxy, you may need to run the installer like
     so (be sure to take a look at the related faq (|eclim-proxy|) as
     well):>
 
-       $ FORMIC_OPTS="-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080" ./eclim_version.sh
+       $ java -Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080 -jar eclim_<version>.jar
 
     <
 
@@ -95,31 +89,7 @@ Note: If you have eclipse running, please close it prior to starting the
     can also try the following which may be able to use your system
     proxy settings:>
 
-       $ FORMIC_OPTS="-Djava.net.useSystemProxies=true" ./eclim_version.sh
-
-    <
-
-
-- Windows: On Windows systems, simply double click the
-  eclim_version.exe file you downloaded.
-
-  Note: If you are behind a proxy, you may need to run the installer from
-    a dos prompt like so (be sure to take a look at the related faq
-    (|eclim-proxy|) as well):>
-
-       C:\...> set FORMIC_OPTS="-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=8080"
-       C:\...> eclim_version.exe
-
-    <
-
-
-    If your proxy requires authentication, you'll need to supply the
-    -Dhttp.proxyUser and -Dhttp.proxyPassword properties as well.You
-    can also try the following which may be able to use your system
-    proxy settings:>
-
-       C:\...> set FORMIC_OPTS="-Djava.net.useSystemProxies=true"
-       C:\...> eclim_version.exe
+       $ java -Djava.net.useSystemProxies=true -jar eclim_<version>.jar
 
     <
 
@@ -157,16 +127,19 @@ Note: In some rare cases you might encounter one of the following errors:
      installer like so:
 
      >
-        $ FORMIC_OPTS="-Djava.ext.dirs" ./eclim_1.4.0.sh
+        $ java -Djava.ext.dirs -jar eclim_<version>.jar
 
      <
 
 
-Step 3: Testing the installation
+Step 2: Testing the installation
 --------------------------------
 
 To test eclim you first need to start the eclim daemon.  How you start
 the daemon will depend on how you intend to use eclim.
+
+Note: More info on running the eclim daemon can be found in the eclimd
+  (|eclimd|) docs.
 
 If you plan on using eclim along with the eclipse gui, then:
 
@@ -204,8 +177,8 @@ If you plan on using eclim without the eclipse gui, then:
 Once you have the eclim daemon (headed or headless) running, you can
 then test eclim:
 
-- open a vim window and issue the command, |:PingEclim|.  The result
-  of executing this command should be the eclim and eclipse version
+- open a vim window and issue the command, :PingEclim.  The result of
+  executing this command should be the eclim and eclipse version
   echoed to the bottom of your Vim window.  If however, you receive
   unable to connect to eclimd - connect: Connection refused, or
   something similar, then your eclimd server is not running or
@@ -217,11 +190,11 @@ then test eclim:
   your issue on the eclim user
   (http://groups.google.com/group/eclim-user) mailing list.
 
-     Example of successful ping:
+     Example of a successful ping:
 
      [image]
 
-     Example of failed ping:
+     Example of a failed ping:
 
      [image]
 
@@ -266,5 +239,81 @@ If you would like to use the bleeding edge development version of
 eclim or you would like to contribute code, then you can checkout and
 build eclim from source.  Instructions on doing so can be found in the
 developers guide (|development-build|).
+
+*install-automated*
+
+
+Unattended (automated) install
+==============================
+
+As of eclim 1.5.6 the eclim installer supports the ability to run an
+automated install without launching the installer gui.
+
+Warning: When using this method no validation is performed to ensure that you
+  have the required third party eclipse plugin dependencies necessary
+  for the eclim features you've chosen to install.  It is the
+  responsibility of the user, or the script which launches the
+  installer, to validate the dependencies prior to installation.  This
+  installation method is primarily provided for those wishing to
+  package eclim for inclusion in a package management system.
+
+Here is an example of installing eclim with only java and ant support
+using this method:
+
+>
+
+   $ java
+     -Declipse.home=/opt/eclipse \
+     -Dvim.files=$HOME/.vim \
+     -DfeatureList.ant=true \
+     -DfeatureList.jdt=true \
+     -jar eclim_<version>.jar install \
+
+<
+
+
+As you can see by the example, the values normally obtained from the
+user by the graphical installer are supplied using java system
+properties.  This method of installation has only two required
+properties that must be set and various optional properties to enable
+features, etc.
+
+Required:
+
+- eclipse.home - The absolute path to the eclipse installation.
+
+- vim.files - The absolute path to the vim files directory.
+
+Optional:
+
+- eclipse.local - When installing for a single user, some eclipse
+  installations have a user local location where eclipse plugins are
+  installed.  This property can be set to that location.
+
+- eclim.gvim - The location of the gvim executable to be set as the
+  default for embedding gvim inside of eclipse.
+
+Optional Feature Properties: All of the following properties must have
+the value 'true' to enable the feature.  All other values, or no value
+at all will result in the exclusion of that feature.  Also, some
+features require that other features be enabled, as noted below:
+
+- featureList.ant (requires jdt)
+
+- featureList.cdt
+
+- featureList.dltk
+
+- featureList.dltkruby (requires dltk)
+
+- featureList.jdt
+
+- featureList.maven
+
+- featureList.pdt (requires wst and dltk)
+
+- featureList.python
+
+- featureList.wst
 
 vim:ft=eclimhelp

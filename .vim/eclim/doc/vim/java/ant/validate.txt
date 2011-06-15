@@ -24,7 +24,7 @@ Eclim also combines the above validation with xml validation
 (|vim-xml-validate|) to validate that the ant file is well formed.
 
 If you do not want your ant files validated automatically when saved,
-you can set the |g:EclimAntValidate| variable described in the
+you can set the g:EclimAntValidate variable described in the
 configuration section below.
 
 *:Validate_ant*

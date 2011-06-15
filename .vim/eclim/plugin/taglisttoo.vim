@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2010  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -34,6 +34,21 @@ if !exists("g:EclimTaglistEnabled")
   let g:EclimTaglistEnabled = 1
 endif
 
+" always set the taglist title since eclim references it in a few places.
+if !exists('g:TagList_title')
+  let g:TagList_title = "__Tag_List__"
+endif
+
+if !g:EclimTaglistEnabled
+  finish
+endif
+
+" disable if user has taglist installed on windows since we can't hook into
+" taglist to fix the windows path separators to be java compatible.
+if exists('loaded_taglist') && (has('win32') || has('win64') || has('win32unix'))
+  finish
+endif
+
 if !exists('g:Tlist_Ctags_Cmd')
   if executable('exuberant-ctags')
     let g:Tlist_Ctags_Cmd = 'exuberant-ctags'
@@ -46,11 +61,6 @@ if !exists('g:Tlist_Ctags_Cmd')
   endif
 endif
 
-" always set the taglist title since eclim references it in a few places.
-if !exists('g:TagList_title')
-  let g:TagList_title = "__Tag_List__"
-endif
-
 " no ctags found, no need to continue.
 if !exists('g:Tlist_Ctags_Cmd')
   finish
@@ -61,7 +71,13 @@ let eclimAvailable = eclim#EclimAvailable()
 let g:Tlist_Ctags_Cmd_Ctags = g:Tlist_Ctags_Cmd
 let g:Tlist_Ctags_Cmd_Eclim =
   \ eclim#client#nailgun#GetEclimCommand() .
-  \ ' -command taglist -c "' . g:Tlist_Ctags_Cmd . '"'
+  \ ' --nailgun-port <port> -command taglist -c "' . g:Tlist_Ctags_Cmd . '"'
+
+if exists('loaded_taglist')
+  let g:Tlist_Ctags_Cmd_Eclim = substitute(
+    \ g:Tlist_Ctags_Cmd_Eclim, '<port>', eclim#client#nailgun#GetNgPort(), '')
+endif
+
 " for windows, need to add a trailing quote to complete the command.
 if g:Tlist_Ctags_Cmd_Eclim =~ '^"[a-zA-Z]:'
   let g:Tlist_Ctags_Cmd_Eclim = g:Tlist_Ctags_Cmd_Eclim . '"'
@@ -87,7 +103,7 @@ if !exists('loaded_taglist')
 
     " Auto open on new tabs as well.
     if v:version >= 700
-      autocmd BufWinEnter *
+      autocmd taglisttoo_autoopen BufWinEnter *
         \ if tabpagenr() > 1 &&
         \     !exists('t:Tlist_Auto_Opened') &&
         \     !exists('g:SessionLoad') |

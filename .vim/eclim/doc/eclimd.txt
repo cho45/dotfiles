@@ -26,6 +26,9 @@ Linux / Mac / BSD (and other unix based systems): To start eclimd from
 linux, simply execute the eclimd script found in your eclipse root
 directory: $ECLIPSE_HOME/eclimd
 
+Note: When starting the eclim daemon, you must start it as the same user
+  who will be running vim.
+
 Windows: The easiest way to start eclimd in windows is to double click
 on the eclimd.bat file found in your eclipse root directory:
 %ECLIPSE_HOME%/eclimd.bat
@@ -128,6 +131,16 @@ in the eclipse tree and then selecting:
 
 [image]
 
+Please note that if you want to use supported eclipse features (code
+completion, validation, searching, etc.) from the embedded gvim
+editor, you must have the eclimd view open.
+
+Note: If you'd like to have the embedded gvim editor as the default for
+  one or more file types, you can configure it to be in your eclipse
+  preferences:
+
+     Window > Preferences > General > Editors > File Associations
+
 The eclim installer should take care of locating your gvim
 installation for use inside of eclipse, but in the event that it could
 not locate it, you can set the location and other settings via the
@@ -191,6 +204,8 @@ focus, you will fall into one of two groups:
      - Ctrl+U: in eclipse this run "Execute", but in gvim this is
        needed to run code completion (ex. ctrl-x ctrl-u).
 
+*FeedKeys*
+
 1. In the second group, all key presses are received by gvim and not
    evaluated at all by eclipse.
 
@@ -213,6 +228,9 @@ focus, you will fall into one of two groups:
          " maps Ctrl-F to eclipse's Ctrl-Shift-R key binding (find resource)
          nmap <silent> <c-f> :call eclim#vimplugin#FeedKeys('Ctrl+Shift+R')<cr>
 
+         " maps Ctrl-M to eclipse's Ctrl-M binding to maximize the editor
+         nmap <silent> <c-m> :call eclim#vimplugin#FeedKeys('Ctrl+M', 1)<cr>
+
       <
 
 
@@ -220,6 +238,10 @@ focus, you will fall into one of two groups:
    compatible key binding string as found in:
 
       Windows -> Preferences -> General -> Keys
+
+   Be sure to notice the extra argument to the FeedKeys function in
+   the last mapping. Supplying 1 as the arg will result in the
+   refocusing of gvim after the eclipse key binding has been executed.
 
 
 ~/.eclimrc
@@ -278,8 +300,8 @@ Eclimd utilizes log4j for all of its logging.  As such, the logging
 can be configured via the
 $ECLIPSE_HOME/plugins/org.eclim_version/log4j.xml file.
 
-By default, eclimd writes all logging info to both the console and
-$ECLIPSE_HOME/plugins/org.eclim_<version>/log/eclimd.log.
+By default, eclimd writes all logging info to both the console and to
+a log file in your workspace: <workspace>/.metadata/.log.eclimd
 
 *eclimd_extdir*
 
@@ -300,7 +322,7 @@ Linux / BSD / OSX:
 
    >
 
-      ~/.vim/eclim/resources/ext
+      ~/.eclim/resources/ext
 
    <
 
@@ -309,7 +331,7 @@ Windows:
 
    >
 
-      $HOME/vimfiles/eclim/resources/ext
+      $HOME/.eclim/resources/ext
 
    <
 

@@ -23,6 +23,8 @@ set list
 
 set directory=~/swp
 
+let g:EclimBaseDir        = '/Users/cho45/.vim'
+
 let g:hatena_user          = 'cho45'
 let g:hatena_group_name    = 'subtech'
 
@@ -221,8 +223,8 @@ nnoremap <C-w>k <C-w>k:call <SID>good_width()<CR>
 nnoremap <C-w>l <C-w>l:call <SID>good_width()<CR>
 
 function! s:good_width()
-	if winwidth(0) < 100
-		vertical resize 100
+	if winwidth(0) < 120
+		vertical resize 120
 	endif
 endfunction
 

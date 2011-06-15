@@ -328,6 +328,12 @@ may use Vim's command line completion to complete the project name.
     When non 0, the path of the current file will be expanded in the
     project tree when the project tree window is opened.
 
+  *g:EclimProjectTreePathEcho*
+  - g:EclimProjectTreePathEcho (Default: 1)
+
+    When non 0, the root relative path of the node under the cursor
+    will be echoed as you move the cursor around.
+
   *g:EclimProjectTreeSharedInstance*
   - g:EclimProjectTreeSharedInstance (Default: 0)
 
@@ -360,9 +366,25 @@ may use Vim's command line completion to complete the project name.
 
   Similar to :ProjectTree but opens a tree containing all projects.
 
+*:ProjectTab*
+
+- :ProjectTab <project>
+
+  Command to initialize a new vim tab with the project tree open and
+  the tab relative working directory set to the project root.  This
+  allows you to work on multiple projects within a single vim instance
+  where each project is isolated to its own tab.
+
+*:TreeTab*
+
+- :TreeTab <dir>
+
+  Like :ProjectTree, but opens a vim tab with a tree window for any
+  arbitrary directory.
+
 *:ProjectGrep*
 
-- :ProjectGrep /<pattern>/ file_pattern [file_pattern ...]
+- :ProjectGrep /<pattern>/ <file_pattern> [<file_pattern> ...]
 
   Executes vimgrep using the supplied arguments from the root of the
   current project allowing you to run a project wide grep from any
@@ -370,19 +392,19 @@ may use Vim's command line completion to complete the project name.
 
 *:ProjectGrepAdd*
 
-- :ProjectGrepAdd /<pattern>/ file_pattern [file_pattern ...]
+- :ProjectGrepAdd /<pattern>/ <file_pattern> [<file_pattern> ...]
 
   Just like :ProjectGrep but using vimgrepadd instead.
 
 *:ProjectLGrep*
 
-- :ProjectLGrep /<pattern>/ file_pattern [file_pattern ...]
+- :ProjectLGrep /<pattern>/ <file_pattern> [<file_pattern> ...]
 
   Just like :ProjectGrep but using lvimgrep instead.
 
 *:ProjectLGrepAdd*
 
-- :ProjectLGrepAdd /<pattern>/ file_pattern [file_pattern ...]
+- :ProjectLGrepAdd /<pattern>/ <file_pattern> [<file_pattern> ...]
 
   Just like :ProjectGrep but using lvimgrepadd instead.
 
@@ -391,8 +413,8 @@ may use Vim's command line completion to complete the project name.
 - :ProjectTodo
 
   Searches all the source files in the project (those with extensions
-  included in |g:EclimTodoSearchExtensions|) for the fixme / todo
-  pattern (defined by |g:EclimTodoSearchPattern|) and adds all
+  included in g:EclimTodoSearchExtensions) for the fixme / todo
+  pattern (defined by g:EclimTodoSearchPattern) and adds all
   occurrences to the current location list.
 
 *:Todo*
@@ -459,10 +481,9 @@ Tracker
     <
 
     In addition to being used by :TrackerTicket, this setting is also
-    used in conjunction with |:VcsLog| and |:VcsChangeSet| to enable
-    linking of ticket ids of the form #ticket_id (#1234) found in user
-    supplied commit comments.  You may also specify other patterns to
-    match by setting the g:EclimVcsTrackerIdPatterns
-    (|g-eclimvcstrackeridpatterns|) variable.
+    used in conjunction with :VcsLog to enable linking of ticket ids
+    of the form #ticket_id (#1234) found in user supplied commit
+    comments.  You may also specify other patterns to match by setting
+    the g:EclimVcsTrackerIdPatterns variable.
 
 vim:ft=eclimhelp
