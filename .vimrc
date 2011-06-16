@@ -406,7 +406,6 @@ augroup END
 autocmd BufWritePost */debuglet.js silent! execute '!ruby /Users/cho45/bin/debuglet.rb %'
 autocmd BufNewFile */debuglet.js silent! execute 'r!ruby /Users/cho45/bin/debuglet.rb'
 
-
 function! GitWeb()
 	let git_output = substitute(system('git config --get remote.origin.url'), '\n*$', '', '')
 	let repos = substitute(git_output, 'git@192.168.2.181:/var/git', '', '')
@@ -417,23 +416,6 @@ function! GitWeb()
 	call system('open http://repository01.host.h:5001/gitweb.cgi' . repos . '/blob/' . commit . ':' . expand('%') . '#l' . line('.'))
 endfunction
 command! GitWeb call GitWeb()
-
-function! Haiku()
-	let git_output = substitute(system('git config --get remote.origin.url'), '\n*$', '', '')
-	let repos = substitute(git_output, 'git@192.168.2.181:/var/git', '', '')
-	let branch = substitute(system('git name-rev --name-only HEAD'), '\n*$', '', '')
-	let commit = substitute(system('git rev-parse  HEAD'), '\n*$', '', '')
-
-	let repos = substitute(repos, '\(.git\)*$', '', '')
-
-	let base  = 'https://task.hatena.ne.jp/git' . repos . '/' . expand('%')
-	let word  = base . '/tree/' . branch
-	let body  = base . '/tree/' . commit . '#' . line('.') . "\n" . input('comment>')
-
-	call system('open "http://h1office.hatena.ne.jp/?word=' . word . ';body=' . body . '"')
-endfunction
-command! Haiku call Haiku()
-
 
 command! Bookmark call fuf#script#launch('', 0, 'B\!>', 'perl', $HOME . '/.vim/bookmarks.pl', 0)
 command! Music call fuf#script#launch('', 0, 'iTunes>', 'perl', $HOME . '/.vim/itunes.pl', 1)

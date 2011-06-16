@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -Ku
+#!/usr/bin/env ruby
 =begin
 git-branch-recent ( http://github.com/cho45/dotfiles/blob/master/bin/git-branch-recent )
 

@@ -17,8 +17,8 @@ cd File.expand_path("~")
 
 
 cd File.expand_path("~")
-cd "app/mobirc"
-system("screen", "-t", "mobirc", "zsh", "-c", "DEBUG=1 ./mobirc")
+cd "project/Irssw"
+system("screen", "-t", "irssw", "zsh", "-c", "./irssw")
 
 cd File.expand_path("~")
 cd "project/net-irc"

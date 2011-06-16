@@ -38,7 +38,14 @@ loop do
 			exec = "#{@command} #{task}"
 		}
 		puts exec
-		system(exec)
+		unless system(exec)
+			puts "Failed to execute: #{exec}... Retry after"
+			sleep 30
+			File.open(@file, "a") do |f|
+				f.flock File::LOCK_EX
+				f.puts exec
+			end
+		end
 	end
 
 	sleep 1
