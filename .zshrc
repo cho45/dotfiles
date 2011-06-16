@@ -44,11 +44,10 @@ bindkey -e
 bindkey -D vicmd
 bindkey -r '^X^V'
 
-bindkey '^R' history-incremental-pattern-search-backward
-bindkey '^S' history-incremental-pattern-search-forward
-
 ## modules
 autoload zargs
+
+autoload -Uz is-at-least
 
 autoload -U url-quote-magic
 zle -N self-insert url-quote-magic
@@ -56,6 +55,11 @@ zle -N self-insert url-quote-magic
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey "^F" edit-command-line
+
+if is-at-least 4.3.10; then
+	bindkey '^R' history-incremental-pattern-search-backward
+	bindkey '^S' history-incremental-pattern-search-forward
+fi
 
 ### completion
 autoload -U compinit
