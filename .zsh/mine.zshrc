@@ -129,7 +129,11 @@ update-git-status () {
 
 			ret="bisect[$start, $bisect_nr left]"
 		else
-			ret=$(command git name-rev --name-only HEAD)
+			ret=$(command git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
+			if [[ $ret == "(nobranch)" ]]; then
+				ret=$(command git name-rev --name-only HEAD)
+				ret="($ret)"
+			fi
 		fi
 
 		if [[ -n $ret ]]; then
