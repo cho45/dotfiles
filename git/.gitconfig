@@ -1,5 +1,5 @@
 [user]
-	name  = cho45
+	name = cho45
 	email = cho45@lowreal.net
 
 [alias]
@@ -12,6 +12,7 @@
 	svn-ado = config svn-remote.svn.autodcommit false
 	br      = branch
 	lc      = log ORIG_HEAD.. --stat --no-merges
+	logall  = !sh -c 'git log --all --patch --color | git name-rev --stdin | $PAGER'
 
 [color]
 	diff   = auto
