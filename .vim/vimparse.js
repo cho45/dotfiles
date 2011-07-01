@@ -19,10 +19,23 @@ argv.forEach(function (filename) {
 		JSHINT.errors.forEach(function (error) {
 			if (!error) return;
 
+			if (error.reason.indexOf('Stopping, unable to continue.') != -1) return;
+
+			// 何これ？
+			if (error.reason.indexOf("Confusing use of '!'.") != -1) return;
+
+			// for (var i...) は何度も書きたい
+			if (error.reason.indexOf("'i' is already defined.") != -1) return;
+
 			// 可読性のために意図的にそうしているのでうざいし、そういう最適化は実行エンジンがすべきこと
 			if (error.reason.indexOf('is better written in dot notation') != -1) return;
 
+			// 根拠がわからないので保留
+			if (error.reason.indexOf("Don't make functions within a loop") != -1) return;
+
 			if (error.evidence) {
+				error.evidence = error.evidence.replace(/\t/g, '    ');
+
 				// やたら長い行は圧縮されたJSコードとみなす
 				if (error.evidence.length > 1000) return;
 
