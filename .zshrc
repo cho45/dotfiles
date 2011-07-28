@@ -36,7 +36,7 @@ export MYSQL_PS1="(\u@\h) [\d]> "
 export PERL5LIB=lib:$HOME/lib/perl
 export NYTPROF=sigexit=int,hup:trace=2:start=no
 export PERL_CPANM_OPT="--verbose --sudo --prompt --mirror http://cpan.cpantesters.org"
-export RIDGE_ENV=test
+export RIDGE_ENV=default
 export FLEX_HOME=$HOME/sdk/flex4sdk
 export _JAVA_OPTIONS="-Duser.language=en -Dfile.language=UTF-8"
 
@@ -124,7 +124,7 @@ PROMPT_L="
 PROMPT="$PROMPT_EXIT$PROMPT_CWD$PROMPT_L"
 RPROMPT='%{[32m%}[%n@%m]%{[m%}'
 
-HISTSIZE=1000
+HISTSIZE=5000
 HISTFILE=~/.zsh_history
 SAVEHIST=9999999
 

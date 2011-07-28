@@ -74,6 +74,7 @@ cp ".gemrc", "~/.gemrc".expand unless Pathname.new("~/.gemrc").expand_path.exist
 if RUBY_PLATFORM =~ /darwin/
 	link "/Applications/Firefox.app/Contents/MacOS/firefox-bin", "~/bin/firefox"
 	link "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "~/bin/chrome"
+	link "skk/my.rule", "~/Library/Application Support/AquaSKK/my.rule"
 	sh "gcc -framework Cocoa tools/set_default_browser.m -o #{ENV['HOME']}/bin/set_default_browser"
 end
 
