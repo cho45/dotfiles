@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+
 var JSHINT = require("./jshint.js").JSHINT;
 var fs = require("fs");
 
@@ -37,7 +38,7 @@ argv.forEach(function (filename) {
 				error.evidence = error.evidence.replace(/\t/g, '    ');
 
 				// 明示的に抑止されてるなら無視
-				if (error.evidence.indexOf('no warnings')) return;
+				if (error.evidence.indexOf('no warnings') != -1) return;
 
 				// やたら長い行は圧縮されたJSコードとみなす
 				if (error.evidence.length > 1000) return;
