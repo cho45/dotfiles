@@ -13,6 +13,7 @@ alias -g CP="| pbcopy"
 
 alias ql='qlmanage -p "$@" >& /dev/null'
 alias lock='open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app'
+alias strace='sudo dtruss'
 
 export PATH=/usr/local/mysql/bin:$PATH
 export PATH=$HOME/project/hatena/commands/bin:$PATH

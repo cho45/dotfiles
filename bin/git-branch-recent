@@ -74,7 +74,16 @@ class GitRecentCommand
 	end
 
 	def run
-		details = @opts[:strict] ? recent_branches_strict : recent_branches_fast
+		details = []
+		if @opts[:strict]
+			details = recent_branches_strict
+		else
+			details = recent_branches_fast
+			# ファイルとして存在しない場合もあるので、数が足りないときは自動的に strict モードに
+			if details.size < @opts[:max_num]
+				details = recent_branches_strict
+			end
+		end
 		details = details.sort_by {|ref| ref.time }.last(@opts[:max_num])
 
 		remote_master = nil
