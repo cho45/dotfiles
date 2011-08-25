@@ -32,7 +32,7 @@ argv.forEach(function (filename) {
 			// 可読性のために意図的にそうしているのでうざいし、そういう最適化は実行エンジンがすべきこと
 			if (error.reason.indexOf('is better written in dot notation') != -1) return;
 
-			// 根拠がわからないので保留
+			// 可読性を損う程の根拠がわからないので保留
 			if (error.reason.indexOf("Don't make functions within a loop") != -1) return;
 
 			if (error.evidence) {

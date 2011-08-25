@@ -38,6 +38,7 @@ else
 end
 
 "bin".expand.mkpath
+
 Dir["bin/*"].each do |f|
 	link f, "~/bin"
 end
@@ -58,6 +59,7 @@ link ".irssi/scripts", "~/.irssi/scripts"
 link ".bashrc", "~/.bashrc"
 
 link ".screenrc", "~/.screenrc"
+link ".tscreenrc", "~/.tscreenrc"
 link ".screen", "~/.screen"
 
 link ".bvirc", "~/.bvirc"
