@@ -22,6 +22,12 @@ argv.forEach(function (filename) {
 
 			if (error.reason.indexOf('Stopping, unable to continue.') != -1) return;
 
+			if (error.reason.indexOf("Bad escapement") != -1) return;
+			if (error.reason.indexOf("Weird construction. Delete 'new'") != -1) return;
+
+			// いや…… 必要なときに言われても……
+			if (error.reason.indexOf("Unnecessary escapement.") != -1) return;
+
 			// 何これ？
 			if (error.reason.indexOf("Confusing use of '!'.") != -1) return;
 
