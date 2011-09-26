@@ -273,7 +273,7 @@ Editing your project's settings
 ===============================
 
 Several of eclim's features are configurable via project settings
-which you can modify using the :ProjectSettings command.  If your
+which you can modify using the |:ProjectSettings| command.  If your
 current Vim window's working directory is at or under the project's
 root directory then you can execute the :ProjectSettings with no
 arguments, otherwise you will need to supply the project name.
@@ -291,9 +291,10 @@ are the project's preferences files.  You should avoid editing these
 files directly and stick to using :ProjectSettings to update them.
 
 Note: If you have only one project or many projects that share the same
-  settings you can use the :EclimSettings command instead to edit the
-  global settings.  These global settings will apply to any project
-  that has not overridden them with values via :ProjectSettings.
+  settings you can use the |:EclimSettings| command instead to edit
+  the global settings.  These global settings will apply to any
+  project that has not overridden them with values via
+  :ProjectSettings.
 
 *gettingstarted-maven*
 

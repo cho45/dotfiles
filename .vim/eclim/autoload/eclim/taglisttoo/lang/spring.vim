@@ -1,11 +1,10 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.org/vim/java/maven/run.html
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,16 +21,13 @@
 "
 " }}}
 
-" Maven(bang, args) {{{
-" Executes maven 1.x using the supplied arguments.
-function! eclim#java#maven#run#Maven(bang, args)
-  call eclim#util#MakeWithCompiler('eclim_maven', a:bang, a:args)
-endfunction " }}}
-
-" Mvn(bang, args) {{{
-" Executes maven 2.x using the supplied arguments.
-function! eclim#java#maven#run#Mvn(bang, args)
-  call eclim#util#MakeWithCompiler('eclim_mvn', a:bang, a:args)
+" Parse(file, settings) {{{
+function! eclim#taglisttoo#lang#spring#Parse(file, settings)
+  return taglisttoo#util#Parse(a:file, a:settings, [
+      \ ['b', "<bean\\s+[^>]*?(?:name|id)=['\"](.*?)['\"]", 1],
+      \ ['i', "<import\\s+[^>]*?resource=['\"](.*?)['\"]", 1],
+      \ ['a', "<alias\\s+[^>]*?alias=['\"](.*?)['\"]", 1],
+    \ ])
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

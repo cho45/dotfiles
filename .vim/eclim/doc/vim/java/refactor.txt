@@ -7,7 +7,7 @@ Refactoring
 Note: All the refactorings are performed externally with Eclipse and with
   that comes a couple caveats (|vim-issues|).  In the event that you
   need to undo a refactoring, please see the |:JavaRefactorUndo| and
-  :History commands.
+  |:History| commands.
 
 Warning: Refactoring support in eclim is very new, so it should probably be
   considered alpha quality.  Eclim uses the eclipse provided
@@ -15,7 +15,7 @@ Warning: Refactoring support in eclim is very new, so it should probably be
   caution.  If something does go wrong and you need to revert a failed
   refactoring, please first try the |:JavaRefactorUndo| command.  If
   that fails to revert the changes, you can then try using the
-  :History command for each file that was changed.Be sure to report
+  |:History| command for each file that was changed.Be sure to report
   your experiences, good or bad, on the eclim-user
   (http://groups.google.com/group/eclim-user) mailing list as well.
 

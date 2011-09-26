@@ -85,9 +85,9 @@ searched for instead.
 
 If only one result is found and that result is in the current source
 file, the cursor will be moved to the element found.  Otherwise, on
-single result matches, the value of g:EclimRubySearchSingleResult will
-be consulted for the action to take.  If there are multiple results,
-the location list will be opened with the list of results.
+single result matches, the value of |g:EclimRubySearchSingleResult|
+will be consulted for the action to take.  If there are multiple
+results, the location list will be opened with the list of results.
 
 *:RubySearchContext*
 

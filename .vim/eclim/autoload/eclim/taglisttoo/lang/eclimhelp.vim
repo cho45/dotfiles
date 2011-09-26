@@ -1,10 +1,10 @@
-" Author: Eric Van Dewoestine
+" Author:  Eric Van Dewoestine
 "
 " Description: {{{
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -21,17 +21,12 @@
 "
 " }}}
 
-runtime ftplugin/help.vim
-
-nnoremap <silent> <buffer> <cr> :call eclim#help#Help('', 1)<cr>
-nnoremap <silent> <buffer> <c-]> :call eclim#help#Help('', 1)<cr>
-
-if !exists("g:tlist_eclimhelp_settings")
-  let g:tlist_eclimhelp_settings = {
-      \ 'lang': 'eclimhelp',
-      \ 'parse': 'eclim#taglisttoo#lang#eclimhelp#Parse',
-      \ 'tags': {'s': 'section', 'a': 'anchor'}
-    \ }
-endif
+" Parse(file, settings) {{{
+function! eclim#taglisttoo#lang#eclimhelp#Parse(file, settings)
+  return taglisttoo#util#Parse(a:file, a:settings, [
+      \ ['a', '\*([^ *]+)\*', 1],
+      \ ['s', '\n([^\n]+)\n[=^-]{4,}', 1],
+    \ ])
+endfunction " }}}
 
 " vim:ft=vim:fdm=marker

@@ -4,7 +4,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -21,18 +21,19 @@
 "
 " }}}
 
-" Ticket(ticket) {{{
-function eclim#project#tracker#Ticket(ticket)
-  let url = eclim#project#util#GetProjectSetting('org.eclim.project.tracker')
-  if type(url) == 0 || url == ''
-    call eclim#util#EchoWarning(
-      \ "Viewing tickets requires project setting " .
-      \ "'org.eclim.project.tracker'.")
-    return
-  endif
+" ParseDocument(file, settings) {{{
+function! eclim#taglisttoo#lang#forrest#ParseDocument(file, settings)
+  return taglisttoo#util#Parse(a:file, a:settings, [
+      \ ['s', "<section\\s+[^>]*?id=['\"](.*?)['\"]", 1],
+    \ ])
+endfunction " }}}
 
-  let url = substitute(url, '<id>', a:ticket, 'g')
-  call eclim#web#OpenUrl(url)
+" ParseStatus(file, settings) {{{
+function! eclim#taglisttoo#lang#forrest#ParseStatus(file, settings)
+  return taglisttoo#util#Parse(a:file, a:settings, [
+      \ ['t', "<actions\\s+[^>]*?priority=['\"](.*?)['\"]", 1],
+      \ ['r', "<release\\s+[^>]*?version=['\"](.*?)['\"]", 1],
+    \ ])
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

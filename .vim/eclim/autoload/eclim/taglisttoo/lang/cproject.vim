@@ -1,11 +1,10 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.org/vim/java/regex.html
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,18 +21,20 @@
 "
 " }}}
 
-" Script Variables {{{
-  let s:command_regex = '-command java_regex -f "<file>"'
-" }}}
+" Parse(file, settings) {{{
+function! eclim#taglisttoo#lang#cproject#Parse(file, settings)
+  let tags = taglisttoo#util#Parse(a:file, a:settings, [
+      \ ['c', "<configuration\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['t', "<toolChain\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['l', "<tool\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['i', "<option\\s+[^>]*?valueType=['\"]includePath['\"]", 'includes'],
+      \ ['s', "<option\\s+[^>]*?valueType=['\"]definedSymbols['\"]", 'symbols'],
+    \ ])
 
-" Evaluate(file) {{{
-function eclim#java#regex#Evaluate(file)
-  let command = s:command_regex
-  let command = substitute(command, '<file>', a:file, '')
-  if exists('b:eclim_regex_type')
-    let command .= ' -t ' . b:eclim_regex_type
-  endif
-  return eclim#ExecuteEclim(command)
+  call taglisttoo#util#SetNestedParents(
+    \ a:settings.tags, tags, ['c'], '<configuration', '</configuration')
+
+  return tags
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker

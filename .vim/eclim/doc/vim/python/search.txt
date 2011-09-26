@@ -17,7 +17,7 @@ perform a search for that element by issuing the command
 
 If only one result is found and that result is in the current source
 file, the cursor will be moved to the element found.  Otherwise, on
-single result matches, the value of g:EclimPythonSearchSingleResult
+single result matches, the value of |g:EclimPythonSearchSingleResult|
 will be consulted for the action to take.  If there are multiple
 results, the location list will be opened with the list of results.
 

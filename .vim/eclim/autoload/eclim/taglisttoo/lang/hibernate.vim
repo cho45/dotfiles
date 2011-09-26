@@ -1,11 +1,10 @@
 " Author:  Eric Van Dewoestine
 "
 " Description: {{{
-"   see http://eclim.org/vim/common/vcs.html
 "
 " License:
 "
-" Copyright (C) 2005 - 2009  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -22,8 +21,17 @@
 "
 " }}}
 
-" Mappings {{{
-  nnoremap <silent> <buffer> <cr> :call eclim#vcs#editor#ViewDiff()<cr>
-" }}}
+" Parse(file, settings) {{{
+function! eclim#taglisttoo#lang#hibernate#Parse(file, settings)
+  return taglisttoo#util#Parse(a:file, a:settings, [
+      \ ['c', "<class\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['j', "<joined-subclass\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['t', "<typedef\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['f', "<filter-def\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['i', "<import\\s+[^>]*?class=['\"](.*?)['\"]", 1],
+      \ ['q', "<query\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+      \ ['s', "<sql-query\\s+[^>]*?name=['\"](.*?)['\"]", 1],
+    \ ])
+endfunction " }}}
 
 " vim:ft=vim:fdm=marker

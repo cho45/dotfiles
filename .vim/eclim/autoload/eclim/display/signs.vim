@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2010  Eric Van Dewoestine
+" Copyright (C) 2005 - 2011  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -315,10 +315,10 @@ function! eclim#display#signs#Update()
   let &lazyredraw = save_lazy
 endfunction " }}}
 
-" Show(type, list) {{{
+" Show(type, list, [delayed]) {{{
 " Set the type on each entry in the specified list ('qf' or 'loc') and mark
 " any matches in the current file.
-function! eclim#display#signs#Show(type, list)
+function! eclim#display#signs#Show(type, list, ...)
   if a:type != ''
     if a:list == 'qf'
       let list = getqflist()
@@ -328,14 +328,8 @@ function! eclim#display#signs#Show(type, list)
 
     let newentries = []
     for entry in list
-      let newentry = {
-          \ 'filename': bufname(entry.bufnr),
-          \ 'lnum': entry.lnum,
-          \ 'col': entry.col,
-          \ 'text': entry.text,
-          \ 'type': a:type
-        \ }
-      call add(newentries, newentry)
+      let entry['type'] = a:type
+      call add(newentries, entry)
     endfor
 
     if a:list == 'qf'
@@ -345,9 +339,13 @@ function! eclim#display#signs#Show(type, list)
     endif
   endif
 
-  call eclim#display#signs#Update()
-
-  redraw!
+  let delayed = a:0 > 0 && a:1
+  if delayed
+    " prevent gvim from redrawing immediately after a :make call
+    call eclim#util#DelayedCommand('call eclim#display#signs#Update() | redraw!')
+  else
+    call eclim#display#signs#Update() | redraw!
+  endif
 endfunction " }}}
 
 " SetPlaceholder([only_if_necessary]) {{{
