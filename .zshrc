@@ -35,7 +35,8 @@ export LANG=ja_JP.UTF-8
 export MYSQL_PS1="(\u@\h) [\d]> "
 export PERL5LIB=lib:$HOME/lib/perl
 export NYTPROF=sigexit=int,hup:trace=2:start=no
-export PERL_CPANM_OPT="--verbose --sudo --prompt --mirror http://cpan.cpantesters.org"
+#export PERL_CPANM_OPT="--verbose --sudo --prompt --mirror http://cpan.cpantesters.org"
+export PERL_CPANM_OPT="--verbose --prompt"
 export FLEX_HOME=$HOME/sdk/flex4sdk
 export _JAVA_OPTIONS="-Duser.language=en -Dfile.language=UTF-8"
 
