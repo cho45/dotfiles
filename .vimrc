@@ -23,7 +23,10 @@ set list
 
 set directory=~/swp
 
-let g:EclimBaseDir        = '/Users/cho45/.vim'
+let g:EclimBaseDir  = '/Users/cho45/.vim'
+if !filereadable('.classpath')
+	let g:EclimDisabled = 1
+endif
 
 let g:hatena_user          = 'cho45'
 let g:hatena_group_name    = 'subtech'
