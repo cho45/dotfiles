@@ -46,8 +46,8 @@ issues, it does have its drawbacks:
 
   Using vim:
 
-  1. Open the eclim settings (global: :EclimSettings or project level:
-     :ProjectSettings)
+  1. Open the eclim settings (global: |:EclimSettings| or project
+     level: |:ProjectSettings|)
 
   2. Edit the indentation settings to match your vim options:
 

@@ -23,7 +23,10 @@ set list
 
 set directory=~/swp
 
-let g:EclimBaseDir        = '/Users/cho45/.vim'
+let g:EclimBaseDir  = '/Users/cho45/.vim'
+if !filereadable('.classpath')
+	let g:EclimDisabled = 1
+endif
 
 let g:hatena_user          = 'cho45'
 let g:hatena_group_name    = 'subtech'
@@ -393,14 +396,15 @@ iabbr thsi this
 iabbr crete create
 iabbr funciton function
 
-augroup BinaryXXD
+augroup AutoMkdir
+	function! s:auto_mkdir(dir, force)
+		if !isdirectory(a:dir) && (a:force || input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+			call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+		endif
+	endfunction
+
 	autocmd!
-	autocmd BufReadPre  *.bin let &binary =1
-	autocmd BufReadPost * if &binary | silent %!xxd -g 1
-	autocmd BufReadPost * set ft=xxd | endif
-	autocmd BufWritePre * if &binary | %!xxd -r | endif
-	autocmd BufWritePost * if &binary | silent %!xxd -g 1
-	autocmd BufWritePost * set nomod | endif
+	autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
 augroup END
 
 autocmd BufWritePost */debuglet.js silent! execute '!ruby /Users/cho45/bin/debuglet.rb %'
@@ -416,7 +420,4 @@ function! GitWeb()
 	call system('open http://repository01.host.h:5001/gitweb.cgi' . repos . '/blob/' . commit . ':' . expand('%') . '#l' . line('.'))
 endfunction
 command! GitWeb call GitWeb()
-
-command! Bookmark call fuf#script#launch('', 0, 'B\!>', 'perl', $HOME . '/.vim/bookmarks.pl', 0)
-command! Music call fuf#script#launch('', 0, 'iTunes>', 'perl', $HOME . '/.vim/itunes.pl', 1)
 

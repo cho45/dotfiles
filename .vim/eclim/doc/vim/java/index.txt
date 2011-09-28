@@ -35,6 +35,8 @@ Java
   - Configuration (#configuration)
   - Executing javac (#executing-javac)
   - Configuration (#id1)
+  - Echo the classpath for the current project
+    (#echo-the-classpath-for-the-current-project)
   - Viewing list of known JDKs/JREs installed
     (#viewing-list-of-known-jdks-jres-installed)
 - Javadoc Support ()
@@ -72,8 +74,6 @@ Java
   - Configuration (#id1)
 - TestNG ()
 - Logging ()
-  - Configuration (#configuration)
-- Regex Testing ()
   - Configuration (#configuration)
 - Java Tools Integration ()
 
@@ -147,8 +147,6 @@ Java
 - TestNG (|vim-java-testng|)
 
 - Logging (|vim-java-logging|)
-
-- Regex Testing (|vim-java-regex|)
 
 - Java Tools Integration (|vim-java-tools|)
 

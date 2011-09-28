@@ -14,7 +14,7 @@ following requirements.
 - Java Development Kit
   (http://java.sun.com/javase/downloads/index.html) 1.5 or greater
 
-- Eclipse 3.6.x (Helios) (http://eclipse.org/downloads/index.php)
+- Eclipse 3.7.x (Indigo) (http://eclipse.org/downloads/index.php)
 
 - Vim 7.1.x (http://www.vim.org/download.php)
 
@@ -177,8 +177,8 @@ If you plan on using eclim without the eclipse gui, then:
 Once you have the eclim daemon (headed or headless) running, you can
 then test eclim:
 
-- open a vim window and issue the command, :PingEclim.  The result of
-  executing this command should be the eclim and eclipse version
+- open a vim window and issue the command, |:PingEclim|.  The result
+  of executing this command should be the eclim and eclipse version
   echoed to the bottom of your Vim window.  If however, you receive
   unable to connect to eclimd - connect: Connection refused, or
   something similar, then your eclimd server is not running or
