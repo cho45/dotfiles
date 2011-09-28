@@ -53,7 +53,7 @@ Irssi::signal_add_first('print text', sub {
 	if ($stripped =~ /$regexp/ || $dest->{target} =~ /$regexp/) {
 		$dest->{level} ^= MSGLEVEL_HILIGHT;
 		$dest->{level} |= MSGLEVEL_NOHILIGHT;
-		$dest->{window}->print($text, $dest->{level});
+		$dest->{window}->print($dest->{target} . ": " . $text, $dest->{level});
 		Irssi::signal_stop;
 	}
 });
