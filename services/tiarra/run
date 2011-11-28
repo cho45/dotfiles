@@ -1,0 +1,6 @@
+#!/bin/sh
+
+exec 2>&1
+exec setuidgid cho45 \
+        /home/cho45/bin/tiarra --config=/home/cho45/tiarra.conf
+

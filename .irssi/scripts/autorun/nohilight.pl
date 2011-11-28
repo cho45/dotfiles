@@ -50,10 +50,10 @@ Irssi::signal_add_first('print text', sub {
 	my ($dest, $text, $stripped) = @_;
 	return unless $dest->{level} & MSGLEVEL_HILIGHT;
 	my $regexp = join '|', @$nohilight;
-	if ($stripped =~ /$regexp/) {
+	if ($stripped =~ /$regexp/ || $dest->{target} =~ /$regexp/) {
 		$dest->{level} ^= MSGLEVEL_HILIGHT;
 		$dest->{level} |= MSGLEVEL_NOHILIGHT;
-		$dest->{window}->print($text, $dest->{level});
+		$dest->{window}->print($dest->{target} . ": " . $text, $dest->{level});
 		Irssi::signal_stop;
 	}
 });

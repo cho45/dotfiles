@@ -37,7 +37,7 @@ else
 	cd "dotfiles"
 end
 
-"bin".expand.mkpath
+"~/bin".expand.mkpath
 
 Dir["bin/*"].each do |f|
 	link f, "~/bin"
