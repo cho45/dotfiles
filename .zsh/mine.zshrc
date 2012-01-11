@@ -9,7 +9,8 @@ zle -N cheat-sheet
 PROMPT_EXIT="%(?..exit %?
 )
 "
-PROMPT_CWD=" %{[33m%}%~%{[m%}"
+RPROMPT=""
+PROMPT_CWD="%{[32m%}[%n@%m] %{[33m%}%~%{[m%}"
 PROMPT_CMD="%{[32m%} | q ド _ リ|$ <%{[m%}%{[m%} "
 # precmd で設定される
 PROMPT_CWD_ADD=""
@@ -86,9 +87,7 @@ precmd () {
 	# update prompt
 	PROMPT="$PROMPT_EXIT$PROMPT_CMD_ADD$PROMPT_CWD$PROMPT_CWD_ADD
 $PROMPT_CMD"
-	RPROMPT='%{[32m%}[%n@%m]%{[m%}'
 	PROMPT_CWD_ADD=""
-	PROMPT_CMD_ADD=""
 }
 
 chpwd () {
@@ -161,24 +160,28 @@ function git () {
 		echo
 		echo "x| _ |x < .svn があったので svn コマンドにしました!"
 	else
-		if [[ $1 == "" ]]; then
-			# git ってだけうったときは status 表示
-			command git --no-pager branch-recent && \
-			command git --no-pager diff --stat --color-words && \
-			command git --no-pager status \
-			| $PAGER
-		elif [[ $1 == "log" ]]; then
-			# 常に diff を表示してほしい
-			command git log -p ${@[2, -1]}
-		elif [[ $1 == "pull" ]]; then
-			if [[ ( -x '.git/pull-chain' ) ]]; then
-				command git $@
-				asyncrun ./.git/pull-chain
+		if command git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+			if [[ $1 == "" ]]; then
+				# git ってだけうったときは status 表示
+				command git --no-pager branch-recent && \
+				command git --no-pager diff --stat --color-words && \
+				command git --no-pager status \
+				| $PAGER
+			elif [[ $1 == "log" ]]; then
+				# 常に diff を表示してほしい
+				command git log -p ${@[2, -1]}
+			elif [[ $1 == "pull" ]]; then
+				if [[ ( -x '.git/pull-chain' ) ]]; then
+					command git $@
+					asyncrun ./.git/pull-chain
+				else
+					command git $@
+				fi
 			else
 				command git $@
 			fi
 		else
-			command git $@
+			echo "Not in git work tree."
 		fi
 	fi
 }

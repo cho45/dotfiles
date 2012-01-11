@@ -157,15 +157,12 @@ abbreviations=(
 	"L"    "| \$PAGER"
 	"G"    "| grep"
 
-	"H"     "$HOME/project/Hatena-"
-
 	"HEAD^"     "HEAD\\^"
 	"HEAD^^"    "HEAD\\^\\^"
 	"HEAD^^^"   "HEAD\\^\\^\\^"
 	"HEAD^^^^"  "HEAD\\^\\^\\^\\^\\^"
 	"HEAD^^^^^" "HEAD\\^\\^\\^\\^\\^"
 
-	"sipp"  "server_ips"
 	"mysql" "mysql -unobody -pnobody -h"
 
 	# typo
