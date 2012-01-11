@@ -11,10 +11,14 @@ argv.shift();
 argv.forEach(function (filename) {
 	var source = fs.readFileSync(filename, 'utf-8');
 	var result = JSHINT(source, {
-		browser : true,
-		jquery  : true,
-		evil    : true,
-		passfail : false
+		browser   : true,
+		jquery    : true,
+		evil      : true,
+		devel     : true,
+		lastsemic : true,
+		smarttabs : true,
+		onecase   : true,
+		passfail  : false
 	});
 	if (!result) {
 		JSHINT.errors.forEach(function (error) {
@@ -24,6 +28,8 @@ argv.forEach(function (filename) {
 
 			if (error.reason.indexOf("Bad escapement") != -1) return;
 			if (error.reason.indexOf("Weird construction. Delete 'new'") != -1) return;
+
+			if (error.reason.indexOf("Use the array literal notation [].") != -1) return;
 
 			// いや…… 必要なときに言われても……
 			if (error.reason.indexOf("Unnecessary escapement.") != -1) return;
@@ -50,9 +56,6 @@ argv.forEach(function (filename) {
 
 				// やたら長い行は圧縮されたJSコードとみなす
 				if (error.evidence.length > 1000) return;
-
-				// 閉じブレース前のセミコロンは省略可能に
-				if (error.reason.indexOf('Missing semicolon') != -1 && error.evidence.substring(error.character).match(/^\s*\}/)) return;
 			}
 
 			console.log([filename, error.line, error.character].join(':') + "\t" + error.reason);
