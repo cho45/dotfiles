@@ -160,28 +160,28 @@ function git () {
 		echo
 		echo "x| _ |x < .svn があったので svn コマンドにしました!"
 	else
-		if command git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-			if [[ $1 == "" ]]; then
+		if [[ $1 == "" ]]; then
+			if command git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
 				# git ってだけうったときは status 表示
 				command git --no-pager branch-recent && \
 				command git --no-pager diff --stat --color-words && \
 				command git --no-pager status \
 				| $PAGER
-			elif [[ $1 == "log" ]]; then
-				# 常に diff を表示してほしい
-				command git log -p ${@[2, -1]}
-			elif [[ $1 == "pull" ]]; then
-				if [[ ( -x '.git/pull-chain' ) ]]; then
-					command git $@
-					asyncrun ./.git/pull-chain
-				else
-					command git $@
-				fi
+			else
+				echo "Not in git work tree."
+			fi
+		elif [[ $1 == "log" ]]; then
+			# 常に diff を表示してほしい
+			command git log -p ${@[2, -1]}
+		elif [[ $1 == "pull" ]]; then
+			if [[ ( -x '.git/pull-chain' ) ]]; then
+				command git $@
+				asyncrun ./.git/pull-chain
 			else
 				command git $@
 			fi
 		else
-			echo "Not in git work tree."
+			command git $@
 		fi
 	fi
 }
