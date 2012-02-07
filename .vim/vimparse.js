@@ -41,6 +41,7 @@ argv.forEach(function (filename) {
 			if (error.reason.indexOf("'i' is already defined.") != -1) return;
 			if (error.reason.indexOf("'it' is already defined.") != -1) return;
 			if (error.reason.indexOf("'key' is already defined.") != -1) return;
+			if (error.reason.indexOf("'len' is already defined.") != -1) return;
 
 			// 可読性のために意図的にそうしているのでうざいし、そういう最適化は実行エンジンがすべきこと
 			if (error.reason.indexOf('is better written in dot notation') != -1) return;
