@@ -128,6 +128,7 @@ set listchars+=precedes:<,extends:>
 " mapping
 
 inoremap  <BS>
+nnoremap Y y$
 
 nnoremap j gj
 nnoremap k gk

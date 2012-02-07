@@ -4,24 +4,47 @@
 
 stty intr 
 
-PATHS=(
+# tied to $PATH
+path=(
 	$HOME/bin
 	$HOME/project/commands/bin
 	$HOME/sdk/play
 	$HOME/sdk/android/tools
 	$HOME/sdk/android/platform-tools
 	$HOME/sdk/flex/bin
+
 	/usr/local/ruby1.9/bin
 	/usr/local/scala/bin
 	/usr/local/vim7/bin
 	/usr/local/tscreen/bin
 	/usr/local/screen/bin
+
 	/opt/local/sbin
 	/opt/local/bin
+
 	/usr/local/bin
-	$PATH
+	/usr/bin
+	/bin
+	/usr/sbin
+	/sbin
 )
-export PATH=${(j.:.)PATHS}
+
+# tie
+typeset -xT RUBYLIB rubylib
+typeset -U rubylib
+rubylib=(
+	lib
+	$HOME/lib/ruby
+)
+
+# tie
+typeset -xT PERL5LIB perl5lib
+typeset -U perl5lib
+perl5lib=(
+	lib
+	$HOME/lib/perl
+)
+
 
 unset PS1
 
@@ -33,7 +56,6 @@ export LANG=ja_JP.UTF-8
 
 ## Application environment variables
 export MYSQL_PS1="(\u@\h) [\d]> "
-export PERL5LIB=lib:$HOME/lib/perl
 export NYTPROF=sigexit=int,hup:trace=2:start=no
 #export PERL_CPANM_OPT="--verbose --sudo --prompt --mirror http://cpan.cpantesters.org"
 export PERL_CPANM_OPT="--verbose --prompt"
@@ -80,10 +102,10 @@ zstyle ':predict' verbose true
 ## setopt
 setopt print_eight_bit
 setopt auto_menu
-#setopt auto_cd
+setopt transient_rprompt
 setopt correct
 setopt auto_name_dirs
-#setopt append_history
+setopt inc_append_history
 setopt share_history
 setopt auto_remove_slash
 setopt auto_param_keys
@@ -101,7 +123,7 @@ setopt cdable_vars
 setopt sh_word_split
 setopt ignore_eof
 setopt magic_equal_subst
-#setopt print_exit_value
+setopt long_list_jobs
 
 help! () { zle -M "E478: Don't panic!" }
 zle -N help!
@@ -124,6 +146,7 @@ PROMPT_L="
 PROMPT="$PROMPT_EXIT$PROMPT_CWD$PROMPT_L"
 RPROMPT='%{[32m%}[%n@%m]%{[m%}'
 
+REPORTTIME=3
 HISTSIZE=5000
 HISTFILE=~/.zsh_history
 SAVEHIST=9999999
@@ -134,16 +157,11 @@ abbreviations=(
 	"L"    "| \$PAGER"
 	"G"    "| grep"
 
-	"H"     "$HOME/project/Hatena-"
-
 	"HEAD^"     "HEAD\\^"
 	"HEAD^^"    "HEAD\\^\\^"
 	"HEAD^^^"   "HEAD\\^\\^\\^"
 	"HEAD^^^^"  "HEAD\\^\\^\\^\\^\\^"
 	"HEAD^^^^^" "HEAD\\^\\^\\^\\^\\^"
-
-	"sipp"  "server_ips"
-	"mysql" "mysql -unobody -pnobody -h"
 
 	# typo
 	"lkm"   "lm"

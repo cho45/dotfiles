@@ -17,7 +17,7 @@ if [ $? -ne 0 ]; then
 fi
 
 COMMAND=${0##*/}
-PATH=/opt/local/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+COMMAND=`which -a $COMMAND | grep -v $0 | head -n 1`
 
 /usr/bin/env $COMMAND ${@+"$@"}
 

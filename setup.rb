@@ -67,6 +67,7 @@ link ".rascutrc", "~/.rascutrc"
 link ".re.pl", "~/.re.pl"
 link ".irbrc", "~/.irbrc"
 link ".gdbinit", "~/.gdbinit"
+link ".my.cnf", "~/.my.cnf"
 
 link "git/.gitconfig", "~/.gitconfig"
 link "git/.gitignore", "~/.gitignore"
