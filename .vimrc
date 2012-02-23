@@ -46,6 +46,10 @@ let g:jpTemplateKey        = '<C-B>'
 
 let g:netrw_preview        = 1
 
+let g:use_xhtml = 1
+let g:html_use_css = 1
+let g:html_no_pre = 1
+
 " zsh っぽい補完に
 "
 set wildmode=longest,list
