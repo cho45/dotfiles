@@ -33,6 +33,7 @@ sub print_text {
 	return if !$window;
 
 	if ($dest->{level} & (
+		MSGLEVEL_MSGS    |
 		MSGLEVEL_PUBLIC  |
 		MSGLEVEL_NOTICES |
 		MSGLEVEL_SNOTES  |
@@ -42,7 +43,7 @@ sub print_text {
 		my $n = $dest->{window}->{refnum};
 		my $c = $dest->{target};
 		$text =~ s/%/%%/g;
-		$text =  sprintf "[%2d]%s:%s", $n, $c, $text;
+		$text =  sprintf "%s:%s", $c, $text;
 
 
 		$window->print($text, MSGLEVEL_CLIENTCRAP) unless $prevmsg eq $text;
