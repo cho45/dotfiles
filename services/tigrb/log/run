@@ -1,0 +1,4 @@
+#!/bin/sh
+
+exec setuidgid cho45 multilog t ./main
+
