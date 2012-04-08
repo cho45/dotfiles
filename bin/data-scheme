@@ -1,0 +1,65 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+require 'optparse'
+require 'webrick/httputils'
+
+class DataSchemeCommand
+	include WEBrick::HTTPUtils
+
+	def self.run(argv)
+		self.new(argv).run
+	end
+
+	def initialize(argv)
+		@argv = argv.dup
+		@opts = {
+			:copy => false
+		}
+		self.option
+	end
+
+	def option
+		opts = @opts
+		argv = @argv
+		OptionParser.new do |parser|
+			parser.instance_eval do
+				self.banner = <<-EOB.gsub(/^\t+/, "")
+					Usage: #{$0} [opts] <filename> <filename>
+
+				EOB
+
+				separator ""
+
+				separator "Options:"
+
+				on("-C", "--copy", "Running on interactive copy mode.") do |o|
+					opts[:copy] = true
+				end
+
+				parse!(argv)
+			end
+		end
+		self
+	end
+
+	def run
+		@argv.each_with_index do |filename, index|
+			result =  "data:#{mime_type(filename, DefaultMimeTypes)};base64,#{[ File.read(filename) ].pack('m').gsub(/\n/, '')}"
+			puts result
+			if @opts[:copy]
+				IO.popen('pbcopy', 'r+') do |io|
+					io.print result
+				end
+
+				if index < @argv.size - 1
+					puts "Press any key to continue"
+					$stdin.gets
+				end
+			end
+		end
+	end
+
+end
+
+DataSchemeCommand.run(ARGV)

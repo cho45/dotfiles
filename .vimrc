@@ -412,8 +412,8 @@ augroup AutoMkdir
 	autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
 augroup END
 
-autocmd BufWritePost */debuglet.js silent! execute '!ruby /Users/cho45/bin/debuglet.rb %'
-autocmd BufNewFile */debuglet.js silent! execute 'r!ruby /Users/cho45/bin/debuglet.rb'
+autocmd BufWritePost */debuglet.js silent! execute '!ruby ' . $HOME . '/bin/debuglet.rb %'
+autocmd BufNewFile */debuglet.js silent! execute 'r!ruby ' . $HOME . '/bin/debuglet.rb'
 
 function! GitWeb()
 	let git_output = substitute(system('git config --get remote.origin.url'), '\n*$', '', '')
