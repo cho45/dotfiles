@@ -66,6 +66,8 @@ preexec () {
 precmd () {
 	# Set title of screen window
 	echo -n "k:$prev\\"
+	PROMPT_CMD_ADD=""
+	PROMPT_CWD_ADD=""
 
 #	if [[ $prev == "ls" ]]; then
 #		osascript -e 'tell application "System Events" to key code 103'
@@ -77,7 +79,10 @@ precmd () {
 	update-git-status
 
 	if [[ ${DYLD_INSERT_LIBRARIES:#libtsocks} != "" ]]; then
-		local proxy=$(command ps -ocommand= | grep "^ssh .*\-D *8081" | head -n 1 | awk '{ print $NF }')
+		# local proxy=$(command ps -ocommand= | grep "^ssh .*\-D *8081" | head -n 1 | awk '{ print $NF }')
+		if command ps -ocommand= | grep -v grep | grep "ssh.*10081" > /dev/null; then
+			local proxy=Connected
+		fi
 		PROMPT_CMD_ADD="$PROMPT_CMD_ADD [35m%}[${proxy:-[31mDisconnected[35m}]%{[m%}=$cmd[1]"
 
 		# どこの window が socks 経由になっているかわかったほうがいいので
@@ -87,7 +92,6 @@ precmd () {
 	# update prompt
 	PROMPT="$PROMPT_EXIT$PROMPT_CMD_ADD$PROMPT_CWD$PROMPT_CWD_ADD
 $PROMPT_CMD"
-	PROMPT_CWD_ADD=""
 }
 
 chpwd () {
