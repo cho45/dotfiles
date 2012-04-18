@@ -1,0 +1,9 @@
+#!/bin/sh
+
+export HOME=/home/cho45
+
+exec 2>&1
+cd $HOME/project/net-irc
+exec setuidgid cho45 \
+	ruby -r$HOME/dotfiles/services/.rubyopts.rb examples/gig.rb --foreground --debug
+
