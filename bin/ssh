@@ -1,7 +1,8 @@
 #!/bin/sh
 
-if [ -e $HOME/.keychain/*-sh ]; then
-	. $HOME/.keychain/*-sh
+HOST=$(hostname)
+if [ -e $HOME/.keychain/$HOST-sh ]; then
+	. $HOME/.keychain/$HOST-sh
 fi
 
 ssh-add -l > /dev/null 2>&1
