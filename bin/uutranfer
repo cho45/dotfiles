@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+require 'tmpdir'
+require 'pathname'
+
+window = ARGV.shift || 1
+if window == ENV['WINDOW']
+	abort "same window"
+end
+
+dir = Pathname('/tmp')
+
+message = dir + "message"
+# message.open("w") {|f| f.print %q|perl -MPath::Class -e 'my $file=file(shift);printf("begin 666 %s\n%s`\nend\n",$file->basename,pack("u",scalar $file->slurp))' | }
+
+system "screen", "-X", "eval", "select #{window}", "logfile #{dir}/uutransfer.%n", "logfile flush 1", "log on" #, "readbuf #{message}", "paste ."
+file = dir + "uutransfer.#{window}"
+file.unlink
+begin
+	sleep 1 until file.exist?
+
+	File.open(file, 'r+') do |f|
+		buff = ''
+		loop do
+			begin
+				buff << f.sysread(4096).gsub(/\r\n/, "\n")
+			rescue EOFError => e
+				sleep 1
+				next
+			end
+			# There may be any characters before 'begin'
+			matched, mode, filename, bytes = */begin (\d\d\d) ([^\s]+)\n(?:([\s\S]+)\nend)?/.match(buff)
+			case
+			when bytes
+				p [mode, filename, bytes.size]
+				dest = Pathname(filename).basename
+				dest.open('w') do |out|
+					out << bytes.unpack('u')[0]
+				end
+				f.seek(0)
+				f.truncate(0)
+				system "screen", "-X", "eval", "echo '#{dest.realpath} was created'"
+				buff = ''
+			when matched
+				# matched but not completed
+			else
+				buff.slice!(0, buff.size - 255)
+			end
+		end
+	end
+ensure
+	system "screen", "-X", "eval", "log off"
+end
