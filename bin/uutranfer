@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require 'tmpdir'
 require 'pathname'
+require 'digest/md5'
 
 window = ARGV.shift || 1
 if window == ENV['WINDOW']
@@ -17,10 +17,13 @@ system "screen", "-X", "eval", "select #{window}", "logfile #{dir}/uutransfer.%n
 file = dir + "uutransfer.#{window}"
 file.unlink
 begin
+	puts "Waiting for log..."
 	sleep 1 until file.exist?
 
+	puts "Watching window #{window}"
 	File.open(file, 'r+') do |f|
 		buff = ''
+		filename = nil
 		loop do
 			begin
 				buff << f.sysread(4096).gsub(/\r\n/, "\n")
@@ -28,21 +31,34 @@ begin
 				sleep 1
 				next
 			end
-			# There may be any characters before 'begin'
-			matched, mode, filename, bytes = */begin (\d\d\d) ([^\s]+)\n(?:([\s\S]+)\nend)?/.match(buff)
+
 			case
-			when bytes
-				p [mode, filename, bytes.size]
+			when m = /begin (\d\d\d) ([^\s]+)\n/.match(buff)
+				filename = Pathname(m[2]).basename
+				puts "#{filename}: Detect uuencoded file..."
+				buff.slice!(0, m.end(0))
+			when m = /\nend\n/.match(buff)
+				buff.slice!(m.begin(0), buff.size)
+
+				puts "#{filename}: Writing... #{buff.size} bytes"
 				dest = Pathname(filename).basename
 				dest.open('w') do |out|
-					out << bytes.unpack('u')[0]
+					out << buff.unpack('u')[0]
 				end
+
+				md5 = Digest::MD5.hexdigest(dest.read)
+
 				f.seek(0)
 				f.truncate(0)
-				system "screen", "-X", "eval", "echo '#{dest.realpath} was created'"
-				buff = ''
-			when matched
-				# matched but not completed
+
+				system "screen", "-X", "eval", "echo '#{dest.realpath} was created. md5: #{md5}'"
+
+				puts "#{filename}: Done #{dest.realpath} #{dest.size} bytes #{md5}"
+
+				buff.replace('')
+				filename = nil
+			when filename
+				puts "#{filename}: Receving... #{buff.size} bytes"
 			else
 				buff.slice!(0, buff.size - 255)
 			end
