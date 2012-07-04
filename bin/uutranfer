@@ -65,5 +65,12 @@ begin
 		end
 	end
 ensure
-	system "screen", "-X", "eval", "log off"
+	system "screen", "-X", "eval", "select #{window}", "log off"
 end
+
+__END__
+uuencode file
+ruby -e 'puts "begin 666 #{File.basename(ARGV[0])}\n#{[File.read(ARGV[0])].pack("u")}`\nend"' file
+perl -MPath::Class -e 'my $file=file(shift);printf("begin 666 %s\n%s`\nend\n",$file->basename,pack("u",scalar $file->slurp))' file
+
+
