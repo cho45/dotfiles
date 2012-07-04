@@ -8,12 +8,10 @@ if window == ENV['WINDOW']
 	abort "same window"
 end
 
+# screen fails writing to directory created by tmpdir, so use /tmp instead
 dir = Pathname('/tmp')
 
-message = dir + "message"
-# message.open("w") {|f| f.print %q|perl -MPath::Class -e 'my $file=file(shift);printf("begin 666 %s\n%s`\nend\n",$file->basename,pack("u",scalar $file->slurp))' | }
-
-system "screen", "-X", "eval", "select #{window}", "logfile #{dir}/uutransfer.%n", "logfile flush 1", "log on" #, "readbuf #{message}", "paste ."
+system "screen", "-X", "eval", "select #{window}", "logfile #{dir}/uutransfer.%n", "logfile flush 1", "log on"
 file = dir + "uutransfer.#{window}"
 file.unlink
 begin
