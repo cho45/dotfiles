@@ -11,7 +11,7 @@ end
 def format_bytes(bytes)
 	case
 	when bytes < 1024
-		"%d bytes"
+		"%d bytes" % bytes
 	when bytes < (1024 * 1024)
 		"%.2f KBytes" % (bytes / 1024.0)
 	when bytes < (1024 * 1024 * 1024)
@@ -33,7 +33,7 @@ begin
 
 	puts "Watching window #{window}"
 	File.open(file, 'r+') do |f|
-		time = nil, filename = nil, dest = nil, buff = nil
+		time = nil, filename = nil, dest = nil, buff = nil, type = nil
 		loop do
 			line = f.gets
 			unless line
@@ -54,12 +54,13 @@ begin
 			line.chomp!
 
 			case
-			when m = /begin (\d\d\d) ([^\s'"]+)$/.match(line)
+			when m = /begin(-base64)? (\d\d\d) ([^\s'"]+)$/.match(line)
+				type     = m[1] ? 'm' : 'u'
 				time     = Time.now
-				filename = Pathname(m[2]).basename
+				filename = Pathname(m[3]).basename
 				dest     = filename.open('w')
 				puts "#{filename}: Detected uuencoded file..."
-			when m = /^end$/.match(line)
+			when m = /^(end|====)$/.match(line)
 				dest.close
 
 				md5 = Digest::MD5.hexdigest(filename.read)
@@ -79,7 +80,8 @@ begin
 			when dest
 				elapsed = Time.now - time
 
-				dest << line.unpack('u')[0]
+				dest << line.unpack(type)[0]
+
 				print "#{filename}: Writing... #{format_bytes(dest.pos)} #{elapsed > 3 ? "(#{format_bytes(dest.pos / elapsed)}/sec)": ''}         \r"
 				$stdout.flush
 			end
