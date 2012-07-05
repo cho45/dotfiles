@@ -54,7 +54,7 @@ begin
 			line.chomp!
 
 			case
-			when m = /begin (\d\d\d) ([^\s]+)/.match(line)
+			when m = /begin (\d\d\d) ([^\s'"]+)$/.match(line)
 				time     = Time.now
 				filename = Pathname(m[2]).basename
 				dest     = filename.open('w')
