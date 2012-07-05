@@ -33,7 +33,7 @@ begin
 
 	puts "Watching window #{window}"
 	File.open(file, 'r+') do |f|
-		time = nil, filename = nil, dest = nil, buff = ''
+		time = nil, filename = nil, dest = nil, buff = nil
 		loop do
 			line = f.gets
 			unless line
@@ -46,8 +46,8 @@ begin
 				buff = line
 				next
 			else
-				line = buff << line
-				buff = ''
+				line = buff << line if buff
+				buff = nil
 			end
 
 			line.gsub!(/\r\n/, "\n")
@@ -58,7 +58,7 @@ begin
 				time     = Time.now
 				filename = Pathname(m[2]).basename
 				dest     = filename.open('w')
-				puts "#{filename}: Detect uuencoded file..."
+				puts "#{filename}: Detected uuencoded file..."
 			when m = /^end$/.match(line)
 				dest.close
 
@@ -80,7 +80,7 @@ begin
 				elapsed = Time.now - time
 
 				dest << line.unpack('u')[0]
-				print "#{filename}: Receving... #{format_bytes(dest.pos)} #{elapsed > 5 ? "#{format_bytes(dest.pos / elapsed)}/sec": ''}         \r"
+				print "#{filename}: Writing... #{format_bytes(dest.pos)} #{elapsed > 3 ? "(#{format_bytes(dest.pos / elapsed)}/sec)": ''}         \r"
 				$stdout.flush
 			end
 		end
