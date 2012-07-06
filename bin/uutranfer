@@ -34,16 +34,16 @@ begin
 	puts "Watching window #{window}"
 	File.open(file, 'r+') do |f|
 		time = nil, filename = nil, dest = nil, buff = nil, type = nil
-		loop do
+		while true
 			line = f.gets
-			unless line
-				sleep 0.5
-				next
-			end
 
 			if f.eof?
 				# midstream of line...
-				buff = line
+				if line
+					buff = line
+				else
+					sleep 0.5
+				end
 				next
 			else
 				line = buff << line if buff
@@ -54,12 +54,6 @@ begin
 			line.chomp!
 
 			case
-			when m = /begin(-base64)? (\d\d\d) ([^\s'"]+)$/.match(line)
-				type     = m[1] ? 'm' : 'u'
-				time     = Time.now
-				filename = Pathname(m[3]).basename
-				dest     = filename.open('w')
-				puts "#{filename}: Detected uuencoded file..."
 			when m = /^(end|====)$/.match(line)
 				dest.close
 
@@ -84,6 +78,12 @@ begin
 
 				print "#{filename}: Writing... #{format_bytes(dest.pos)} #{elapsed > 3 ? "(#{format_bytes(dest.pos / elapsed)}/sec)": ''}         \r"
 				$stdout.flush
+			when m = /begin(-base64)? (\d\d\d) ([^\s'"]+)$/.match(line)
+				type     = m[1] ? 'm' : 'u'
+				time     = Time.now
+				filename = Pathname(m[3]).basename
+				dest     = filename.open('w')
+				puts "#{filename}: Detected uuencoded file..."
 			end
 		end
 	end
