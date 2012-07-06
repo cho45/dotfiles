@@ -34,6 +34,7 @@ begin
 	puts "Watching window #{window}"
 	File.open(file, 'r+') do |f|
 		time = nil, filename = nil, dest = nil, buff = nil, type = nil
+		prev = Time.at(0)
 		while true
 			line = f.gets
 
@@ -53,6 +54,8 @@ begin
 			line.gsub!(/\r\n/, "\n")
 			line.chomp!
 
+			now = Time.now
+
 			case
 			when m = /^(end|====)$/.match(line)
 				dest.close
@@ -64,7 +67,7 @@ begin
 
 				system "screen", "-X", "eval", "echo '#{filename.realpath} was created. md5: #{md5}'"
 
-				elapsed = Time.now - time
+				elapsed = now - time
 
 				puts
 				puts "#{filename}: Done #{filename.realpath} #{format_bytes filename.size} (#{format_bytes(filename.size / elapsed)}/sec) #{md5}"
@@ -72,15 +75,18 @@ begin
 				filename = nil
 				dest     = nil
 			when dest
-				elapsed = Time.now - time
+				elapsed = now - time
 
 				dest << line.unpack(type)[0]
 
-				print "#{filename}: Writing... #{format_bytes(dest.pos)} #{elapsed > 3 ? "(#{format_bytes(dest.pos / elapsed)}/sec)": ''}         \r"
-				$stdout.flush
+				if (now - prev) > 1
+					print "#{filename}: Writing... #{format_bytes(dest.pos)} #{elapsed > 3 ? "(#{format_bytes(dest.pos / elapsed)}/sec)": ''}         \r"
+					$stdout.flush
+					prev = now
+				end
 			when m = /begin(-base64)? (\d\d\d) ([^\s'"]+)$/.match(line)
 				type     = m[1] ? 'm' : 'u'
-				time     = Time.now
+				time     = now
 				filename = Pathname(m[3]).basename
 				dest     = filename.open('w')
 				puts "#{filename}: Detected uuencoded file..."
