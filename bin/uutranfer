@@ -70,7 +70,7 @@ begin
 				elapsed = now - time
 
 				puts
-				puts "#{filename}: Done #{filename.realpath} #{format_bytes filename.size} (#{format_bytes(filename.size / elapsed)}/sec) #{md5}"
+				puts "#{filename}: Done #{filename.realpath} #{format_bytes filename.size} (#{elapsed.to_i} sec, #{format_bytes(filename.size / elapsed)}/sec) #{md5}"
 
 				filename = nil
 				dest     = nil
