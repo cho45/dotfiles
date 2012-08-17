@@ -334,8 +334,8 @@ set nofoldenable
 set lazyredraw
 inoremap <expr> <CR> pumvisible() ? "\<C-Y>\<CR>" : "\<CR>"
 
-let g:AutoComplPop_CompleteOption = '.,w,b,k'
-let g:AutoComplPop_Behavior = {
+let g:acp_completeOption = '.,w,b,k'
+let g:acp_behavior = {
       \   'java' : [
       \     {
       \       'command'  : "\<C-n>",
@@ -360,7 +360,7 @@ let g:AutoComplPop_Behavior = {
 
 autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala
-autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8 | AutoComplPopDisable
+autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8
 
 autocmd BufNewFile,BufRead */Hatena*/*.{html,tt} set ft=html | setlocal softtabstop=2 tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead */Hatena* setlocal expandtab
