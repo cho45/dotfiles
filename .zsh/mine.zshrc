@@ -89,6 +89,10 @@ precmd () {
 		echo -n "k:=:$prev\\"
 	fi
 
+	if [[ ${PERL5OPT:#lib::core::only} != "" ]]; then
+		PROMPT_CWD_ADD="$PROMPT_CWD_ADD [36m%}*carton*%{[m%}"
+	fi
+
 	# update prompt
 	PROMPT="$PROMPT_EXIT$PROMPT_CMD_ADD$PROMPT_CWD$PROMPT_CWD_ADD
 $PROMPT_CMD"
