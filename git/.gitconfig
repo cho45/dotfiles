@@ -57,3 +57,10 @@
 
 [diff "exif"]
 	textconv = exiftool
+
+[merge]
+	stat = true
+
+[rebase]
+	stat = true
+
