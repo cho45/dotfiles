@@ -365,6 +365,11 @@ autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8
 autocmd BufNewFile,BufRead */Hatena*/*.{html,tt} set ft=html | setlocal softtabstop=2 tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead */Hatena* setlocal expandtab
 
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
 nnoremap <C-c>  :<C-u>close<CR>
 nnoremap <C-d>  :<C-u>buffer # \| bwipe #<CR>
 
