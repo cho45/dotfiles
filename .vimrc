@@ -336,26 +336,27 @@ inoremap <expr> <CR> pumvisible() ? "\<C-Y>\<CR>" : "\<CR>"
 
 let g:acp_completeOption = '.,w,b,k'
 let g:acp_behavior = {
-      \   'java' : [
+      \   'html' : [
       \     {
-      \       'command'  : "\<C-n>",
-      \       'pattern'  : '\k\k$',
-      \       'excluded' : '^$',
-      \       'repeat'   : 0,
+      \       'command' : "\<C-n>",
+      \       'meets'   : 'acp#meetsForKeyword',
+      \       'repeat'  : 0,
       \     },
+      \   ],
+      \   'xml' : [
       \     {
-      \       'command'  : "\<C-x>\<C-u>",
-      \       'pattern'  : '\k\k$',
-      \       'excluded' : '^$',
-      \       'repeat'   : 0,
+      \       'command' : "\<C-n>",
+      \       'meets'   : 'acp#meetsForKeyword',
+      \       'repeat'  : 0,
       \     },
+      \   ],
+      \   'xhtml' : [
       \     {
-      \       'command'  : "\<C-x>\<C-f>",
-      \       'pattern'  : (has('win32') || has('win64') ? '\f[/\\]\f*$' : '\f[/]\f*$'),
-      \       'excluded' : '[*/\\][/\\]\f*$\|[^[:print:]]\f*$',
-      \       'repeat'   : 1,
-      \     }
-      \   ]
+      \       'command' : "\<C-n>",
+      \       'meets'   : 'acp#meetsForKeyword',
+      \       'repeat'  : 0,
+      \     },
+      \   ],
       \ }
 
 autocmd BufNewFile,BufRead *.io set filetype=io
@@ -366,9 +367,8 @@ autocmd BufNewFile,BufRead */Hatena*/*.{html,tt} set ft=html | setlocal softtabs
 autocmd BufNewFile,BufRead */Hatena* setlocal expandtab
 
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+" autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 nnoremap <C-c>  :<C-u>close<CR>
 nnoremap <C-d>  :<C-u>buffer # \| bwipe #<CR>
