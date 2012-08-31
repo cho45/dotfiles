@@ -26,5 +26,5 @@ export XDG_DATA_HOME=/usr/local/share
 JPATH=/System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Classes
 export CLASSPATH=.:$JPATH/classes.jar
 
-export JAVA_HOME=/Library/Java/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.6.0_30-b12-404.jdk/Contents/Home
 
