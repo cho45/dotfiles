@@ -5,6 +5,6 @@ export HOME=$ORIG_HOME/cho45-works
 
 mkdir $HOME
 cd $HOME
-wget https://raw.github.com/cho45/dotfiles/master/.bashrc
+wget --no-check-certificate https://raw.github.com/cho45/dotfiles/master/.bashrc
 exec bash
 
