@@ -361,6 +361,9 @@ let g:acp_behavior = {
 
 autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala
+autocmd BufNewFile,BufRead *.tt set filetype=html
+autocmd BufNewFile,BufRead *.t set filetype=perl
+autocmd BufNewFile,BufRead *.psgi set filetype=perl
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8
 
 autocmd BufNewFile,BufRead */Hatena*/*.{html,tt} set ft=html | setlocal softtabstop=2 tabstop=2 shiftwidth=2
