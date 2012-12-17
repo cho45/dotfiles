@@ -3,9 +3,9 @@ $.ajax({
 	type : "GET",
 	data : {},
 	dataType: 'json|jsonp',
-	success : function (data, status, xhr) {
-	},
-	complete : function (xhr, status) {
-	}
+}).
+done(function (data) {
+}).
+fail(function (e) {
 });
 
