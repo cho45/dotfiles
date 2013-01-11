@@ -1,0 +1,5 @@
+#!/usr/bin/ruby
+
+(w, h, i) = *ARGV.map {|i| i.to_f }
+
+puts "%.0fppi" % (Math.sqrt( w * w + h * h) / i.to_f)
