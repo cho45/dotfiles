@@ -334,36 +334,44 @@ set nofoldenable
 set lazyredraw
 inoremap <expr> <CR> pumvisible() ? "\<C-Y>\<CR>" : "\<CR>"
 
-let g:AutoComplPop_CompleteOption = '.,w,b,k'
-let g:AutoComplPop_Behavior = {
-      \   'java' : [
+let g:acp_completeOption = '.,w,b,k'
+let g:acp_behavior = {
+      \   'html' : [
       \     {
-      \       'command'  : "\<C-n>",
-      \       'pattern'  : '\k\k$',
-      \       'excluded' : '^$',
-      \       'repeat'   : 0,
+      \       'command' : "\<C-n>",
+      \       'meets'   : 'acp#meetsForKeyword',
+      \       'repeat'  : 0,
       \     },
+      \   ],
+      \   'xml' : [
       \     {
-      \       'command'  : "\<C-x>\<C-u>",
-      \       'pattern'  : '\k\k$',
-      \       'excluded' : '^$',
-      \       'repeat'   : 0,
+      \       'command' : "\<C-n>",
+      \       'meets'   : 'acp#meetsForKeyword',
+      \       'repeat'  : 0,
       \     },
+      \   ],
+      \   'xhtml' : [
       \     {
-      \       'command'  : "\<C-x>\<C-f>",
-      \       'pattern'  : (has('win32') || has('win64') ? '\f[/\\]\f*$' : '\f[/]\f*$'),
-      \       'excluded' : '[*/\\][/\\]\f*$\|[^[:print:]]\f*$',
-      \       'repeat'   : 1,
-      \     }
-      \   ]
+      \       'command' : "\<C-n>",
+      \       'meets'   : 'acp#meetsForKeyword',
+      \       'repeat'  : 0,
+      \     },
+      \   ],
       \ }
 
 autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala
-autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8 | AutoComplPopDisable
+autocmd BufNewFile,BufRead *.tt set filetype=html
+autocmd BufNewFile,BufRead *.t set filetype=perl
+autocmd BufNewFile,BufRead *.psgi set filetype=perl
+autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8
 
 autocmd BufNewFile,BufRead */Hatena*/*.{html,tt} set ft=html | setlocal softtabstop=2 tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead */Hatena* setlocal expandtab
+
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+" autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 
 nnoremap <C-c>  :<C-u>close<CR>
 nnoremap <C-d>  :<C-u>buffer # \| bwipe #<CR>

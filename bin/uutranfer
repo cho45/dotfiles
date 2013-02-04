@@ -1,0 +1,108 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+require 'digest/md5'
+
+window = ARGV.shift || 1
+if window == ENV['WINDOW']
+	abort "same window"
+end
+
+def format_bytes(bytes)
+	case
+	when bytes < 1024
+		"%d bytes" % bytes
+	when bytes < (1024 * 1024)
+		"%.2f KBytes" % (bytes / 1024.0)
+	when bytes < (1024 * 1024 * 1024)
+		"%.2f MBytes" % (bytes / 1024.0 / 1024.0)
+	else
+		"%.2f GBytes" % (bytes / 1024.0 / 1024.0 / 1024.0)
+	end
+end
+
+# screen fails writing to directory created by tmpdir, so use /tmp instead
+dir = Pathname('/tmp')
+
+system "screen", "-X", "eval", "select #{window}", "logfile #{dir}/uutransfer.%n", "logfile flush 1", "log on"
+file = dir + "uutransfer.#{window}"
+file.unlink rescue nil
+begin
+	puts "Waiting for log..."
+	sleep 1 until file.exist?
+
+	puts "Watching window #{window}"
+	File.open(file, 'r+') do |f|
+		time = nil, filename = nil, dest = nil, buff = nil, type = nil
+		prev = Time.at(0)
+		while true
+			line = f.gets
+
+			if f.eof?
+				# midstream of line...
+				if line
+					buff = line
+				else
+					sleep 0.5
+				end
+				next
+			else
+				line = buff << line if buff
+				buff = nil
+			end
+
+			line.gsub!(/\r\n/, "\n")
+			line.chomp!
+
+			now = Time.now
+
+			case
+			when m = /^(end|====)$/.match(line)
+				dest.close
+
+				md5 = Digest::MD5.hexdigest(filename.read)
+
+				f.seek(0)
+				f.truncate(0)
+
+				system "screen", "-X", "eval", "echo '#{filename.realpath} was created. md5: #{md5}'"
+
+				elapsed = now - time
+
+				puts
+				puts "#{filename}: Done #{filename.realpath} #{format_bytes filename.size} (#{elapsed.to_i} sec, #{format_bytes(filename.size / elapsed)}/sec) #{md5}"
+
+				filename = nil
+				dest     = nil
+			when dest
+				elapsed = now - time
+
+				dest << line.unpack(type)[0]
+
+				if (now - prev) > 1
+					print "#{filename}: Writing... #{format_bytes(dest.pos)} #{elapsed > 3 ? "(#{format_bytes(dest.pos / elapsed)}/sec)": ''}         \r"
+					$stdout.flush
+					prev = now
+				end
+			when m = /begin(-base64)? (\d\d\d) ([^\s'"]+)$/.match(line)
+				type     = m[1] ? 'm' : 'u'
+				time     = now
+				filename = Pathname(m[3]).basename
+				dest     = filename.open('w')
+				puts "#{filename}: Detected uuencoded file..."
+			end
+		end
+	end
+rescue Interrupt
+	puts "Exiting..."
+ensure
+	system "screen", "-X", "eval", "select #{window}", "log off", "select #{ENV['WINDOW']}"
+end
+
+__END__
+uuencode file
+sh -c 'echo "begin-base64 666 $0"; openssl enc -base64 -in $0; echo "===="'
+sh -c 'echo "begin-base64 666 $0"; base64 $0; echo "===="'
+ruby -e 'puts "begin 666 #{File.basename(ARGV[0])}\n#{[File.read(ARGV[0])].pack("u")}`\nend"' file
+perl -MPath::Class -e 'my $file=file(shift);printf("begin 666 %s\n%s`\nend\n",$file->basename,pack("u",scalar $file->slurp))' file
+
