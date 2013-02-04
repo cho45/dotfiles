@@ -18,27 +18,14 @@ our $VERSION = '0.1';
 
 our %IRSSI = (
     name        => 'hilight2im',
-    description => 'notify hilight message to IM via im.kayac.com api',
-    authors     => 'Daisuke Murase',
 );
-
 
 sub notify {
     my ($message) = @_;
 
-    my $username = Irssi::settings_get_str('im_kayac_com_username');
-    my $password = Irssi::settings_get_str('im_kayac_com_password');
-    my $authtype = Irssi::settings_get_str('im_kayac_com_authtype');
-
-    my $method   = "notify_$authtype";
-    {
-        no strict 'refs';
-        &$method($message, $username, $password);
-    }
-
     my ($channel) = ($message =~ /(#[^\s:<>]+)/);
 
-    my $uri = URI->new("http://irssw.lab.lowreal.net/$channel");
+    my $uri = URI->new("http://irssw.cho45.stfuawsc.com/$channel");
 
     my $subject = $message;
     my $body = join("\n", $message, $uri);
@@ -58,41 +45,6 @@ sub notify {
     my $sender = Email::Send->new({ mailer => 'SMTP' });
     $sender->send($mail);
 }
-
-sub notify_no {
-    my ($message, $username, $password) = @_;
-
-    my $ua = LWP::UserAgent->new;
-    $ua->timeout(3);
-    $ua->post("http://im.kayac.com/api/post/$username", {
-        message => $message,
-    });
-}
-
-sub notify_key {
-    my ($message, $username, $password) = @_;
-
-    my $ua = LWP::UserAgent->new;
-    $ua->timeout(3);
-    $ua->post("http://im.kayac.com/api/post/$username", {
-        message => $message,
-        password => $password,
-    });
-}
-
-sub notify_sig {
-    my ($message, $username, $password) = @_;
-
-    my $signature = sha1_hex($message . $password);
-
-    my $ua = LWP::UserAgent->new;
-    $ua->timeout(3);
-    $ua->post("http://im.kayac.com/api/post/$username", {
-        message => $message,
-        sig     => $signature,
-    });
-}
-
 
 our $prev_text = "";
 sub sig_printtext {
@@ -117,7 +69,4 @@ sub sig_printtext {
     }
 }
 Irssi::signal_add('print text' => \&sig_printtext);
-Irssi::settings_add_str('im_kayac_com', 'im_kayac_com_username', 'username');
-Irssi::settings_add_str('im_kayac_com', 'im_kayac_com_password', 'password');
-Irssi::settings_add_str('im_kayac_com', 'im_kayac_com_authtype', 'no');
 
