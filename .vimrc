@@ -20,6 +20,7 @@ match ZenkakuSpace /\s\+$\|　/
 
 set listchars=tab:>.
 set list
+set textwidth=1000
 
 set directory=~/swp
 
