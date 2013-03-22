@@ -41,7 +41,7 @@ sub print_text {
 		MSGLEVEL_INVITES
 	)) {
 		my $n = $dest->{window}->{refnum};
-		my $c = $dest->{target};
+		my $c = $dest->{target} || $dest->{window}->{name};
 		$text =~ s/%/%%/g;
 		$text =  sprintf "%s:%s", $c, $text;
 
