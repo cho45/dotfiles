@@ -1,0 +1,23 @@
+#!/usr/bin/env perl
+use v5.12;
+use utf8;
+use strict;
+use warnings;
+
+use DBI;
+use Path::Class;
+
+my ($user, $repos) = `git config --get remote.origin.url` =~ m{git\@github\.com:([^/]+)/(.+)\.git};
+$user and $repos or die;
+use Data::Dumper;
+warn Dumper [$user => $repos] ;
+
+my $dbfile = "$ENV{HOME}/Library/Kobito/Kobito.db";
+my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","");
+
+my $rows = $dbh->selectall_arrayref("SELECT * FROM zitem WHERE zraw_body LIKE '%github.com/$user/$repos%'", { Slice => {} });
+@$rows or die "missing";
+@$rows == 1 or die "multiple entries";
+
+my $row = $rows->[0];
+print $row->{ZRAW_BODY};

@@ -24,7 +24,7 @@ end
 # screen fails writing to directory created by tmpdir, so use /tmp instead
 dir = Pathname('/tmp')
 
-system "screen", "-X", "eval", "select #{window}", "logfile #{dir}/uutransfer.%n", "logfile flush 1", "log on"
+system "screen", "-X", "eval", "select #{window}", "logfile #{dir}/uutransfer.%n", "logfile flush 1", "log on", "select #{ENV['WINDOW']}"
 file = dir + "uutransfer.#{window}"
 file.unlink rescue nil
 begin
@@ -32,6 +32,9 @@ begin
 	sleep 1 until file.exist?
 
 	puts "Watching window #{window}"
+	puts "How to uuencode:"
+	puts DATA.read.gsub(/^/, "  ")
+
 	File.open(file, 'r+') do |f|
 		time = nil, filename = nil, dest = nil, buff = nil, type = nil
 		prev = Time.at(0)
@@ -100,9 +103,9 @@ ensure
 end
 
 __END__
-uuencode file
-sh -c 'echo "begin-base64 666 $0"; openssl enc -base64 -in $0; echo "===="'
-sh -c 'echo "begin-base64 666 $0"; base64 $0; echo "===="'
-ruby -e 'puts "begin 666 #{File.basename(ARGV[0])}\n#{[File.read(ARGV[0])].pack("u")}`\nend"' file
-perl -MPath::Class -e 'my $file=file(shift);printf("begin 666 %s\n%s`\nend\n",$file->basename,pack("u",scalar $file->slurp))' file
+Use openssl: sh -c 'echo "begin-base64 666 $0"; openssl enc -base64 -in $0; echo "===="'
+Use uuencode: uuencode file
+Use base64: sh -c 'echo "begin-base64 666 $0"; base64 $0; echo "===="'
+Use ruby: ruby -e 'puts "begin 666 #{File.basename(ARGV[0])}\n#{[File.read(ARGV[0])].pack("u")}`\nend"' file
+Use perl: perl -MPath::Class -e 'my $file=file(shift);printf("begin 666 %s\n%s`\nend\n",$file->basename,pack("u",scalar $file->slurp))' file
 
