@@ -12,6 +12,7 @@ path=(
 	$HOME/sdk/android/tools
 	$HOME/sdk/android/platform-tools
 	$HOME/sdk/flex/bin
+	$HOME/.rbenv/bin
 
 	/usr/local/ruby1.9/bin
 	/usr/local/scala/bin
@@ -297,3 +298,6 @@ if [[ -f "$HOME/perl5/perlbrew/etc/bashrc" ]]; then
 	source $HOME/perl5/perlbrew/etc/bashrc
 fi
 
+if [[ -f "$HOME/.rbenv" ]]; then
+	eval "$(rbenv init -)"
+fi
