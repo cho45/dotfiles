@@ -109,7 +109,7 @@ set undodir=~/swp
 
 " ステータス表示用変数
 set laststatus=2
-set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']['.&ft.']'}\ %=%{GitBranch()}\ %l,%c%V%8P
+set statusline=%<git:%{GitBranch()}:%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']['.&ft.']'}
 
 function! CharacterCount()
 	redir @c
