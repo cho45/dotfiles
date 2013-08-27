@@ -298,6 +298,7 @@ if [[ -f "$HOME/perl5/perlbrew/etc/bashrc" ]]; then
 	source $HOME/perl5/perlbrew/etc/bashrc
 fi
 
-if [[ -f "$HOME/.rbenv" ]]; then
+if [[ -d "$HOME/.rbenv" ]]; then
+	echo 'rbenv'
 	eval "$(rbenv init -)"
 fi
