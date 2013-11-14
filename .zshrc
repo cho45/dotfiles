@@ -20,10 +20,9 @@ path=(
 	/usr/local/tscreen/bin
 	/usr/local/screen/bin
 
-	/opt/local/sbin
-	/opt/local/bin
-
+	/usr/local/sbin
 	/usr/local/bin
+
 	/usr/bin
 	/bin
 	/usr/sbin
@@ -62,6 +61,7 @@ export NYTPROF=sigexit=int,hup:trace=2:start=no
 export PERL_CPANM_OPT="--verbose --prompt"
 export FLEX_HOME=$HOME/sdk/flex4sdk
 export _JAVA_OPTIONS="-Duser.language=en -Dfile.language=UTF-8"
+export GOPATH=~/.go
 
 bindkey -e
 bindkey -D vicmd
@@ -299,6 +299,5 @@ if [[ -f "$HOME/perl5/perlbrew/etc/bashrc" ]]; then
 fi
 
 if [[ -d "$HOME/.rbenv" ]]; then
-	echo 'rbenv'
 	eval "$(rbenv init -)"
 fi
