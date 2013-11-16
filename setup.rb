@@ -81,3 +81,7 @@ if RUBY_PLATFORM =~ /darwin/
 	sh "gcc -framework Cocoa tools/set_default_browser.m -o #{ENV['HOME']}/bin/set_default_browser"
 end
 
+sh "npm set init.author.name cho45"
+sh "npm set init.author.email cho45@lowreal.net"
+sh "npm set init.author.url http://www.lowreal.net/"
+

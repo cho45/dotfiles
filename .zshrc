@@ -13,7 +13,9 @@ path=(
 	$HOME/sdk/android/platform-tools
 	$HOME/sdk/flex/bin
 	$HOME/.rbenv/bin
+	$HOME/app/argyll/bin
 
+	/usr/local/CrossPack-AVR/bin
 	/usr/local/ruby1.9/bin
 	/usr/local/scala/bin
 	/usr/local/vim7/bin
