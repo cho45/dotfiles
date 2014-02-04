@@ -144,7 +144,7 @@ function s:IsParsableTag( tag )
     endif
 
     " support Xslate Colon sytax
-    if a:tag =~ '^<::*>$'
+    if a:tag =~ '^<:.*>$'
         let parse = 0
     endif
     
