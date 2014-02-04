@@ -58,7 +58,7 @@ vbell off
 caption splitonly "%3n %f %t"
 hardstatus alwayslastline "%{.Kw}[%02c] %-w %{.wk}%{!}%n %f%t%{.Kw} %+w %=  %0`"
 
-backtick 0 0 0 ${HOME}/.screen/backtick.rb
+#backtick 0 0 0 ${HOME}/.screen/backtick.rb
 #backtick 1 0 0 ${HOME}/.screen/feed.rb
 
 hardcopydir ${HOME}/.screen
