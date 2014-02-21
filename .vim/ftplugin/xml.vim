@@ -142,6 +142,11 @@ function s:IsParsableTag( tag )
     if strpart (a:tag, strlen (a:tag) - 2, 1) == '/'
         let parse = 0
     endif
+
+    " support Xslate Colon sytax
+    if a:tag =~ '^<:.*>$'
+        let parse = 0
+    endif
     
     return parse
 endfunction
