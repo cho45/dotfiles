@@ -14,6 +14,7 @@ path=(
 	$HOME/sdk/flex/bin
 	$HOME/.rbenv/bin
 	$HOME/app/argyll/bin
+	$HOME/arm-cs-tools/bin
 
 	/usr/local/CrossPack-AVR/bin
 	/usr/local/ruby1.9/bin
