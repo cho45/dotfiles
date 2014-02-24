@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # original: http://search.cpan.org/src/MIYAGAWA/WWW-NicoVideo-Download-0.01/eg/fetch-video.pl
 
 use strict;

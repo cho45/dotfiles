@@ -1,10 +1,3 @@
 --- 
-:verbose: true
-:update_sources: true
-:sources: 
-- http://gemcutter.org
-- http://gems.rubyforge.org
-:bulk_threshold: 1000
-:backtrace: false
-rdoc: --template ~/coderepos/lang/ruby/rdoc/generators/template/html/resh/resh.rb --inline-source
-:benchmark: false
+rdoc: --format bootstrap  --inline-source
+
