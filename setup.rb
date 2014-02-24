@@ -74,6 +74,18 @@ link "git/.gitignore", "~/.gitignore"
 
 cp ".gemrc", "~/.gemrc".expand unless Pathname.new("~/.gemrc").expand_path.exist?
 
+app = "~/app".expand
+app.mkpath
+cd app do
+	unless "git-branch-recent".expand.exist?
+		sh "git clone git@github.com:cho45/git-branch-recent.git"
+	end
+	cd "git-branch-recent" do
+		sh "git pull"
+		link "git-branch-recent", "~/bin"
+	end
+end
+
 if RUBY_PLATFORM =~ /darwin/
 	link "/Applications/Firefox.app/Contents/MacOS/firefox-bin", "~/bin/firefox"
 	link "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "~/bin/chrome"

@@ -363,6 +363,7 @@ let g:acp_behavior = {
 autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.tt set filetype=html
+autocmd BufNewFile,BufRead *.tx set filetype=html
 autocmd BufNewFile,BufRead *.t set filetype=perl
 autocmd BufNewFile,BufRead *.psgi set filetype=perl
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8
@@ -426,12 +427,12 @@ autocmd BufNewFile */debuglet.js silent! execute 'r!ruby ' . $HOME . '/bin/debug
 
 function! GitWeb()
 	let git_output = substitute(system('git config --get remote.origin.url'), '\n*$', '', '')
-	let repos = substitute(git_output, 'git@192.168.2.181:/var/git', '', '')
+	let repos = substitute(git_output, '^.*:\|\.git$', '', 'g')
 	let commit = substitute(system('git name-rev --name-only HEAD'), '\n*$', '', '')
 
-	let repos = substitute(repos, '\(.git\)*$', '.git', '')
-
-	call system('open http://repository01.host.h:5001/gitweb.cgi' . repos . '/blob/' . commit . ':' . expand('%') . '#l' . line('.'))
+	let url = 'open ' . $GITWEB_BASE . repos . '/blob/' . commit . '/' . expand('%') . '#l' . line('.')
+	echo url
+	call system(url)
 endfunction
 command! GitWeb call GitWeb()
 
