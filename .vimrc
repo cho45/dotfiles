@@ -29,8 +29,10 @@ if !filereadable('.classpath')
 	let g:EclimDisabled = 1
 endif
 
-let g:hatena_user          = 'cho45'
-let g:hatena_group_name    = 'subtech'
+
+let g:wildfire_objects = {
+	\ "*" : ["i'", 'i"', "i)", "i]", "i}", "ip", "it", "at", "i>"],
+\ }
 
 let g:changelog_timeformat = "%Y-%m-%d"
 let g:changelog_username   = "SATOH Hiroh <cho45@lowreal.net>"
