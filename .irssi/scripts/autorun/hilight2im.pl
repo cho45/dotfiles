@@ -24,6 +24,7 @@ our %IRSSI = (
 
 sub notify {
     my ($message) = @_;
+    $message = decode_utf8($message);
 
     my ($channel) = ($message =~ /(#[^\s:<>]+)/);
 

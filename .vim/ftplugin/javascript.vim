@@ -8,4 +8,3 @@ setlocal nocindent
 iabbr <buffer> my var
 iabbr <buffer> sub function
 iabbr <buffer> def function
-
