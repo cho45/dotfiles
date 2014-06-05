@@ -14,6 +14,7 @@ path=(
 	$HOME/sdk/apache-maven/bin
 	$HOME/.rbenv/bin
 	$HOME/app/argyll/bin
+	$HOME/app/node/bin
 	$HOME/arm-cs-tools/bin
 
 	/usr/local/CrossPack-AVR/bin

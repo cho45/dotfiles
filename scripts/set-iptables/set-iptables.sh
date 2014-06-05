@@ -67,29 +67,29 @@ if [ -s /root/deny_ip ]; then
 	done
 fi
 
-echo "指定した国からのアクセスはログを記録して破棄"
-echo "各国割当てIPアドレス情報はAPNIC ( http://www.apnic.net/ ) より最新版を取得"
-# http://www.nsrc.org/codes/country-codes.html
-COUNTRYLIST='CN KR US TW KP'
-echo "Deny country: $COUNTRYLIST"
-wget http://ftp.apnic.net/stats/apnic/delegated-apnic-latest
-for country in $COUNTRYLIST
-do
-	echo "$country"
-	for ip in `cat delegated-apnic-latest | grep "apnic|$country|ipv4|"`
-	do
-		FILTER_ADDR=`echo $ip |cut -d "|" -f 4`
-		TEMP_CIDR=`echo $ip |cut -d "|" -f 5`
-		FILTER_CIDR=32
-		while [ $TEMP_CIDR -ne 1 ];
-		do
-			TEMP_CIDR=$((TEMP_CIDR/2))
-			FILTER_CIDR=$((FILTER_CIDR-1))
-		done
-		iptables -I INPUT -s $FILTER_ADDR/$FILTER_CIDR -j deny_ip
-	done
-done
-rm -f delegated-apnic-latest
+#echo "指定した国からのアクセスはログを記録して破棄"
+#echo "各国割当てIPアドレス情報はAPNIC ( http://www.apnic.net/ ) より最新版を取得"
+## http://www.nsrc.org/codes/country-codes.html
+#COUNTRYLIST='CN KR US TW KP'
+#echo "Deny country: $COUNTRYLIST"
+#wget http://ftp.apnic.net/stats/apnic/delegated-apnic-latest
+#for country in $COUNTRYLIST
+#do
+#	echo "$country"
+#	for ip in `cat delegated-apnic-latest | grep "apnic|$country|ipv4|"`
+#	do
+#		FILTER_ADDR=`echo $ip |cut -d "|" -f 4`
+#		TEMP_CIDR=`echo $ip |cut -d "|" -f 5`
+#		FILTER_CIDR=32
+#		while [ $TEMP_CIDR -ne 1 ];
+#		do
+#			TEMP_CIDR=$((TEMP_CIDR/2))
+#			FILTER_CIDR=$((FILTER_CIDR-1))
+#		done
+#		iptables -I INPUT -s $FILTER_ADDR/$FILTER_CIDR -j deny_ip
+#	done
+#done
+#rm -f delegated-apnic-latest
 
 echo 'SSH の設定 Brute Force Attak'
 iptables -N block_ssh

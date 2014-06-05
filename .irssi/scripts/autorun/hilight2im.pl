@@ -9,6 +9,8 @@ use HTTP::Request::Common;
 use Digest::SHA1 qw/sha1_hex/;
 use URI;
 use URI::Escape;
+use Encode;
+use Encode::MIME::Header;
 
 use Email::MIME;
 use Email::MIME::Creator;
@@ -22,6 +24,7 @@ our %IRSSI = (
 
 sub notify {
     my ($message) = @_;
+    $message = decode_utf8($message);
 
     my ($channel) = ($message =~ /(#[^\s:<>]+)/);
 
@@ -34,7 +37,7 @@ sub notify {
         header => [
             From    => 'cho45@lowreal.net',
             To      => 'cho45@lowreal.net',
-            Subject => $subject,
+            Subject => encode('MIME-Header', $subject),
         ],
         attributes => {
             content_type => "text/plain; charset=utf-8"

@@ -48,6 +48,7 @@
 
 [github]
 	user = cho45
+	password = !pit get github.com | ruby -e 'print ARGF.read[/password: *(.+) */, 1]'
 
 [push]
 	default = current

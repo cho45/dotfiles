@@ -15,8 +15,6 @@ PROMPT_CMD="%{[32m%} | q ド _ リ|$ <%{[m%}%{[m%} "
 # precmd で設定される
 PROMPT_CWD_ADD=""
 
-alias svn='svnwrapper.rb'
-
 # for screen
 preexec () {
 	# osascript -e 'tell application "System Events" to key code 103'
