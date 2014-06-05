@@ -11,7 +11,7 @@ path=(
 	$HOME/sdk/play
 	$HOME/sdk/android/tools
 	$HOME/sdk/android/platform-tools
-	$HOME/sdk/flex/bin
+	$HOME/sdk/apache-maven/bin
 	$HOME/.rbenv/bin
 	$HOME/app/argyll/bin
 	$HOME/arm-cs-tools/bin

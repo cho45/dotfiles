@@ -1,0 +1,1 @@
+use DBIx::QueryLog (); my $Q_L_guard = DBIx::QueryLog->guard;

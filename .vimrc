@@ -438,3 +438,6 @@ function! GitWeb()
 endfunction
 command! GitWeb call GitWeb()
 
+command! -nargs=* -range GitBrowseRemote !git browse-remote --rev -L<line1>,<line2> <f-args> -- %
+
+set expandtab
