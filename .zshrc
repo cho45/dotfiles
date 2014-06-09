@@ -21,8 +21,8 @@ path=(
 	/usr/local/ruby1.9/bin
 	/usr/local/scala/bin
 	/usr/local/vim7/bin
-	/usr/local/tscreen/bin
 	/usr/local/screen/bin
+	/usr/local/go/bin
 
 	/usr/local/sbin
 	/usr/local/bin
