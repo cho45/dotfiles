@@ -29,6 +29,9 @@ if !filereadable('.classpath')
 	let g:EclimDisabled = 1
 endif
 
+if $GOROOT != ''
+    set rtp+=$GOROOT/misc/vim
+endif
 
 let g:wildfire_objects = {
 	\ "*" : ["i'", 'i"', "i)", "i]", "i}", "ip", "it", "at", "i>"],
@@ -440,4 +443,3 @@ command! GitWeb call GitWeb()
 
 command! -nargs=* -range GitBrowseRemote !git browse-remote --rev -L<line1>,<line2> <f-args> -- %
 
-set expandtab

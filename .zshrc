@@ -4,6 +4,9 @@
 
 stty intr 
 
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+
 # tied to $PATH
 path=(
 	$HOME/bin
@@ -22,7 +25,8 @@ path=(
 	/usr/local/scala/bin
 	/usr/local/vim7/bin
 	/usr/local/screen/bin
-	/usr/local/go/bin
+	$GOROOT/bin
+	$GOPATH/bin
 
 	/usr/local/sbin
 	/usr/local/bin
@@ -49,7 +53,6 @@ perl5lib=(
 	$HOME/lib/perl
 )
 
-
 unset PS1
 
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
@@ -65,7 +68,6 @@ export NYTPROF=sigexit=int,hup:trace=2:start=no
 export PERL_CPANM_OPT="--verbose --prompt"
 export FLEX_HOME=$HOME/sdk/flex4sdk
 export _JAVA_OPTIONS="-Duser.language=en -Dfile.language=UTF-8"
-export GOPATH=~/.go
 
 bindkey -e
 bindkey -D vicmd
