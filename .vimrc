@@ -31,6 +31,7 @@ endif
 
 if $GOROOT != ''
     set rtp+=$GOROOT/misc/vim
+    exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 endif
 
 let g:wildfire_objects = {
@@ -342,6 +343,18 @@ inoremap <expr> <CR> pumvisible() ? "\<C-Y>\<CR>" : "\<CR>"
 
 let g:acp_completeOption = '.,w,b,k'
 let g:acp_behavior = {
+      \   'go' : [
+      \     {
+      \       'command' : "\<C-x>\<C-o>",
+      \       'meets'   : 'acp#meetsForKeyword',
+      \       'repeat'  : 0,
+      \     },
+      \     {
+      \       'command' : "\<C-n>",
+      \       'meets'   : 'acp#meetsForKeyword',
+      \       'repeat'  : 0,
+      \     },
+      \   ],
       \   'html' : [
       \     {
       \       'command' : "\<C-n>",
@@ -365,6 +378,7 @@ let g:acp_behavior = {
       \   ],
       \ }
 
+autocmd BufNewFile,BufRead *.go set filetype=go
 autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.tt set filetype=html
