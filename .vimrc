@@ -4,6 +4,12 @@ filetype plugin on
 filetype indent on
 
 call pathogen#runtime_append_all_bundles()
+let $GOROOT = substitute(system("go env GOROOT"), "\n", "", "g")
+if $GOROOT != ''
+	set runtimepath+=$GOROOT/misc/vim
+	exe "set runtimepath+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
+endif
+
 
 "ポップアップ補完メニュー色設定（通常の項目、選択されている項目、スクロールバー、スクロールバーのつまみ部分）
 highlight Pmenu ctermbg=6 guibg=#4c745a
@@ -27,11 +33,6 @@ set directory=~/swp
 let g:EclimBaseDir  = '/Users/cho45/.vim'
 if !filereadable('.classpath')
 	let g:EclimDisabled = 1
-endif
-
-if $GOROOT != ''
-    set rtp+=$GOROOT/misc/vim
-    exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 endif
 
 let g:wildfire_objects = {
