@@ -18,7 +18,7 @@ path=(
 	$HOME/.rbenv/bin
 	$HOME/app/argyll/bin
 	$HOME/app/node/bin
-	$HOME/arm-cs-tools/bin
+	$HOME/sdk/gcc-arm-none-eabi/bin
 
 	/usr/local/CrossPack-AVR/bin
 	/usr/local/ruby1.9/bin
