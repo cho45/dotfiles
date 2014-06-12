@@ -62,6 +62,11 @@
 [merge]
 	stat = true
 
+[ghq]
+	root = ~/ghq
+	root = ~/go/src
+
 [rebase]
 	stat = true
+	autostash = true
 

@@ -69,6 +69,7 @@ link ".irbrc", "~/.irbrc"
 link ".gdbinit", "~/.gdbinit"
 link ".my.cnf", "~/.my.cnf"
 link ".percol.d", "~/.percol.d"
+link ".peco", "~/.peco"
 
 link "git/.gitconfig", "~/.gitconfig"
 link "git/.gitignore", "~/.gitignore"

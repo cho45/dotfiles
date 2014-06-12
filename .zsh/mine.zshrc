@@ -202,7 +202,7 @@ function socks () {
 
 
 function percol_select_history () {
-	BUFFER=$(perl -nl -e 's/^.*?;//; print' ~/.zsh_history| percol --query "$LBUFFER")
+	BUFFER=$(perl -nl -e 's/^.*?;//; print' ~/.zsh_history| peco --query "$LBUFFER")
 	# zle clear-screen
 	zle reset-prompt
 	zle accept-line
@@ -213,7 +213,7 @@ zle -N percol_select_history
 function percol-git-recent-branches () {
 	local selected_branch=$(git for-each-ref --format='%(refname)' --sort=-committerdate refs/heads | \
 		perl -pne 's{^refs/heads/}{}' | \
-		percol --query "$LBUFFER")
+		peco --query "$LBUFFER")
 	if [ -n "$selected_branch" ]; then
 		BUFFER="git checkout ${selected_branch}"
 		zle accept-line
@@ -225,7 +225,7 @@ zle -N percol-git-recent-branches
 function percol-git-recent-all-branches () {
 	local selected_branch=$(git for-each-ref --format='%(refname)' --sort=-committerdate refs/heads refs/remotes | \
 		perl -pne 's{^refs/(heads|remotes)/}{}' | \
-		percol --query "$LBUFFER")
+		peco --query "$LBUFFER")
 	if [ -n "$selected_branch" ]; then
 		BUFFER="git checkout -t ${selected_branch}"
 		zle accept-line
@@ -235,7 +235,7 @@ function percol-git-recent-all-branches () {
 zle -N percol-git-recent-all-branches
 
 
-bindkey '^xh' percol_select_history
+bindkey '^x^h' percol_select_history
 bindkey '^x^b' percol-git-recent-branches
 bindkey '^xb' percol-git-recent-all-branches
 
