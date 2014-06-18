@@ -24,7 +24,7 @@ path=(
 	/usr/local/scala/bin
 	/usr/local/vim7/bin
 	/usr/local/screen/bin
-	$GOROOT/bin
+    /usr/local/go/bin
 	$GOPATH/bin
 
 	/usr/local/sbin
@@ -162,6 +162,7 @@ typeset -A abbreviations
 abbreviations=(
 	"L"    "| \$PAGER"
 	"G"    "| grep"
+	"P"    "| peco"
 
 	"HEAD^"     "HEAD\\^"
 	"HEAD^^"    "HEAD\\^\\^"

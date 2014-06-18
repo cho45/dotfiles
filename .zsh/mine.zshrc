@@ -235,6 +235,30 @@ function percol-git-recent-all-branches () {
 zle -N percol-git-recent-all-branches
 
 
+function peco-src () {
+	local selected_dir=$(ghq list --full-path | peco --query "$LBUFFER")
+	if [ -n "$selected_dir" ]; then
+		BUFFER="cd ${selected_dir}"
+		zle accept-line
+	fi
+	zle clear-screen
+}
+zle -N peco-src
+
+
+function peco-godoc() {
+	local selected_dir=$(ghq list --full-path | peco --query "$LBUFFER")
+	if [ -n "$selected_dir" ]; then
+		BUFFER="godoc ${selected_dir} | less"
+		zle accept-line
+	fi
+	zle clear-screen
+}
+
+zle -N peco-godoc
+
+
+bindkey '^x^x' peco-src
 bindkey '^x^h' percol_select_history
 bindkey '^x^b' percol-git-recent-branches
 bindkey '^xb' percol-git-recent-all-branches
