@@ -32,7 +32,7 @@ let s:rememberedValues = {}
 let s:escapeCharacters = '&~\'
 
 
-function! jp:Initialize ()
+function! s:Initialize ()
 
   " List for default configuration
   let defaults = []
@@ -52,7 +52,7 @@ function! jp:Initialize ()
 endfunction
 
 
-function! jp:GetTemplateInfo ()
+function! s:GetTemplateInfo ()
 
   " Prepare info dictionary
   let info = {}
@@ -96,7 +96,7 @@ function! jp:GetTemplateInfo ()
 endfunction
 
 
-function! jp:ReadTemplate (name, filename)
+function! s:ReadTemplate (name, filename)
 
   " Try to read the template file and throw exception if that fails
   try
@@ -108,7 +108,7 @@ function! jp:ReadTemplate (name, filename)
 endfunction
 
 
-function! jp:UpdateCursorPosition (lines, endColumn)
+function! s:UpdateCursorPosition (lines, endColumn)
 
   " Define cursorPosition as the column to which the cursor is moved
   let cursorPosition = -1
@@ -154,7 +154,7 @@ function! jp:UpdateCursorPosition (lines, endColumn)
 endfunction
 
 
-function! jp:ParseExpression (expr)
+function! s:ParseExpression (expr)
 
   " Determine position of the separator between name and value
   let valuepos = match (a:expr, ':')
@@ -169,7 +169,7 @@ function! jp:ParseExpression (expr)
 endfunction
 
 
-function! jp:EvaluateReservedVariable (name, value, variables)
+function! s:EvaluateReservedVariable (name, value, variables)
 
   let result = ''
 
@@ -199,7 +199,7 @@ function! jp:EvaluateReservedVariable (name, value, variables)
 endfunction
 
 
-function! jp:ExpandTemplate (info, template)
+function! s:ExpandTemplate (info, template)
 
   " Backup content before and after the template name
   let before = strpart (getline ('.'), 0, a:info['start'])
@@ -249,7 +249,7 @@ function! jp:ExpandTemplate (info, template)
 endfunction
 
 
-function! jp:ProcessTemplate (info, template)
+function! s:ProcessTemplate (info, template)
 
   let matchpos    = 0
   let expressions = []
@@ -273,7 +273,7 @@ function! jp:ProcessTemplate (info, template)
       let expr = s:str[start+2 : end-2]
 
       " Extract variable name and default value */
-      let [name, value] = jp:ParseExpression (expr)
+      let [name, value] = s:ParseExpression (expr)
 
       if name == 'cursor'
         " Skip the ${cursor} variable
@@ -314,22 +314,22 @@ function! jp:ProcessTemplate (info, template)
 
   " Ask the user to enter values for all variables
   for expr in expressions
-    let [name, value] = jp:ParseExpression (expr)
+    let [name, value] = s:ParseExpression (expr)
     let variables[name] = input (name . ': ', variables[name])
     let s:rememberedValues[name] = variables[name]
   endfor
 
   " Evaluate reserved variables
   for expr in keys (reserved)
-    let [name, value] = jp:ParseExpression (expr)
-    let replacement = jp:EvaluateReservedVariable (name, value, variables)
+    let [name, value] = s:ParseExpression (expr)
+    let replacement = s:EvaluateReservedVariable (name, value, variables)
     let reserved[expr] = replacement
   endfor
 
   " Expand all variables (custom and reserved)
   for index in range (len (a:template))
     for expr in expressions
-      let [name, value] = jp:ParseExpression (expr)
+      let [name, value] = s:ParseExpression (expr)
       let expr = '${' . name . '\(:[^{}]\+\)\?}'
       let value = escape(variables[name], s:escapeCharacters)
       let a:template[index] = substitute (a:template[index], expr, value, 'g')
@@ -343,25 +343,25 @@ function! jp:ProcessTemplate (info, template)
   endfor
 
   " Insert template into the code line by line
-  let [insertedLines, startColumn, endColumn] = jp:ExpandTemplate (a:info, a:template)
+  let [insertedLines, startColumn, endColumn] = s:ExpandTemplate (a:info, a:template)
 
   " Update the cursor position and return to insert mode 
-  call jp:UpdateCursorPosition (insertedLines, endColumn)
+  call s:UpdateCursorPosition (insertedLines, endColumn)
 
 endfunction
 
 
-function! jp:InsertTemplate ()
+function! InsertTemplate ()
 
   try
     " Detect bounds of the template name as well as the name itself
-    let info = jp:GetTemplateInfo ()
+    let info = s:GetTemplateInfo ()
 
     " Load the template file
-    let template = jp:ReadTemplate (info['name'], info['filename'])
+    let template = s:ReadTemplate (info['name'], info['filename'])
 
     " Do the hard work: Process the template
-    call jp:ProcessTemplate (info, template)
+    call s:ProcessTemplate (info, template)
   catch
     " Inform the user about errors
     echo g:jpTemplateVerbose ? v:exception . " (in " . v:throwpoint . ")" : v:exception
@@ -371,7 +371,7 @@ endfunction
 
 
 " Initialize jptemplate configuration
-call jp:Initialize ()
+call s:Initialize ()
 
 " Map keyboard shortcut to the template system
-exec 'imap ' . g:jpTemplateKey . ' <Esc>:call jp:InsertTemplate()<CR>'
+exec 'imap ' . g:jpTemplateKey . ' <Esc>:call InsertTemplate()<CR>'
