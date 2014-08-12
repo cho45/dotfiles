@@ -254,8 +254,7 @@ let g:fuf_previewHeight = 0
 
 nmap bg :FufBuffer<CR>
 nmap bG :FufFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
-"nmap gb :FufFile<CR>
-nmap gb :FufFile **/<CR>
+nmap gb :call fuf#givenfile#launch('', 0, 'x ', split(system('git ls-files'), '\n'))<CR>
 nmap br :FufMruFile<CR>
 nmap bq :FufQuickfix<CR>
 nmap bl :FufLine<CR>
@@ -380,6 +379,9 @@ let g:acp_behavior = {
       \ }
 
 autocmd BufNewFile,BufRead *.go set filetype=go
+autocmd FileType go setlocal sw=4 ts=4 sts=4 noet
+autocmd FileType go setlocal makeprg=go\ build\ ./... errorformat=%f:%l:\ %m
+autocmd BufWritePre *.go Fmt
 autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.tt set filetype=html

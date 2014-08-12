@@ -178,7 +178,7 @@ function git () {
 			fi
 		elif [[ $1 == "log" ]]; then
 			# 常に diff を表示してほしい
-			command git log -p ${@[2, -1]}
+			command git log --patch-with-stat ${@[2, -1]}
 		elif [[ $1 == "pull" ]]; then
 			if [[ ( -x '.git/pull-chain' ) ]]; then
 				command git $@
