@@ -381,7 +381,7 @@ let g:acp_behavior = {
 autocmd BufNewFile,BufRead *.go set filetype=go
 autocmd FileType go setlocal sw=4 ts=4 sts=4 noet
 autocmd FileType go setlocal makeprg=go\ build\ ./... errorformat=%f:%l:\ %m
-autocmd BufWritePre *.go Fmt
+autocmd FileType ruby setlocal sw=2 ts=2 sts=2
 autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.tt set filetype=html
@@ -399,7 +399,6 @@ autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 
 nnoremap <C-c>  :<C-u>close<CR>
 nnoremap <C-d>  :<C-u>buffer # \| bwipe #<CR>
-
 
 function! Smartchr(fallback_literal, ...)
 	let args = reverse(copy(a:000))
