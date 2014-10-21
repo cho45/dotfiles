@@ -65,6 +65,9 @@
 [ghq]
 	root = ~/ghq
 	root = ~/go/src
+	root = ~/Dropbox/project
+	root = ~/project
+	root = ~/sketch/avr
 
 [rebase]
 	stat = true

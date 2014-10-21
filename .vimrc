@@ -381,7 +381,6 @@ let g:acp_behavior = {
 autocmd BufNewFile,BufRead *.go set filetype=go
 autocmd FileType go setlocal sw=4 ts=4 sts=4 noet
 autocmd FileType go setlocal makeprg=go\ build\ ./... errorformat=%f:%l:\ %m
-autocmd BufWritePre *.go Fmt
 autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.tt set filetype=html
@@ -389,6 +388,7 @@ autocmd BufNewFile,BufRead *.tx set filetype=html
 autocmd BufNewFile,BufRead *.t set filetype=perl
 autocmd BufNewFile,BufRead *.psgi set filetype=perl
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8
+
 
 autocmd BufNewFile,BufRead */Hatena*/*.{html,tt} set ft=html | setlocal softtabstop=2 tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead */Hatena* setlocal expandtab
