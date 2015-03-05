@@ -44,6 +44,7 @@ Dir["bin/*"].each do |f|
 end
 
 link ".vimrc", "~/.vimrc"
+link ".ideavimrc", "~/.ideavimrc"
 link ".gvimrc", "~/.gvimrc"
 link ".vim", "~/.vim"
 link ".nanorc", "~/.nanorc"

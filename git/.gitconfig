@@ -14,6 +14,7 @@
 	lc      = log ORIG_HEAD.. --stat --no-merges
 	logall  = !sh -c 'git log --all --patch --color | git name-rev --stdin | $PAGER'
 	tree    = log --graph --pretty=oneline --abbrev-commit --decorate
+	checkout-pull-request = !sh -c 'git fetch origin pull/$1/head:pr-$1 && git checkout pr-$1' -
 
 [color]
 	diff   = auto
@@ -72,4 +73,7 @@
 [rebase]
 	stat = true
 	autostash = true
+
+[include]
+	path = .gitconfig.local
 

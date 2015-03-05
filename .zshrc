@@ -16,8 +16,9 @@ path=(
 	$HOME/sdk/apache-maven/bin
 	$HOME/.rbenv/bin
 	$HOME/app/argyll/bin
+	$HOME/app/depot_tools
 	$HOME/app/node/bin
-	$HOME/sdk/gcc-arm-none-eabi/bin
+	$HOME/sdk/*/bin
 
 	/usr/local/CrossPack-AVR/bin
 	/usr/local/ruby1.9/bin
