@@ -1,3 +1,6 @@
+[include]
+	path = .gitconfig.local
+
 [user]
 	name = cho45
 	email = cho45@lowreal.net
@@ -73,7 +76,3 @@
 [rebase]
 	stat = true
 	autostash = true
-
-[include]
-	path = .gitconfig.local
-
