@@ -1,0 +1,14 @@
+
+set smartcase
+set number
+
+" comment out
+vmap ,# :s/^/#/<CR>
+vmap ,/ :s/^/\/\//<CR>
+vmap ,> :s/^/> /<CR>
+vmap ," :s/^/\"/<CR>
+vmap ,% :s/^/%/<CR>
+vmap ,! :s/^/!/<CR>
+vmap ,; :s/^/;/<CR>
+vmap ,- :s/^/--/<CR>
+vmap ,c :s/^\/\/\\|^--\\|^> \\|^[#"%!;]//<CR>

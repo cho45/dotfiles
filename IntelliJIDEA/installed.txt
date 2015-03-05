@@ -1,0 +1,5 @@
+com.intellij
+CheckStyle-IDEA
+EclipseCodeFormatter
+IdeaVIM
+Lombook Plugin
