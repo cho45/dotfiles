@@ -376,6 +376,13 @@ let g:acp_behavior = {
       \       'repeat'  : 0,
       \     },
       \   ],
+      \   'typescript' : [
+      \     {
+      \       'command' : "\<C-x>\<C-o>",
+      \       'meets'   : 'acp#meetsForKeyword',
+      \       'repeat'  : 0,
+      \     },
+      \   ],
       \ }
 
 autocmd BufNewFile,BufRead *.go set filetype=go
@@ -389,6 +396,7 @@ autocmd BufNewFile,BufRead *.tx set filetype=html
 autocmd BufNewFile,BufRead *.t set filetype=perl
 autocmd BufNewFile,BufRead *.psgi set filetype=perl
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8
+autocmd BufNewFile,BufRead *.ts        set filetype=typescript
 
 
 autocmd BufNewFile,BufRead */Hatena*/*.{html,tt} set ft=html | setlocal softtabstop=2 tabstop=2 shiftwidth=2
