@@ -286,20 +286,6 @@ augroup MyAutocmd
 augroup END
 
 
-" flex
-augroup Fcsh
-	au!
-"	autocmd BufWritePost *.{as,mxml} call FcshCall()
-augroup END
-
-function! FcshCall()
-	let ret = system('ruby -rdrb/drb -e "puts DRbObject.new_with_uri(''druby://localhost:8787'').call(ARGV[0])"  "'.expand("%:p").'"')
-	if matchstr(ret, 'Error') != ""
-		echo ret
-	endif
-endfunction
-
-
 function! ShebangExecute()
 	let m = matchlist(getline(1), '#!\(.*\)')
 	if(len(m) > 2)
@@ -393,10 +379,11 @@ autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.tt set filetype=html
 autocmd BufNewFile,BufRead *.tx set filetype=html
+autocmd BufNewFile,BufRead *.html set filetype=xml
 autocmd BufNewFile,BufRead *.t set filetype=perl
 autocmd BufNewFile,BufRead *.psgi set filetype=perl
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8
-autocmd BufNewFile,BufRead *.ts        set filetype=typescript
+" autocmd BufNewFile,BufRead *.ts        set filetype=typescript
 
 
 autocmd BufNewFile,BufRead */Hatena*/*.{html,tt} set ft=html | setlocal softtabstop=2 tabstop=2 shiftwidth=2
@@ -429,9 +416,6 @@ function! Smartchr(fallback_literal, ...)
 
 	return a:fallback_literal
 endfunction
-
-
-command! -bang -narg=0  HatenaStamp call append(line('.'), "*" . localtime() . "*") | execute "normal jo"
 
 
 iabbr slef self
