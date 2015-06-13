@@ -383,7 +383,6 @@ autocmd BufNewFile,BufRead *.html set filetype=xml
 autocmd BufNewFile,BufRead *.t set filetype=perl
 autocmd BufNewFile,BufRead *.psgi set filetype=perl
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8
-" autocmd BufNewFile,BufRead *.ts        set filetype=typescript
 
 
 autocmd BufNewFile,BufRead */Hatena*/*.{html,tt} set ft=html | setlocal softtabstop=2 tabstop=2 shiftwidth=2
