@@ -1,0 +1,10 @@
+
+
+set smartcase
+set number
+
+imap <C-u> <Esc>v^da
+imap <C-a> <Esc>^i
+imap <C-e> <Esc>$a
+
+
