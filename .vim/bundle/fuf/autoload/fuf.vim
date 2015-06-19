@@ -147,6 +147,7 @@ function fuf#openBuffer(bufNr, mode, reuse)
         \   s:OPEN_TYPE_VSPLIT  : 'vertical %ssbuffer',
         \   s:OPEN_TYPE_TAB     : 'tab %ssbuffer'     ,
         \ }[a:mode], a:bufNr)
+  resize
 endfunction
 
 "
@@ -161,6 +162,7 @@ function fuf#openFile(path, mode, reuse)
           \   s:OPEN_TYPE_VSPLIT  : 'vsplit ' ,
           \   s:OPEN_TYPE_TAB     : 'tabedit ',
           \ }[a:mode] . fnameescape(fnamemodify(a:path, ':~:.'))
+    resize
   endif
 endfunction
 
@@ -172,6 +174,7 @@ function fuf#openTag(tag, mode)
         \   s:OPEN_TYPE_VSPLIT  : 'vertical stjump ',
         \   s:OPEN_TYPE_TAB     : 'tab stjump '     ,
         \ }[a:mode] . a:tag
+  resize
 endfunction
 
 "
@@ -182,6 +185,7 @@ function fuf#openHelp(tag, mode)
         \   s:OPEN_TYPE_VSPLIT  : 'vertical help ',
         \   s:OPEN_TYPE_TAB     : 'tab help '   ,
         \ }[a:mode] . a:tag
+  resize
 endfunction
 
 "
