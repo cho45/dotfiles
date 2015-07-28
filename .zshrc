@@ -20,7 +20,7 @@ path=(
 	$HOME/app/node/bin
 	$HOME/sdk/*/bin
 
-	/usr/local/CrossPack-AVR/bin
+	/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin
 	/usr/local/ruby1.9/bin
 	/usr/local/scala/bin
 	/usr/local/vim7/bin
