@@ -308,3 +308,7 @@ fi
 if [[ -d "$HOME/.rbenv" ]]; then
 	eval "$(rbenv init -)"
 fi
+
+if [[ -f "$HOME/.secret.zshrc" ]]; then
+	source "$HOME/.secret.zshrc"
+fi
