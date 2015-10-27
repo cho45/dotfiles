@@ -244,21 +244,61 @@ function! s:good_width()
 	endif
 endfunction
 
-let g:fuf_modesDisable = ['mrucmd']
-let g:fuf_file_exclude = '\v\~$|\.(o|exe|bak|swp|gif|jpg|png)$|(^|[/\\])\.(hg|git|bzr)($|[/\\])'
-let g:fuf_mrufile_exclude = '\v\~$|\.bak$|\.swp|\.howm$|\.(gif|jpg|png)$'
-let g:fuf_mrufile_maxItem = 500
-let g:fuf_enumeratingLimit = 50
-let g:fuf_keyPreview = '<C-]>'
-let g:fuf_previewHeight = 0
 
-nmap bg :FufBuffer<CR>
-nmap bG :FufFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
-nmap gb :call fuf#givenfile#launch('', 0, 'x ', split(system('git ls-files'), '\n'))<CR>
-nmap br :FufMruFile<CR>
-nmap bq :FufQuickfix<CR>
-nmap bl :FufLine<CR>
-nnoremap <silent> <C-]> :FufTag! <C-r>=expand('<cword>')<CR><CR> 
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_map = '<Nop>'
+let g:ctrlp_working_path_mode = 'c'
+let g:ctrlp_open_new_file = 'r'
+let g:ctrlp_extensions = ['mixed']
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:18'
+let g:ctrlp_user_command = {
+	\ 'types': {
+		\ 1: ['.git', 'cd %s && git ls-files'],
+		\ 2: ['.hg', 'hg --cwd %s locate -I .'],
+		\ },
+	\ 'fallback': 'find %s -type f'
+	\ }
+
+let g:ctrlp_prompt_mappings = {
+	\ 'PrtBS()':              ['<bs>', '<c-]>'],
+	\ 'PrtDelete()':          ['<del>'],
+	\ 'PrtDeleteWord()':      ['<c-w>'],
+	\ 'PrtClear()':           ['<c-u>'],
+	\ 'PrtSelectMove("j")':   ['<c-n>', '<c-j>', '<down>'],
+	\ 'PrtSelectMove("k")':   ['<c-p>', '<c-k>', '<up>'],
+	\ 'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
+	\ 'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
+	\ 'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
+	\ 'PrtSelectMove("d")':   ['<PageDown>', '<kPageDown>'],
+	\ 'PrtHistory(-1)':       [],
+	\ 'PrtHistory(1)':        [],
+	\ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
+	\ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>'],
+	\ 'AcceptSelection("t")': ['<c-t>'],
+	\ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
+	\ 'ToggleFocus()':        ['<s-tab>'],
+	\ 'ToggleRegex()':        ['<c-r>'],
+	\ 'ToggleByFname()':      ['<c-d>'],
+	\ 'ToggleType(1)':        ['<c-f>', '<c-up>'],
+	\ 'ToggleType(-1)':       ['<c-b>', '<c-down>'],
+	\ 'PrtExpandDir()':       ['<tab>'],
+	\ 'PrtInsert("c")':       ['<MiddleMouse>', '<insert>'],
+	\ 'PrtInsert()':          ['<c-\>'],
+	\ 'PrtCurStart()':        ['<c-a>'],
+	\ 'PrtCurEnd()':          ['<c-e>'],
+	\ 'PrtCurLeft()':         ['<c-h>', '<left>', '<c-^>'],
+	\ 'PrtCurRight()':        ['<c-l>', '<right>'],
+	\ 'PrtClearCache()':      ['<F5>'],
+	\ 'PrtDeleteEnt()':       ['<F7>'],
+	\ 'CreateNewFile()':      ['<c-y>'],
+	\ 'MarkToOpen()':         ['<c-z>'],
+	\ 'OpenMulti()':          ['<c-o>'],
+	\ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>'],
+	\ }
+
+nmap bg :<C-u>CtrlPMixed<CR>
+nmap bG :<C-u>CtrlP<CR>
+nmap gb :<C-u>CtrlPRoot<CR>
 
 nmap <unique> g/ :exec ':vimgrep /' . getreg('/') . '/j %\|cwin'<CR>
 nmap ga :silent exec ':Ack ' . substitute(getreg('/'), '\v\\\<(.*)\\\>', "\\1", '')<CR>
