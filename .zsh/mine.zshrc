@@ -97,8 +97,6 @@ $PROMPT_CMD"
 }
 
 chpwd () {
-	# for cdd
-	_reg_pwd_screennum
 }
 
 # ~ (master) のように git レポジトリ以下では git のブランチを表示する
@@ -254,8 +252,14 @@ function peco-godoc() {
 	fi
 	zle clear-screen
 }
-
 zle -N peco-godoc
+
+function cdd() {
+	local selected_dir=$(lsof -c zsh -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])' | uniq | peco)
+	if [ -n "$selected_dir" ]; then
+		cd ${selected_dir}
+	fi
+}
 
 
 bindkey '^x^x' peco-src
@@ -263,9 +267,6 @@ bindkey '^x^h' percol_select_history
 bindkey '^x^b' percol-git-recent-branches
 bindkey '^xb' percol-git-recent-all-branches
 
-
-# screen cd
-source $HOME/.zsh/cdd
 
 if [[ -f "$HOME/.screen/screen2tty.inc.sh" ]]; then
 	source "$HOME/.screen/screen2tty.inc.sh"
