@@ -255,9 +255,19 @@ function peco-godoc() {
 zle -N peco-godoc
 
 function cdd() {
-	local selected_dir=$(lsof -c zsh -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])' | uniq | peco)
-	if [ -n "$selected_dir" ]; then
-		cd ${selected_dir}
+	if [[ $1 == "" ]]; then
+		local selected_dir=$(lsof -c zsh -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])' | uniq | peco)
+		if [ -n "$selected_dir" ]; then
+			cd ${selected_dir}
+		fi
+	else
+		local pid=$(command ps -e -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY}/ and /WINDOW=$ENV{WINDOW}/ and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
+		if [[ $1 == "" ]]; then
+			echo "window not found"
+		else
+			local dir=$(lsof -p $pid -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])')
+			cd $dir
+		fi
 	fi
 }
 
