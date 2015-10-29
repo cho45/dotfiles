@@ -24,7 +24,7 @@ export XDG_DATA_HOME=/usr/local/share
 
 export CLASSPATH=.:lib/\*.jar:$JPATH/classes.jar
 
-export JAVA_HOME=$(/usr/libexec/java_home -v 1.7.0)
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8.0)
 
 export CGO_CFLAGS="-I/usr/local/include"
 export CGO_LDFLAGS="-L/usr/local/lib"

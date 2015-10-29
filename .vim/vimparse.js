@@ -30,6 +30,7 @@ argv.forEach(function (filename) {
 			if (error.reason.indexOf("Weird construction. Delete 'new'") != -1) return;
 
 			if (error.reason.indexOf("Use the array literal notation [].") != -1) return;
+			if (error.reason.indexOf("Expected an identifier and instead saw 'catch' (a reserved word).") != -1) return;
 
 			// いや…… 必要なときに言われても……
 			if (error.reason.indexOf("Unnecessary escapement.") != -1) return;

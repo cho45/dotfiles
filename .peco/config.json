@@ -5,6 +5,7 @@
         "C-u": "peco.DeleteAll",
         "C-k": "peco.KillEndOfLine",
         "Tab": "peco.ToggleSelectionAndSelectNext",
+        "M-Tab": "peco.SelectAll",
         "C-c": "peco.Cancel"
     }
 }
