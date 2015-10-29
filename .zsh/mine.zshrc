@@ -67,12 +67,6 @@ precmd () {
 	PROMPT_CMD_ADD=""
 	PROMPT_CWD_ADD=""
 
-#	if [[ $prev == "ls" ]]; then
-#		osascript -e 'tell application "System Events" to key code 103'
-#		sleep 0.2
-#		osascript -e 'tell application "System Events" to key code 103'
-#	fi
-#
 	# for git
 	update-git-status
 
@@ -150,10 +144,6 @@ function n () {
 	screen -X eval "chdir $PWD" "screen" "chdir"
 }
 
-function l () {
-	screen tail -n 100 -f $HOME/.screen/backtick.log
-}
-
 function git () {
 	if [[ -e '.svn' ]]; then
 		if [[ $1 == "log" ]]; then
@@ -199,16 +189,16 @@ function socks () {
 }
 
 
-function percol_select_history () {
+function peco-select-history () {
 	BUFFER=$(perl -nl -e 's/^.*?;//; print' ~/.zsh_history| peco --query "$LBUFFER")
 	# zle clear-screen
 	zle reset-prompt
 	zle accept-line
 }
-zle -N percol_select_history
+zle -N peco-select-history
 
 
-function percol-git-recent-branches () {
+function peco-git-recent-branches () {
 	local selected_branch=$(git for-each-ref --format='%(refname)' --sort=-committerdate refs/heads | \
 		perl -pne 's{^refs/heads/}{}' | \
 		peco --query "$LBUFFER")
@@ -218,9 +208,9 @@ function percol-git-recent-branches () {
 	fi
 	zle clear-screen
 }
-zle -N percol-git-recent-branches
+zle -N peco-git-recent-branches
 
-function percol-git-recent-all-branches () {
+function peco-git-recent-all-branches () {
 	local selected_branch=$(git for-each-ref --format='%(refname)' --sort=-committerdate refs/heads refs/remotes | \
 		perl -pne 's{^refs/(heads|remotes)/}{}' | \
 		peco --query "$LBUFFER")
@@ -230,7 +220,7 @@ function percol-git-recent-all-branches () {
 	fi
 	zle clear-screen
 }
-zle -N percol-git-recent-all-branches
+zle -N peco-git-recent-all-branches
 
 
 function peco-src () {
@@ -261,8 +251,14 @@ function cdd() {
 			cd ${selected_dir}
 		fi
 	else
-		local pid=$(command ps -e -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY}/ and /WINDOW=$ENV{WINDOW}/ and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
-		if [[ $1 == "" ]]; then
+		local pid
+		if [[ $(uname) == "Darwin" ]]; then
+			pid=$(command ps -E -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
+		else
+			pid=$(command ps e -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
+		fi
+
+		if [[ $pid == "" ]]; then
 			echo "window not found"
 		else
 			local dir=$(lsof -p $pid -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])')
@@ -271,19 +267,18 @@ function cdd() {
 	fi
 }
 
+function pid2screen() {
+	local
+	command ps -E -o 'command' -p 42629 | perl -anal -e '/STY=$ENV{STY}/ and /WINDOW=([0-9]+)/ and print $1'
+}
+
 
 bindkey '^x^x' peco-src
-bindkey '^x^h' percol_select_history
-bindkey '^x^b' percol-git-recent-branches
-bindkey '^xb' percol-git-recent-all-branches
-
-
-if [[ -f "$HOME/.screen/screen2tty.inc.sh" ]]; then
-	source "$HOME/.screen/screen2tty.inc.sh"
-fi
+bindkey '^x^h' peco-select-history
+bindkey '^x^b' peco-git-recent-branches
+bindkey '^xb' peco-git-recent-all-branches
 
 # ホストごとの設定を読みこむ
 h="${HOST%%.*}"
-if [[ -f "$HOME/.zsh/host-$h.zshrc" ]]; then
-	source "$HOME/.zsh/host-$h.zshrc"
-fi
+load-extra "$HOME/.zsh/host-$h.zshrc"
+

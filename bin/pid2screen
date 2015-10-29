@@ -1,1 +1,13 @@
-../.screen/pid2screen
+#!/usr/bin/env ruby
+
+sty = ENV['STY']
+pid = ARGV[0] || 42629
+
+ps = nil
+case RUBY_PLATFORM
+when /darwin/
+	ps = `ps -E -o 'command' -p #{pid}`
+else
+	ps = `ps e -o 'command' -p #{pid}`
+end
+puts ps[/WINDOW=([0-9]+)( |$)/, 1]

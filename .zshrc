@@ -297,18 +297,19 @@ function oo () {
 
 # Load extra rc
 
-if [[ -f "$HOME/.zsh/mine.zshrc" ]]; then
-	source "$HOME/.zsh/mine.zshrc"
-fi
+function load-extra () {
+	echo " * Loading extra $1"
+	if [[ -f $1 ]]; then
+		source $1
+	fi
+}
 
-if [[ -f "$HOME/perl5/perlbrew/etc/bashrc" ]]; then
-	source $HOME/perl5/perlbrew/etc/bashrc
-fi
+load-extra "$HOME/.zsh/mine.zshrc"
+load-extra "$HOME/perl5/perlbrew/etc/bashrc"
+load-extra "$HOME/.secret.zshrc"
 
 if [[ -d "$HOME/.rbenv" ]]; then
+	echo " * rbenv init"
 	eval "$(rbenv init -)"
 fi
 
-if [[ -f "$HOME/.secret.zshrc" ]]; then
-	source "$HOME/.secret.zshrc"
-fi
