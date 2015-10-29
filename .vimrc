@@ -258,7 +258,7 @@ let g:ctrlp_user_command = {
 		\ 1: ['.git', 'cd %s && git ls-files'],
 		\ 2: ['.hg', 'hg --cwd %s locate -I .'],
 		\ },
-	\ 'fallback': 'find %s -type f'
+	\ 'fallback': 'find --depth 0 %s -type f'
 	\ }
 
 let g:ctrlp_prompt_mappings = {
@@ -275,11 +275,11 @@ let g:ctrlp_prompt_mappings = {
 	\ 'PrtHistory(-1)':       [],
 	\ 'PrtHistory(1)':        [],
 	\ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
-	\ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>'],
-	\ 'AcceptSelection("t")': ['<c-t>'],
-	\ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
+	\ 'AcceptSelection("h")': [],
+	\ 'AcceptSelection("t")': [],
+	\ 'AcceptSelection("v")': [],
 	\ 'ToggleFocus()':        ['<s-tab>'],
-	\ 'ToggleRegex()':        ['<c-r>'],
+	\ 'ToggleRegex()':        [],
 	\ 'ToggleByFname()':      ['<c-d>'],
 	\ 'ToggleType(1)':        ['<c-f>', '<c-up>'],
 	\ 'ToggleType(-1)':       ['<c-b>', '<c-down>'],
@@ -292,13 +292,13 @@ let g:ctrlp_prompt_mappings = {
 	\ 'PrtCurRight()':        ['<c-l>', '<right>'],
 	\ 'PrtClearCache()':      ['<F5>'],
 	\ 'PrtDeleteEnt()':       ['<F7>'],
-	\ 'CreateNewFile()':      ['<c-y>'],
+	\ 'CreateNewFile()':      ['<c-o>'],
 	\ 'MarkToOpen()':         ['<c-z>'],
-	\ 'OpenMulti()':          ['<c-o>'],
+	\ 'OpenMulti()':          [],
 	\ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>'],
 	\ }
 
-nmap bg :<C-u>CtrlPMixed<CR>
+nmap bg :<C-u>CtrlPBuffer<CR>
 nmap bG :<C-u>CtrlP<CR>
 nmap gb :<C-u>CtrlPRoot<CR>
 
