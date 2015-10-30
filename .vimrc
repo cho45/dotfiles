@@ -247,12 +247,13 @@ endfunction
 
 highlight clear CursorLine
 highlight CursorLine ctermbg=2 ctermfg=15 guifg=#ffffff guibg=#000000 
+let g:ctrlp_default_input = 1
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_map = '<Nop>'
 let g:ctrlp_working_path_mode = 'c'
 let g:ctrlp_open_new_file = 'r'
 let g:ctrlp_extensions = ['mixed']
-let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:18'
+let g:ctrlp_match_window = 'bottom,order:ttb,min:1,max:18'
 let g:ctrlp_user_command = {
 	\ 'types': {
 		\ 1: ['.git', 'cd %s && git ls-files'],
