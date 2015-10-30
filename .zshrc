@@ -18,7 +18,7 @@ path=(
 	$HOME/app/argyll/bin
 	$HOME/app/depot_tools
 	$HOME/app/node/bin
-	$HOME/sdk/*/bin
+	$HOME/sdk/*/bin(N)
 
 	/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin
 	/usr/local/ruby1.9/bin
