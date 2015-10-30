@@ -246,7 +246,7 @@ endfunction
 
 
 highlight clear CursorLine
-highlight CursorLine ctermbg=7 ctermfg=0 guifg=#ffffff guibg=#000000 
+highlight CursorLine ctermbg=2 ctermfg=15 guifg=#ffffff guibg=#000000 
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_map = '<Nop>'
 let g:ctrlp_working_path_mode = 'c'
@@ -299,7 +299,7 @@ let g:ctrlp_prompt_mappings = {
 	\ }
 
 nmap bg :<C-u>CtrlPBuffer<CR>
-nmap bG :<C-u>CtrlP<CR>
+nmap bG :<C-u>CtrlP <C-R>=expand("%:p:h") . "/" <CR><CR>
 nmap gb :<C-u>CtrlPRoot<CR>
 
 nmap <unique> g/ :exec ':vimgrep /' . getreg('/') . '/j %\|cwin'<CR>
