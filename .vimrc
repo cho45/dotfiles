@@ -246,7 +246,8 @@ endfunction
 
 
 highlight clear CursorLine
-highlight CursorLine ctermbg=2 ctermfg=15 guifg=#ffffff guibg=#000000 
+highlight CursorLine ctermbg=DarkGreen ctermfg=White guifg=#ffffff guibg=#000000 
+highlight CtrlPMatch term=bold ctermfg=Yellow
 let g:ctrlp_default_input = 1
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_map = '<Nop>'

@@ -1,6 +1,8 @@
 # vim:set ft=zsh:
 # ~/.zshrc is standalone for copy to remote server as a file
 # ~/.zsh/mine.zshrc is located on local machines
+clear
+echo " > Initializing .zshrc"
 
 stty intr 
 
@@ -19,6 +21,8 @@ path=(
 	$HOME/app/depot_tools
 	$HOME/app/node/bin
 	$HOME/sdk/*/bin(N)
+
+	/usr/local/opt/go/libexec/bin
 
 	/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin
 	/usr/local/ruby1.9/bin
@@ -75,6 +79,12 @@ bindkey -r '^X^V'
 
 ## modules
 autoload zargs
+
+# The eight base colors are: black, red, green, yellow, blue, magenta, cyan, and white.  Each of these has codes for foreground and background.  In addition  there  are  seven  intensity  attributes:
+# bold,  faint,  standout,  underline,  blink,  reverse,  and conceal.  Finally, there are seven codes used to negate attributes: none (reset all attributes to the defaults), normal (neither bold nor
+# faint), no-standout, no-underline, no-blink, no-reverse, and no-conceal.
+autoload colors
+colors;
 
 autoload -Uz is-at-least
 
@@ -298,11 +308,13 @@ function oo () {
 # Load extra rc
 
 function load-extra () {
-	echo " * Loading extra $1"
+	echo "$fg[green] * Loading extra $reset_color$1"
 	if [[ -f $1 ]]; then
 		source $1
 	fi
 }
+
+echo "$fg[blue] # Loading extra files...$reset_color"
 
 load-extra "$HOME/.zsh/mine.zshrc"
 load-extra "$HOME/perl5/perlbrew/etc/bashrc"
@@ -312,4 +324,7 @@ if [[ -d "$HOME/.rbenv" ]]; then
 	echo " * rbenv init"
 	eval "$(rbenv init -)"
 fi
+
+export NVM_DIR="/Users/cho45/.nvm"
+load-extra "$NVM_DIR/nvm.sh"
 

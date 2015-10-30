@@ -1,6 +1,4 @@
 # vim:ft=zsh:
-echo "Mary!!"
-
 export LANG=ja_JP.UTF-8
 
 if [[ -n $WINDOW ]]; then
