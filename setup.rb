@@ -27,6 +27,23 @@ def link(src, dst)
 	ln_sf src.to_s, dst.to_s
 end
 
+def which(bin)
+	ENV['PATH'].split(/:/).map {|i| File.join(i, bin) }.find {|i| File.exist?(i) }
+end
+
+def with(bin, &block)
+	if which(bin)
+		yield
+	else
+		puts "** #{bin} is not found in path"
+	end
+end
+
+unless which('git')
+	puts "Install git first. exit..."
+	exit 1
+end
+
 
 cd "~".expand
 
@@ -81,7 +98,7 @@ app = "~/app".expand
 app.mkpath
 cd app do
 	unless "git-branch-recent".expand.exist?
-		sh "git clone git@github.com:cho45/git-branch-recent.git"
+		sh "git clone https://github.com/cho45/git-branch-recent.git"
 	end
 	cd "git-branch-recent" do
 		sh "git pull"
@@ -97,7 +114,13 @@ if RUBY_PLATFORM =~ /darwin/
 	sh "gcc -framework Cocoa tools/lockscreen.m -o #{ENV['HOME']}/bin/lockscreen"
 end
 
-sh "npm set init.author.name cho45"
-sh "npm set init.author.email cho45@lowreal.net"
-sh "npm set init.author.url http://www.lowreal.net/"
+with('npm') do
+	sh "npm set init.author.name cho45"
+	sh "npm set init.author.email cho45@lowreal.net"
+	sh "npm set init.author.url http://www.lowreal.net/"
+end
+
+with('go') do
+	sh "go get github.com/mattn/files"
+end
 
