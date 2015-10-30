@@ -1,5 +1,4 @@
 runtime! ftplugin/xml.vim
-set ft=xml
 
 augroup AutoReloadHTML
 	au!

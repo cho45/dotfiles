@@ -376,7 +376,7 @@ autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.tt set filetype=html
 autocmd BufNewFile,BufRead *.tx set filetype=html
-autocmd BufNewFile,BufRead *.html set filetype=xml
+autocmd BufNewFile,BufRead *.html set filetype=html
 autocmd BufNewFile,BufRead *.t set filetype=perl
 autocmd BufNewFile,BufRead *.psgi set filetype=perl
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8
