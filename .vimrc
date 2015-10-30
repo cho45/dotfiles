@@ -1,4 +1,3 @@
-
 syntax on
 filetype plugin on
 filetype indent on
@@ -30,15 +29,6 @@ set textwidth=1000
 
 set directory=~/swp
 
-let g:EclimBaseDir  = '/Users/cho45/.vim'
-if !filereadable('.classpath')
-	let g:EclimDisabled = 1
-endif
-
-let g:wildfire_objects = {
-	\ "*" : ["i'", 'i"', "i)", "i]", "i}", "ip", "it", "at", "i>"],
-\ }
-
 let g:changelog_timeformat = "%Y-%m-%d"
 let g:changelog_username   = "SATOH Hiroh <cho45@lowreal.net>"
 let g:changelog_date_end_entry_search = '^\s*$'
@@ -47,8 +37,6 @@ let g:Perl_AuthorName      = 'cho45'
 let g:Perl_AuthorRef       = ''
 let g:Perl_Email           = 'cho45@lowreal.net'
 let g:Perl_Company         = ''
-
-let g:user_zen_expandabbr_key = '<C-E>'
 
 let g:jpTemplateKey        = '<C-B>'
 
@@ -144,34 +132,36 @@ nnoremap Y y$
 
 nnoremap j gj
 nnoremap k gk
-" nmap gb :ls<CR>:buf 
 
-" sort css property (id:secondlife)
-nmap gso vi{:!sortcss<CR>
-vmap gso i{:!sortcss<CR>
-
+nnoremap <C-c>  :<C-u>close<CR>
+nnoremap <C-d>  :<C-u>buffer # \| bwipe #<CR>
 
 " encoding
-nmap <silent> eu :set fenc=utf-8<CR>
-nmap <silent> ee :set fenc=euc-jp<CR>
-nmap <silent> es :set fenc=cp932<CR>
+nnoremap <silent> eu :set fenc=utf-8<CR>
+nnoremap <silent> ee :set fenc=euc-jp<CR>
+nnoremap <silent> es :set fenc=cp932<CR>
 
 " encode reopen encoding
-nmap <silent> eru :e ++enc=utf-8 %<CR>
-nmap <silent> ere :e ++enc=euc-jp %<CR>
-nmap <silent> ers :e ++enc=cp932 %<CR>
-nmap <silent> err :e %<CR>
-
+nnoremap <silent> eru :e ++enc=utf-8 %<CR>
+nnoremap <silent> ere :e ++enc=euc-jp %<CR>
+nnoremap <silent> ers :e ++enc=cp932 %<CR>
+nnoremap <silent> err :e %<CR>
 
 "for yanktmp.vim
-map <silent> sy :call YanktmpYank()<CR>
-map <silent> sp :call YanktmpPaste_p()<CR>
-map <silent> sP :call YanktmpPaste_P()<CR>
+noremap <silent> sy :call YanktmpYank()<CR>
+noremap <silent> sp :call YanktmpPaste_p()<CR>
+noremap <silent> sP :call YanktmpPaste_P()<CR>
+
+"pasteboard 
+noremap <silent> sY :call YankPB()<CR>
+function! YankPB() range
+	let @* = join(getline(a:firstline, a:lastline), "\n")
+endfunction
 
 " redraw map
-nmap <silent> sr :redraw!<CR>
+nnoremap <silent> sr :redraw!<CR>
 
-nmap <silent> eo :e %:h<CR>
+nnoremap <silent> eo :e %:h<CR>
 nnoremap e3 :s/?\s*\((.\{-1,})\\|\S\+\)\s*:\s*\((.\{-1,})\\|\S\+\)/? \2 : \1/<CR>
 
 " nmap <silent> eg :e git:HEAD^:%<CR>
@@ -212,25 +202,11 @@ function! s:git_prev_rev()
 	endif
 endfunction
 
-" cmode
-cmap <ESC>h <Left>
-cmap <ESC>l <Right>
-
-
-"if has("mac")
-	map <silent> sY :call YankPB()<CR>
-	function! YankPB()
-		let tmp = tempname()
-		call writefile(getline(a:firstline, a:lastline), tmp, 'b')
-		silent exec ":!cat " . tmp . " | pbcopy"
-	endfunction
-"endif
-
 " execute script
-nmap ,e :call ShebangExecute()<CR>
+nnoremap ,e :call ShebangExecute()<CR>
 
 " insert timestamp
-nmap tw :exe "normal! i" . strftime("%Y-%m-%d\T%H:%M:%S+09:00")<CR>
+nnoremap tw :exe "normal! i" . strftime("%Y-%m-%d\T%H:%M:%S+09:00")<CR>
 
 nnoremap <C-w><C-w> <C-w><C-w>:call <SID>good_width()<CR>
 nnoremap <C-w>h <C-w>h:call <SID>good_width()<CR>
@@ -300,35 +276,12 @@ let g:ctrlp_prompt_mappings = {
 	\ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>'],
 	\ }
 
-nmap bg :<C-u>CtrlPBuffer<CR>
-nmap bG :<C-u>CtrlP <C-R>=expand("%:p:h") . "/" <CR><CR>
-nmap gb :<C-u>CtrlPRoot<CR>
+nnoremap bg :<C-u>CtrlPBuffer<CR>
+nnoremap bG :<C-u>CtrlP <C-R>=expand("%:p:h") . "/" <CR><CR>
+nnoremap gb :<C-u>CtrlPRoot<CR>
 
-nmap <unique> g/ :exec ':vimgrep /' . getreg('/') . '/j %\|cwin'<CR>
-nmap ga :silent exec ':Ack ' . substitute(getreg('/'), '\v\\\<(.*)\\\>', "\\1", '')<CR>
-
-
-
-augroup MyAutocmd
-	au!
-	autocmd BufWritePost * if getline(1) =~ "^#!" | exe "silent !chmod +x %" | endif
-	autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | silent! exe '!echo -n "k%\\"' | endif
-
-	" YAML setting
-	autocmd FileType yaml setlocal expandtab ts=2 sw=2 enc=utf-8 fenc=utf-8
-	autocmd BufEnter * set nowrap
-
-
-	" auto cd
-	" autocmd BufEnter * exe ":lcd \"" . expand("%:p:h") . "\""
-
-	" use 'encoding' if the buffer doesn't contain any multibyte character.
-	autocmd BufReadPost *
-				\   if &modifiable && !search('[^\x00-\x7F]', 'cnw')
-				\ |   setlocal fileencoding=
-				\ | endif
-augroup END
-
+nnoremap <unique> g/ :exec ':vimgrep /' . getreg('/') . '/j %\|cwin'<CR>
+nnoremap ga :silent exec ':Ack ' . substitute(getreg('/'), '\v\\\<(.*)\\\>', "\\1", '')<CR>
 
 function! ShebangExecute()
 	let m = matchlist(getline(1), '#!\(.*\)')
@@ -338,11 +291,6 @@ function! ShebangExecute()
 		execute '!' &ft ' %'
 	endif
 endfunction
-
-augroup Indent
-	au!
-	au BufNewFile,BufRead *yuno/* set expandtab softtabstop=4 tabstop=4 shiftwidth=4
-augroup END
 
 " {{{ Autocompletion using the TAB key
 
@@ -415,10 +363,15 @@ let g:acp_behavior = {
       \   ],
       \ }
 
+autocmd BufWritePost * if getline(1) =~ "^#!" | exe "silent !chmod +x %" | endif
+autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | silent! exe '!echo -n "k%\\"' | endif
+
+autocmd BufEnter * set nowrap
 autocmd BufNewFile,BufRead *.go set filetype=go
 autocmd FileType go setlocal sw=4 ts=4 sts=4 noet
 autocmd FileType go setlocal makeprg=go\ build\ ./... errorformat=%f:%l:\ %m
-autocmd FileType ruby setlocal sw=2 ts=2 sts=2
+autocmd FileType ruby setlocal sw=4 ts=4 sts=4
+autocmd FileType yaml setlocal expandtab ts=2 sw=2 enc=utf-8 fenc=utf-8
 autocmd BufNewFile,BufRead *.io set filetype=io
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.tt set filetype=html
@@ -428,7 +381,6 @@ autocmd BufNewFile,BufRead *.t set filetype=perl
 autocmd BufNewFile,BufRead *.psgi set filetype=perl
 autocmd BufNewFile,BufRead COMMIT_EDITMSG set filetype=git fenc=utf-8
 
-
 autocmd BufNewFile,BufRead */Hatena*/*.{html,tt} set ft=html | setlocal softtabstop=2 tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead */Hatena* setlocal expandtab
 
@@ -436,30 +388,8 @@ autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 " autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 
-nnoremap <C-c>  :<C-u>close<CR>
-nnoremap <C-d>  :<C-u>buffer # \| bwipe #<CR>
-
-function! Smartchr(fallback_literal, ...)
-	let args = reverse(copy(a:000))
-	call add(args, a:fallback_literal)
-	let args = map(args, 'type(v:val) == type("") ? [0, v:val] : v:val')
-
-	for i in range(len(args) - 1)
-		let [pattern1, literal1] = args[i]
-		let [pattern2, literal2] = args[i+1]
-
-		if pattern1 is 0
-			if search('\V' . escape(literal2, '\') . '\%#', 'bcn')
-				return repeat("\<BS>", len(literal2)) . literal1
-			endif
-		else
-			throw 'FIXME: pattern is not implemented yet: ' . string(args[i])
-		endif
-	endfor
-
-	return a:fallback_literal
-endfunction
-
+autocmd BufWritePost */debuglet.js silent! execute '!ruby ' . $HOME . '/bin/debuglet.rb %'
+autocmd BufNewFile */debuglet.js silent! execute 'r!ruby ' . $HOME . '/bin/debuglet.rb'
 
 iabbr slef self
 iabbr sefl self
@@ -478,20 +408,6 @@ augroup AutoMkdir
 	autocmd!
 	autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
 augroup END
-
-autocmd BufWritePost */debuglet.js silent! execute '!ruby ' . $HOME . '/bin/debuglet.rb %'
-autocmd BufNewFile */debuglet.js silent! execute 'r!ruby ' . $HOME . '/bin/debuglet.rb'
-
-function! GitWeb()
-	let git_output = substitute(system('git config --get remote.origin.url'), '\n*$', '', '')
-	let repos = substitute(git_output, '^.*:\|\.git$', '', 'g')
-	let commit = substitute(system('git name-rev --name-only HEAD'), '\n*$', '', '')
-
-	let url = 'open ' . $GITWEB_BASE . repos . '/blob/' . commit . '/' . expand('%') . '#l' . line('.')
-	echo url
-	call system(url)
-endfunction
-command! GitWeb call GitWeb()
 
 command! -nargs=* -range GitBrowseRemote !git browse-remote --rev -L<line1>,<line2> <f-args> -- %
 
