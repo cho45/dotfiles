@@ -1,2 +1,2 @@
-set dictionary=~/.vim/dict/css.dict
-set iskeyword+=-
+setlocal dictionary=~/.vim/dict/css.dict
+setlocal iskeyword+=-
