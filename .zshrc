@@ -17,6 +17,7 @@ path=(
 	$HOME/sdk/android/platform-tools
 	$HOME/sdk/apache-maven/bin
 	$HOME/.rbenv/bin
+	$HOME/app/vim/bin
 	$HOME/app/argyll/bin
 	$HOME/app/depot_tools
 	$HOME/app/node/bin
@@ -27,7 +28,6 @@ path=(
 	/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin
 	/usr/local/ruby1.9/bin
 	/usr/local/scala/bin
-	/usr/local/vim7/bin
 	/usr/local/screen/bin
     /usr/local/go/bin
 	$GOPATH/bin
