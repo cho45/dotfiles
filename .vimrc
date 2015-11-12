@@ -115,7 +115,7 @@ endfunction
 
 set termencoding=utf-8
 set encoding=utf-8
-set fileencodings=euc-jp,iso-2022-jp
+set fileencodings=utf-8,euc-jp,iso-2022-jp
 
 set hidden
 
@@ -231,9 +231,10 @@ let g:ctrlp_working_path_mode = 'c'
 let g:ctrlp_open_new_file = 'r'
 let g:ctrlp_extensions = ['mixed']
 let g:ctrlp_match_window = 'bottom,order:ttb,min:1,max:18'
+let g:ctrlp_switch_buffer = 'e'
 let g:ctrlp_user_command = {
 	\ 'types': {
-		\ 1: ['.git', 'cd %s && git ls-files'],
+		\ 1: ['.git', 'cd %s && git ls-files --cached --others | ruby -e "puts ARGF.readlines.sort_by(&:size)"'],
 		\ 2: ['.hg', 'hg --cwd %s locate -I .'],
 		\ },
 	\ 'fallback': 'files %s'
@@ -270,7 +271,7 @@ let g:ctrlp_prompt_mappings = {
 	\ 'PrtCurRight()':        ['<c-l>', '<right>'],
 	\ 'PrtClearCache()':      ['<F5>'],
 	\ 'PrtDeleteEnt()':       ['<F7>'],
-	\ 'CreateNewFile()':      ['<c-o>'],
+	\ 'CreateNewFile()':      ['<c-o>', '<c-r>'],
 	\ 'MarkToOpen()':         ['<c-z>'],
 	\ 'OpenMulti()':          [],
 	\ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>'],
