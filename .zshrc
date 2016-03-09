@@ -260,6 +260,7 @@ else
 fi
 alias lm='ls -altrh'
 alias ps='ps aux'
+alias zcat='gzip -dfc'
 
 alias ..='cd ..'
 
