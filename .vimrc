@@ -6,8 +6,14 @@ set nocompatible
 " Setup Plug
 filetype off
 call plug#begin('~/.vim/plugged')
+Plug 'hail2u/vim-css3-syntax'
+Plug 'pangloss/vim-javascript'
+Plug 'vim-scripts/L9'
 Plug 'cho45/vim-fuzzyfinder'
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'leafgarland/typescript-vim'
+Plug 'Quramy/tsuquyomi'
+Plug 'fatih/vim-go'
 call plug#end()
 
 
@@ -21,7 +27,6 @@ if $GOROOT != ''
 	set runtimepath+=$GOROOT/misc/vim
 	exe "set runtimepath+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
 endif
-
 
 "ポップアップ補完メニュー色設定（通常の項目、選択されている項目、スクロールバー、スクロールバーのつまみ部分）
 highlight Pmenu ctermbg=6 guibg=#4c745a
