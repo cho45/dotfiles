@@ -7,15 +7,23 @@ set nocompatible
 " Setup Plug {
 	filetype off
 	call plug#begin('~/.vim/plugged')
-		Plug 'hail2u/vim-css3-syntax'
-		Plug 'pangloss/vim-javascript'
 		Plug 'vim-scripts/L9'
 		Plug 'cho45/vim-fuzzyfinder'
-		Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-		Plug 'leafgarland/typescript-vim'
-		Plug 'Quramy/tsuquyomi'
-		Plug 'fatih/vim-go'
 		Plug 'kana/vim-metarw'
+
+		" tsuquyomi dependency
+		Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+
+		Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+		Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
+
+		Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
+
+		Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+		Plug 'mattn/jscomplete-vim', { 'for': 'javascript' }
+		Plug 'myhere/vim-nodejs-complete', { 'for': 'javascript' }
+
+		Plug 'fatih/vim-go', { 'for': 'go' }
 	call plug#end()
 " }
 
@@ -254,6 +262,18 @@ set nocompatible
 " AutoComplePop {
 	let g:acp_completeOption = '.,w,b,k'
 	let g:acp_behavior = {
+		  \   'javascript' : [
+		  \     {
+		  \       'command' : "\<C-x>\<C-o>",
+		  \       'meets'   : 'acp#meetsForKeyword',
+		  \       'repeat'  : 0,
+		  \     },
+		  \     {
+		  \       'command' : "\<C-n>",
+		  \       'meets'   : 'acp#meetsForKeyword',
+		  \       'repeat'  : 0,
+		  \     },
+		  \   ],
 		  \   'go' : [
 		  \     {
 		  \       'command' : "\<C-x>\<C-o>",
@@ -379,7 +399,7 @@ set nocompatible
 
 " --------------------------------------------------------------------------------
 " javascript {
-	autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 " }
 
 
