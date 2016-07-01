@@ -1,14 +1,26 @@
 
+set ignorecase
 set smartcase
 set number
+set visualbell
+set noerrorbells
+set scrolloff=1
+set showmode
+
+noremap <LeftMouse> <ESC>
+noremap <RightMouse> <ESC>
+noremap <LeftRelease> <ESC>
 
 " comment out
-vmap ,# :s/^/#/<CR>
-vmap ,/ :s/^/\/\//<CR>
-vmap ,> :s/^/> /<CR>
-vmap ," :s/^/\"/<CR>
-vmap ,% :s/^/%/<CR>
-vmap ,! :s/^/!/<CR>
-vmap ,; :s/^/;/<CR>
-vmap ,- :s/^/--/<CR>
-vmap ,c :s/^\/\/\\|^--\\|^> \\|^[#"%!;]//<CR>
+vnoremap ,# :s/^/#/<CR>
+vnoremap ,/ :s/^/\/\//<CR>
+vnoremap ,> :s/^/> /<CR>
+vnoremap ," :s/^/\"/<CR>
+vnoremap ,% :s/^/%/<CR>
+vnoremap ,! :s/^/!/<CR>
+vnoremap ,; :s/^/;/<CR>
+vnoremap ,- :s/^/--/<CR>
+vnoremap ,c :s/^\/\/\|^--//<CR>
+
+inoremap <C-a> <C-o>^
+inoremap <C-e> <C-o>$<Right>

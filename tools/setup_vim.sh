@@ -28,8 +28,8 @@ cd src
 	--without-x \
 	--disable-xim \
 	--enable-pythoninterp=yes \
-	--enable-perlinterp=yes \
-	--enable-rubyinterp=yes
+	--enable-perlinterp=no \
+	--enable-rubyinterp=no
 
 make -j 2
 make install
