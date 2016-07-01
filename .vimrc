@@ -1,3 +1,16 @@
+" For :PlugInstall / :PlugUpdate
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+set nocompatible
+
+" Setup Plug
+filetype off
+call plug#begin('~/.vim/plugged')
+Plug 'cho45/vim-fuzzyfinder'
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+call plug#end()
+
+
 syntax on
 filetype plugin on
 filetype indent on
