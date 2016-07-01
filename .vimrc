@@ -14,6 +14,7 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'leafgarland/typescript-vim'
 Plug 'Quramy/tsuquyomi'
 Plug 'fatih/vim-go'
+Plug 'kana/vim-metarw'
 call plug#end()
 
 
