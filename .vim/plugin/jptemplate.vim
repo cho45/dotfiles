@@ -350,6 +350,21 @@ function! s:ProcessTemplate (info, template)
 
 endfunction
 
+function! ReplaceCurrentLine()
+	let info = s:GetTemplateInfo()
+	let n = line('.')
+	let end = col('.') - 1 - len(info['name']) - 1
+	normal ^
+	let start = col('.') - 1
+	let line = getline('.')
+	if start > 0
+		call setline(n, line[0 : start - 1])
+	else
+		call setline(n, '')
+	endif
+	return line[start : end]
+endfunction
+
 
 function! InsertTemplate ()
 
