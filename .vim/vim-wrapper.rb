@@ -33,7 +33,11 @@ struct block0
 
 require "pathname"
 ENV["PERL5LIB"] = (ENV["PERL5LIB"] || "").split(/:/).unshift('t/lib').join(':')
-VIM = "#{ENV['HOME']}/app/vim/bin/vim"
+VIM = [
+	"#{ENV['HOME']}/app/vim/bin/vim",
+	"/usr/local/vim7/bin/vim",
+	"/usr/bin/vim"
+].find {|i| File.exist?(i) }
 
 begin
 	swap = Pathname.new("~/.vimrc").expand_path.read[/set directory=(.+)/, 1]
