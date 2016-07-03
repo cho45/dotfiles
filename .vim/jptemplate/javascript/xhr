@@ -1,5 +1,5 @@
 var req = new XMLHttpRequest();
-req.open("GET", '', false);
+req.open("GET", '');
 req.onload = function (e) {
 };
 req.onerror = function (e) {
