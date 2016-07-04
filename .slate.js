@@ -18,6 +18,10 @@ slate.bind("esc:alt", slate.operation("grid", {
 			"width" : 3,
 			"height" : 2
 		},
+		"1366x768" : {
+			"width" : 3,
+			"height" : 2
+		},
 		"2560x1440" : {
 			"width" : 3,
 			"height" : 3
