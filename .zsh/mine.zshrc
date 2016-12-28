@@ -153,6 +153,13 @@ function git () {
 		fi
 		echo
 		echo "x| _ |x < .svn があったので svn コマンドにしました!"
+	elif [[ -e '.hg' ]]; then
+		if [[ $1 == "" ]]; then
+			command hg status
+		else
+			command hg $@
+		fi
+		echo "x| _ |x < .hg があったので hg コマンドにしました!"
 	else
 		if [[ $1 == "" ]]; then
 			if command git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
