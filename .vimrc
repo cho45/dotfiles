@@ -18,7 +18,7 @@
 		Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
 
 		Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-		Plug 'mattn/jscomplete-vim', { 'for': 'javascript' }
+"		Plug 'mattn/jscomplete-vim', { 'for': 'javascript' }
 		Plug 'myhere/vim-nodejs-complete', { 'for': 'javascript' }
 
 		Plug 'fatih/vim-go', { 'for': 'go' }
@@ -397,7 +397,7 @@
 
 " --------------------------------------------------------------------------------
 " javascript {
-	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
+"	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 " }
 
 

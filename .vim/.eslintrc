@@ -1,7 +1,11 @@
 {
+	"parserOptions": {
+		"ecmaVersion": 2017
+	},
 	"ecmaFeatures": {
 		"blockBindings": true,
-		"arrowFunctions": true
+		"arrowFunctions": true,
+		"impliedStrict": true
 	},
 	"rules": {
 		"no-unused-vars": [0, {"vars": "all", "args": "none"}],
@@ -16,7 +20,6 @@
 		"semi": [ 0, "always" ]
 	},
 	"env": {
-		"es6": true,
 		"node": true,
 		"browser": true
 	},
