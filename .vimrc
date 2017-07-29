@@ -1,8 +1,6 @@
 " For :PlugInstall / :PlugUpdate
 " curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-set nocompatible
-
 " --------------------------------------------------------------------------------
 " Setup Plug {
 	filetype off
@@ -20,7 +18,7 @@ set nocompatible
 		Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
 
 		Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-		Plug 'mattn/jscomplete-vim', { 'for': 'javascript' }
+"		Plug 'mattn/jscomplete-vim', { 'for': 'javascript' }
 		Plug 'myhere/vim-nodejs-complete', { 'for': 'javascript' }
 
 		Plug 'fatih/vim-go', { 'for': 'go' }
@@ -399,7 +397,7 @@ set nocompatible
 
 " --------------------------------------------------------------------------------
 " javascript {
-	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
+"	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
 " }
 
 

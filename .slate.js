@@ -18,6 +18,10 @@ slate.bind("esc:alt", slate.operation("grid", {
 			"width" : 3,
 			"height" : 2
 		},
+		"1366x768" : {
+			"width" : 3,
+			"height" : 2
+		},
 		"2560x1440" : {
 			"width" : 3,
 			"height" : 3
@@ -58,7 +62,7 @@ function detectScreensAndRelocationWindows () {
 	console.log('detectScreensAndRelocationWindows');
 	var layout = getLayoutSignature();
 	console.log(layout);
-	if (layout === '1920x1200 2560x1440') {
+	if (layout === '1920x1200 2560x1440' || layout === '1680x1050 2560x1440') {
 		slate.eachApp(function (app) {
 			var appName = app.name();
 			console.log('appName', appName);
