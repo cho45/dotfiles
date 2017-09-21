@@ -22,6 +22,7 @@
 		Plug 'myhere/vim-nodejs-complete', { 'for': 'javascript' }
 
 		Plug 'fatih/vim-go', { 'for': 'go' }
+		Plug 'apple/swift', { 'for': 'swift', 'rtp': 'utils/vim' }
 	call plug#end()
 " }
 
@@ -422,6 +423,13 @@
 " --------------------------------------------------------------------------------
 " io {
 	autocmd BufNewFile,BufRead *.io set filetype=io
+" }
+"
+
+" --------------------------------------------------------------------------------
+" swift {
+	autocmd BufNewFile,BufRead *.swift set filetype=swift
+	autocmd FileType swift setlocal noexpandtab ts=4 sw=4
 " }
 "
 
