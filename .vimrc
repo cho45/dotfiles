@@ -21,8 +21,10 @@
 "		Plug 'mattn/jscomplete-vim', { 'for': 'javascript' }
 		Plug 'myhere/vim-nodejs-complete', { 'for': 'javascript' }
 
-		Plug 'fatih/vim-go', { 'for': 'go' }
+		Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
 		Plug 'apple/swift', { 'for': 'swift', 'rtp': 'utils/vim' }
+
+		Plug 'rust-lang/rust.vim'
 	call plug#end()
 " }
 
@@ -49,6 +51,7 @@
 	set completeopt=menu,preview,longest,menuone
 	set complete=.,w,b,u,k
 	set nobackup
+	set backupskip=/tmp/*,/private/tmp/*
 	set autoread
 	set scrolloff=10000000
 	set number
@@ -387,6 +390,8 @@
 	autocmd BufNewFile,BufRead *.tt set filetype=html
 	autocmd BufNewFile,BufRead *.tx set filetype=html
 	autocmd BufNewFile,BufRead *.html set filetype=html
+	autocmd BufNewFile,BufRead *.ftl set filetype=html
+	autocmd BufNewFile,BufRead *.ftl setlocal expandtab ts=2 sw=2 enc=utf-8 fenc=utf-8
 " }
 
 
@@ -446,5 +451,12 @@
 	let g:changelog_timeformat = "%Y-%m-%d"
 	let g:changelog_username   = "SATOH Hiroh <cho45@lowreal.net>"
 	let g:changelog_date_end_entry_search = '^\s*$'
+" }
+
+" --------------------------------------------------------------------------------
+" nginx {
+	autocmd BufNewFile,BufRead *.nginx.conf set filetype=nginx
+	autocmd BufNewFile,BufRead *nginx.conf.j2 set filetype=nginx
+	autocmd BufNewFile,BufRead deploy/nginx/* set filetype=nginx
 " }
 
