@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+size = ARGV.shift
+mountpoint = ARGV.shift
+
+if !size || !mountpoint
+	$stderr.puts "#{$0} size mountpoint"
+	exit 1
+end
+
+UNITS = {
+	'K' => 1024,
+	'M' => 1024 * 1024,
+	'G' => 1024 * 1024 * 1024,
+}
+SECTOR_SIZE = 512
+
+num, unit = *size.match(/^(\d+)([KMG])?$/).captures
+UNITS.has_key?(unit) or raise "Unknown unit #{unit}"
+
+bytes = num.to_i * UNITS[unit]
+
+
+sectors = (bytes / SECTOR_SIZE).ceil
+
+$stderr.puts "creating ram with #{sectors} sectors"
+device = `hdiutil attach -nomount ram://#{sectors}`.strip
+$stderr.puts "#{device} created"
+$stderr.puts "newfs_hfs..."
+system('newfs_hfs', device)
+$stderr.puts "mounting..."
+system('mount', '-t', 'hfs', device, mountpoint)
+
