@@ -22,7 +22,7 @@
 		" tsuquyomi dependency
 		"Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 
-		"Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+		Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 		"Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 
 		Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
@@ -39,6 +39,7 @@
 
 let g:lsp_log_verbose = 1
 let g:lsp_log_file = expand('/tmp/vim-lsp.log')
+let g:lsp_diagnostics_echo_cursor = 1
 let g:asyncomplete_log_file = expand('/tmp/asyncomplete.log')
 
 call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
