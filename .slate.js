@@ -26,6 +26,14 @@ slate.bind("esc:alt", slate.operation("grid", {
 			"width" : 3,
 			"height" : 3
 		},
+		"1280x800" : {
+			"width" : 3,
+			"height" : 3
+		},
+		"3840x2160" : {
+			"width" : 3,
+			"height" : 3
+		},
 		"1680x1050" : {
 			"width" : 3,
 			"height" : 3
@@ -137,6 +145,63 @@ function detectScreensAndRelocationWindows () {
 						"y" : "screenOriginY+100",
 						"width" : "screenSizeX-200*2",
 						"height" : "screenSizeY-100*2"
+					}));
+				});
+			}
+		});
+	} else
+	if (layout === '1680x1050') {
+		// d
+	} else
+	if (layout === '2560x1440 1280x800 3840x2160') {
+		// do
+		slate.eachApp(function (app) {
+			var appName = app.name();
+			console.log('appName', appName);
+
+			if (appName === 'Radiant Player' ||
+				appName === 'iTunes') {
+				app.eachWindow(function (win) {
+					win.doOperation(slate.operation("move", {
+						"screen": "2",
+						"x" : "screenOriginX+screenSizeX-1280",
+						"y" : "screenOriginY",
+						"width" : "1280",
+						"height" : "screenSizeY"
+					}));
+				});
+			} else
+			if (appName === 'プレビュー') {
+				app.eachWindow(function (win) {
+					win.doOperation(slate.operation("move", {
+						"screen": "2",
+						"x" : "screenOriginX",
+						"y" : "screenOriginY",
+						"width" : "screenSizeX",
+						"height" : "screenSizeY"
+					}));
+				});
+			} else
+			if (appName === 'Chemr' ||
+				appName === 'メール' ) {
+				app.eachWindow(function (win) {
+					win.doOperation(slate.operation("move", {
+						"screen": "0",
+						"x" : "screenOriginX+200",
+						"y" : "screenOriginY+100",
+						"width" : "screenSizeX-200*2",
+						"height" : "screenSizeY-100*2"
+					}));
+				});
+			} else
+			if (appName === 'Slack') {
+				app.eachWindow(function (win) {
+					win.doOperation(slate.operation("move", {
+						"screen": "1",
+						"x" : "screenOriginX",
+						"y" : "screenOriginY",
+						"width" : "screenSizeX",
+						"height" : "screenSizeY"
 					}));
 				});
 			}

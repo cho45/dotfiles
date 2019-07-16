@@ -255,7 +255,7 @@ function cdd() {
 	if [[ $1 == "" ]]; then
 		local selected_dir=$(lsof -c zsh -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])' | uniq | peco)
 		if [ -n "$selected_dir" ]; then
-			cd ${selected_dir}
+			cd "${selected_dir}"
 		fi
 	else
 		local pid
@@ -269,7 +269,7 @@ function cdd() {
 			echo "window not found"
 		else
 			local dir=$(lsof -p $pid -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])')
-			cd $dir
+			cd "$dir"
 		fi
 	fi
 }

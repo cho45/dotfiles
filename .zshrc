@@ -22,7 +22,10 @@ path=(
 	$HOME/app/depot_tools
 	$HOME/app/node/bin
 	$HOME/sdk/*/bin(N)
+	$HOME/.cargo/bin
+	$HOME/.platformio/packages/toolchain-gccarmnoneeabi/bin
 
+	/usr/local/opt/llvm/bin
 	/usr/local/opt/go/libexec/bin
 
 	/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin

@@ -9,21 +9,56 @@
 		Plug 'cho45/vim-fuzzyfinder'
 		Plug 'kana/vim-metarw'
 
+		Plug 'prabirshrestha/asyncomplete.vim'
+		Plug 'prabirshrestha/async.vim'
+		Plug 'prabirshrestha/vim-lsp'
+		Plug 'prabirshrestha/asyncomplete-lsp.vim'
+		Plug 'prabirshrestha/asyncomplete-buffer.vim'
+		Plug 'prabirshrestha/asyncomplete-file.vim'
+		Plug 'ryanolsonx/vim-lsp-javascript'
+		Plug 'ryanolsonx/vim-lsp-typescript'
+		Plug 'ryanolsonx/vim-lsp-python' " pip install python-language-server
+
 		" tsuquyomi dependency
-		Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+		"Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 
 		Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-		Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
+		"Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 
 		Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
 
 		Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-"		Plug 'mattn/jscomplete-vim', { 'for': 'javascript' }
 		Plug 'myhere/vim-nodejs-complete', { 'for': 'javascript' }
 
-		Plug 'fatih/vim-go', { 'for': 'go' }
+		"Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
+		Plug 'apple/swift', { 'for': 'swift', 'rtp': 'utils/vim' }
+
+		Plug 'rust-lang/rust.vim'
 	call plug#end()
 " }
+
+let g:lsp_log_verbose = 1
+let g:lsp_log_file = expand('/tmp/vim-lsp.log')
+let g:lsp_diagnostics_echo_cursor = 1
+let g:asyncomplete_log_file = expand('/tmp/asyncomplete.log')
+
+call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+			\ 'name': 'buffer',
+			\ 'whitelist': ['*'],
+			\ 'blacklist': ['go'],
+			\ 'completor': function('asyncomplete#sources#buffer#completor'),
+			\ 'config': {
+			\    'max_buffer_size': 5000000,
+			\  },
+			\ }))
+
+
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+			\ 'name': 'file',
+			\ 'whitelist': ['*'],
+			\ 'priority': 10,
+			\ 'completor': function('asyncomplete#sources#file#completor')
+			\ }))
 
 
 " --------------------------------------------------------------------------------
@@ -48,6 +83,7 @@
 	set completeopt=menu,preview,longest,menuone
 	set complete=.,w,b,u,k
 	set nobackup
+	set backupskip=/tmp/*,/private/tmp/*
 	set autoread
 	set scrolloff=10000000
 	set number
@@ -256,65 +292,6 @@
 " }
 
 
-" --------------------------------------------------------------------------------
-" AutoComplePop {
-	let g:acp_completeOption = '.,w,b,k'
-	let g:acp_behavior = {
-		  \   'javascript' : [
-		  \     {
-		  \       'command' : "\<C-x>\<C-o>",
-		  \       'meets'   : 'acp#meetsForKeyword',
-		  \       'repeat'  : 0,
-		  \     },
-		  \     {
-		  \       'command' : "\<C-n>",
-		  \       'meets'   : 'acp#meetsForKeyword',
-		  \       'repeat'  : 0,
-		  \     },
-		  \   ],
-		  \   'go' : [
-		  \     {
-		  \       'command' : "\<C-x>\<C-o>",
-		  \       'meets'   : 'acp#meetsForKeyword',
-		  \       'repeat'  : 0,
-		  \     },
-		  \     {
-		  \       'command' : "\<C-n>",
-		  \       'meets'   : 'acp#meetsForKeyword',
-		  \       'repeat'  : 0,
-		  \     },
-		  \   ],
-		  \   'html' : [
-		  \     {
-		  \       'command' : "\<C-n>",
-		  \       'meets'   : 'acp#meetsForKeyword',
-		  \       'repeat'  : 0,
-		  \     },
-		  \   ],
-		  \   'xml' : [
-		  \     {
-		  \       'command' : "\<C-n>",
-		  \       'meets'   : 'acp#meetsForKeyword',
-		  \       'repeat'  : 0,
-		  \     },
-		  \   ],
-		  \   'xhtml' : [
-		  \     {
-		  \       'command' : "\<C-n>",
-		  \       'meets'   : 'acp#meetsForKeyword',
-		  \       'repeat'  : 0,
-		  \     },
-		  \   ],
-		  \   'typescript' : [
-		  \     {
-		  \       'command' : "\<C-x>\<C-o>",
-		  \       'meets'   : 'acp#meetsForKeyword',
-		  \       'repeat'  : 0,
-		  \     },
-		  \   ],
-		  \ }
-" }
-
 
 " --------------------------------------------------------------------------------
 " Generic autocmd {
@@ -347,10 +324,14 @@
 
 " --------------------------------------------------------------------------------
 " go-lang {
-	let $GOROOT = substitute(system("go env GOROOT"), "\n", "", "g")
-	if $GOROOT != ''
-		set runtimepath+=$GOROOT/misc/vim
-		exe "set runtimepath+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
+	" go get -u golang.org/x/tools/cmd/gopls
+	if executable('gopls')
+		au User lsp_setup call lsp#register_server({
+					\ 'name': 'gopls',
+					\ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+					\ 'whitelist': ['go'],
+					\ })
+		autocmd BufWritePre *.go LspDocumentFormatSync
 	endif
 
 	autocmd BufNewFile,BufRead *.go set filetype=go
@@ -386,12 +367,21 @@
 	autocmd BufNewFile,BufRead *.tt set filetype=html
 	autocmd BufNewFile,BufRead *.tx set filetype=html
 	autocmd BufNewFile,BufRead *.html set filetype=html
+	autocmd BufNewFile,BufRead *.ftl set filetype=html
+	autocmd BufNewFile,BufRead *.ftl setlocal expandtab ts=2 sw=2 enc=utf-8 fenc=utf-8
 " }
 
 
 " --------------------------------------------------------------------------------
 " css {
 	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+	if executable('css-languageserver') " npm install -g vscode-css-languageserver-bin
+		au User lsp_setup call lsp#register_server({
+			\ 'name': 'css-languageserver',
+			\ 'cmd': {server_info->[&shell, &shellcmdflag, 'css-languageserver --stdio']},
+			\ 'whitelist': ['css', 'less', 'sass'],
+			\ })
+	endif
 " }
 
 
@@ -404,6 +394,15 @@
 " --------------------------------------------------------------------------------
 " ruby {
 	autocmd FileType ruby setlocal sw=4 ts=4 sts=4
+	if executable('solargraph')
+		" gem install solargraph
+		au User lsp_setup call lsp#register_server({
+					\ 'name': 'solargraph',
+					\ 'cmd': {server_info->[&shell, &shellcmdflag, 'solargraph stdio']},
+					\ 'initialization_options': {"diagnostics": "true"},
+					\ 'whitelist': ['ruby'],
+					\ })
+	endif
 " }
 
 
@@ -425,6 +424,13 @@
 " }
 "
 
+" --------------------------------------------------------------------------------
+" swift {
+	autocmd BufNewFile,BufRead *.swift set filetype=swift
+	autocmd FileType swift setlocal noexpandtab ts=4 sw=4
+" }
+"
+
 
 " --------------------------------------------------------------------------------
 " git {
@@ -440,3 +446,38 @@
 	let g:changelog_date_end_entry_search = '^\s*$'
 " }
 
+" --------------------------------------------------------------------------------
+" nginx {
+	autocmd BufNewFile,BufRead *.nginx.conf set filetype=nginx
+	autocmd BufNewFile,BufRead *nginx.conf.j2 set filetype=nginx
+	autocmd BufNewFile,BufRead deploy/nginx/* set filetype=nginx
+" }
+
+" --------------------------------------------------------------------------------
+" rust {
+	" rustup update
+	" rustup component add rls rust-analysis rust-src
+	if executable('rls')
+		au User lsp_setup call lsp#register_server({
+			\ 'name': 'rls',
+			\ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
+			\ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+			\ 'whitelist': ['rust'],
+			\ })
+	endif
+" }
+
+
+" --------------------------------------------------------------------------------
+" c/c++ {
+	" " https://github.com/MaskRay/ccls/wiki
+	if executable('ccls')
+	   au User lsp_setup call lsp#register_server({
+		  \ 'name': 'ccls',
+		  \ 'cmd': {server_info->['ccls']},
+		  \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+		  \ 'initialization_options': {},
+		  \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+		  \ })
+	endif
+" }
