@@ -21,6 +21,7 @@ path=(
 	$HOME/app/argyll/bin
 	$HOME/app/depot_tools
 	$HOME/app/node/bin
+	$HOME/anaconda3/bin
 	$HOME/sdk/*/bin(N)
 	$HOME/.cargo/bin
 	$HOME/.platformio/packages/toolchain-gccarmnoneeabi/bin
@@ -329,6 +330,18 @@ if [[ -d "$HOME/.rbenv" ]]; then
 	eval "$(rbenv init -)"
 fi
 
-export NVM_DIR="/Users/cho45/.nvm"
-load-extra "$NVM_DIR/nvm.sh"
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$("$HOME/anaconda3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="$HOME/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
 
