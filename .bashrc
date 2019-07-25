@@ -14,4 +14,3 @@ export PERL5LIB=$HOME/local/lib/perl5:$HOME/local/lib/perl5/site_perl
 
 alias lm='ls -altr'
 alias wget='wget --no-check-certificate'
-
