@@ -77,6 +77,7 @@ link ".irssi/scripts", "~/.irssi/scripts"
 link ".bashrc", "~/.bashrc"
 
 link ".screenrc", "~/.screenrc"
+link ".tmux.conf", "~/.tmux.conf"
 link ".tscreenrc", "~/.tscreenrc"
 link ".screen", "~/.screen"
 

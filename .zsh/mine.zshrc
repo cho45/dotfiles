@@ -141,7 +141,8 @@ update-git-status () {
 
 # 新しく screen window をつくり、カレントディレクトリを実行元のディレクトリに
 function n () {
-	screen -X eval "chdir $PWD" "screen" "chdir"
+	# screen -X eval "chdir $PWD" "screen" "chdir"
+	tmux new-window -c $PWD
 }
 
 function git () {
@@ -251,26 +252,39 @@ function peco-godoc() {
 }
 zle -N peco-godoc
 
-function cdd() {
-	if [[ $1 == "" ]]; then
-		local selected_dir=$(lsof -c zsh -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])' | uniq | peco)
-		if [ -n "$selected_dir" ]; then
-			cd "${selected_dir}"
-		fi
-	else
-		local pid
-		if [[ $(uname) == "Darwin" ]]; then
-			pid=$(command ps -E -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
-		else
-			pid=$(command ps e -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
-		fi
+# cdd for GNU screen
+#function cdd() {
+#	if [[ $1 == "" ]]; then
+#		local selected_dir=$(lsof -c zsh -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])' | uniq | peco)
+#		if [ -n "$selected_dir" ]; then
+#			cd "${selected_dir}"
+#		fi
+#	else
+#		local pid
+#		if [[ $(uname) == "Darwin" ]]; then
+#			pid=$(command ps -E -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
+#		else
+#			pid=$(command ps e -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
+#		fi
+#
+#		if [[ $pid == "" ]]; then
+#			echo "window not found"
+#		else
+#			local dir=$(lsof -p $pid -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])')
+#			cd "$dir"
+#		fi
+#	fi
+#}
 
-		if [[ $pid == "" ]]; then
-			echo "window not found"
-		else
-			local dir=$(lsof -p $pid -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])')
-			cd "$dir"
-		fi
+function cdd() {
+	typeset -A mapping
+	local window=$1
+	mapping=($(tmux list-panes -s -F '#{window_index} #{pane_current_path}'))
+	local dir=$mapping[$window]
+	if [[ $dir == "" ]]; then
+		echo "window not found"
+	else
+		cd "$dir"
 	fi
 }
 
