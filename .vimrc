@@ -37,6 +37,14 @@
 	call plug#end()
 " }
 
+
+let &t_tI .= "\eP\e[2 q\e\\"
+let &t_SI .= "\eP\e[6 q\e\\"
+let &t_EI .= "\eP\e[2 q\e\\"
+let &t_SR .= "\eP\e[4 q\e\\"
+let &t_te .= "\eP\e[0 q\e\\"
+
+
 let g:lsp_log_verbose = 1
 let g:lsp_log_file = expand('/tmp/vim-lsp.log')
 let g:lsp_diagnostics_echo_cursor = 1
@@ -123,6 +131,12 @@ au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#source
 " --------------------------------------------------------------------------------
 " Color Settings {
 	if &term =~ "xterm-256color"
+		colorscheme desert256mod
+	endif
+	if &term =~ "screen-256color"
+		colorscheme desert256mod
+	endif
+	if &term =~ "tmux-256color"
 		colorscheme desert256mod
 	endif
 
