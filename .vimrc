@@ -38,11 +38,19 @@
 " }
 
 
-let &t_tI .= "\eP\e[2 q\e\\"
-let &t_SI .= "\eP\e[6 q\e\\"
-let &t_EI .= "\eP\e[2 q\e\\"
-let &t_SR .= "\eP\e[4 q\e\\"
-let &t_te .= "\eP\e[0 q\e\\"
+if $TMUX != ""
+	let &t_tI .= "\ePtmux;\e\e[2 q\e\\"
+	let &t_SI .= "\ePtmux;\e\e[6 q\e\\"
+	let &t_EI .= "\ePtmux;\e\e[2 q\e\\"
+	let &t_SR .= "\ePtmux;\e\e[4 q\e\\"
+	let &t_te .= "\ePtmux;\e\e[0 q\e\\"
+else
+	let &t_tI .= "\e[2 q"
+	let &t_SI .= "\e[6 q"
+	let &t_EI .= "\e[2 q"
+	let &t_SR .= "\e[4 q"
+	let &t_te .= "\e[0 q"
+endif
 
 
 let g:lsp_log_verbose = 1
