@@ -14,3 +14,4 @@ GLOB (man zshexpn)
     *(/)   # dir
     *(^/)  # not dir
     *(.)   # plain file
+    *(om[1]) # mtime が新しい順に並べて最初のファイル
