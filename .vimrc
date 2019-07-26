@@ -17,7 +17,7 @@
 		Plug 'prabirshrestha/asyncomplete-file.vim'
 		Plug 'ryanolsonx/vim-lsp-javascript'
 		Plug 'ryanolsonx/vim-lsp-typescript'
-		Plug 'ryanolsonx/vim-lsp-python' " pip install python-language-server
+		" Plug 'ryanolsonx/vim-lsp-python' " pip install python-language-server
 
 		" tsuquyomi dependency
 		"Plug 'Shougo/vimproc.vim', { 'do': 'make' }
