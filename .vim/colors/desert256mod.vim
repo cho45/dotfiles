@@ -261,7 +261,7 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
     call <SID>X("NonText", "ffdead", "000000", "")
     call <SID>X("Question", "00ff7f", "", "")
     call <SID>X("Search", "f5deb3", "ffffff", "reverse")
-    call <SID>X("SpecialKey", "666666", "", "")
+    call <SID>X("SpecialKey", "888888", "", "")
     call <SID>X("StatusLine", "222222", "ffffff", "reverse")
     call <SID>X("StatusLineNC", "222222", "999999", "reverse")
     call <SID>X("Title", "53c3ba", "", "")
@@ -279,7 +279,7 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
     " syntax highlighting groups
     call <SID>X("Comment", "99cccc", "", "")
     call <SID>X("Constant", "cc9966", "", "")
-    call <SID>X("Identifier", "558888", "", "none")
+    call <SID>X("Identifier", "88cccc", "", "none")
     call <SID>X("Statement", "77c6c0", "", "bold")
     call <SID>X("PreProc", "cd5c5c", "", "")
     call <SID>X("Type", "bdb76b", "", "bold")
