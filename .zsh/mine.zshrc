@@ -279,8 +279,7 @@ zle -N peco-godoc
 function cdd() {
 	typeset -A mapping
 	local window=$1
-	mapping=($(tmux list-windows -F '#{window_index} #{pane_current_path}'))
-	local dir=$mapping[$window]
+	local dir=$(perl -e '$n = shift; print +{ map { split / /, $_, 2 } split /\n/, `tmux list-panes -s -F "#{window_index} #{pane_current_path}"` }->{$n}', $window);
 	if [[ $dir == "" ]]; then
 		echo "window not found"
 	else
