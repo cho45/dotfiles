@@ -266,9 +266,13 @@ alias lm='ls -altrh'
 alias ps='ps aux'
 alias zcat='gzip -dfc'
 
+
 alias ..='cd ..'
 
 alias wget='noglob wget --no-check-certificate'
+
+NUMCPUS=$(ruby -retc -e 'puts Etc.nprocessors')
+alias make="make -j$NUMCPUS"
 
 alias :q=exit
 
