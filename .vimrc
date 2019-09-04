@@ -34,6 +34,7 @@
 		Plug 'apple/swift', { 'for': 'swift', 'rtp': 'utils/vim' }
 
 		Plug 'rust-lang/rust.vim'
+		Plug 'posva/vim-vue'
 	call plug#end()
 " }
 
