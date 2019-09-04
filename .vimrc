@@ -308,6 +308,7 @@ au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#source
 	nmap br :FufMruFile<CR>
 	nmap bq :FufQuickfix<CR>
 	nmap bl :FufLine<CR>
+	autocmd FileType fuf let b:asyncomplete_enable=0
 	nnoremap <silent> <C-]> :FufTag! <C-r>=expand('<cword>')<CR><CR> 
 " }
 
