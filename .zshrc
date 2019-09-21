@@ -24,13 +24,13 @@ path=(
 	$HOME/anaconda3/bin
 	$HOME/sdk/*/bin(N)
 	$HOME/.cargo/bin
-	$HOME/.platformio/packages/toolchain-gccarmnoneeabi/bin
+#	$HOME/.platformio/packages/toolchain-gccarmnoneeabi/bin
 
 	/usr/local/opt/llvm/bin
 	/usr/local/opt/go/libexec/bin
+	/usr/local/opt/ruby/bin
 
 	/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin
-	/usr/local/ruby1.9/bin
 	/usr/local/scala/bin
 	/usr/local/screen/bin
     /usr/local/go/bin
