@@ -15,8 +15,6 @@
 		Plug 'prabirshrestha/asyncomplete-lsp.vim'
 		Plug 'prabirshrestha/asyncomplete-buffer.vim'
 		Plug 'prabirshrestha/asyncomplete-file.vim'
-		Plug 'ryanolsonx/vim-lsp-javascript'
-		Plug 'ryanolsonx/vim-lsp-typescript'
 		" Plug 'ryanolsonx/vim-lsp-python' " pip install python-language-server
 
 		" tsuquyomi dependency
@@ -409,7 +407,30 @@ au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#source
 
 " --------------------------------------------------------------------------------
 " javascript {
-"	autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
+
+if executable('typescript-language-server')
+	au User lsp_setup call lsp#register_server({
+				\ 'name': 'javascript support using typescript-language-server',
+				\ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+				\ 'whitelist': ['javascript', 'javascript.jsx'],
+				\ })
+endif
+
+" }
+"
+" --------------------------------------------------------------------------------
+" typescript {
+
+
+if executable('typescript-language-server')
+	au User lsp_setup call lsp#register_server({
+				\ 'name': 'typescript support using typescript-language-server',
+				\ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+				\ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+				\ 'whitelist': ['typescript', 'typescript.tsx'],
+				\ })
+endif
+
 " }
 
 
