@@ -52,6 +52,7 @@ else
 endif
 
 
+let g:lsp_text_edit_enabled = 0
 let g:lsp_log_verbose = 1
 let g:lsp_log_file = expand('/tmp/vim-lsp.log')
 let g:lsp_diagnostics_echo_cursor = 1

@@ -13,8 +13,7 @@ path=(
 	$HOME/bin
 	$HOME/project/commands/bin
 	$HOME/sdk/play
-	$HOME/sdk/android/tools
-	$HOME/sdk/android/platform-tools
+	$HOME/Library/Android/sdk/platform-tools
 	$HOME/sdk/apache-maven/bin
 	$HOME/.rbenv/bin
 	$HOME/app/vim/bin
