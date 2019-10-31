@@ -31,7 +31,7 @@
 		Plug 'myhere/vim-nodejs-complete', { 'for': 'javascript' }
 
 		"Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
-		Plug 'apple/swift', { 'for': 'swift', 'rtp': 'utils/vim' }
+		"Plug 'apple/swift', { 'for': 'swift', 'rtp': 'utils/vim' }
 
 		Plug 'rust-lang/rust.vim'
 		Plug 'posva/vim-vue'
