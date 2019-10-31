@@ -6,21 +6,34 @@
 
 		<title></title>
 
-		<script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
+		<link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css">
+		<link rel="stylesheet" href="https://unpkg.com/vue-material/dist/theme/default.css">
+		<script src="https://unpkg.com/vue"></script>
+		<script src="https://unpkg.com/vue-material"></script>
 
 		<link rev="made" href="mailto:cho45@lowreal.net"/>
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
 	</head>
 	<body>
-		<div class="container">
-			<div class="page-header">
-				<h1></h1>
-				<p class="lead"></p>
-			</div>
-
-			<div id="footer">
-				<address>@YEAR@ <a href="mailto:cho45@lowreal.net">cho45@lowreal.net</a></address>
-			</div>
+		<div id="app">
+			{{hello}}
 		</div>
+		<script>
+			Vue.use(VueMaterial.default)
+
+			new Vue({
+				el: '#app',
+				data: {
+					hello: 'world',
+				},
+
+				methods: {
+				},
+
+				mounted: function () {
+				},
+			})
+		</script>
 	</body>
 </html>
