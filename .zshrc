@@ -197,6 +197,20 @@ function magic-abbrev-expand () {
 	local MATCH
 	LBUFFER=${LBUFFER%%(#m)[-_a-zA-Z0-9^]#}
 	LBUFFER+=${abbreviations[$MATCH]:-$MATCH}
+
+	MATCH=""
+	# match quoted windows path
+	LBUFFER=${LBUFFER%%(#m)\"C:\\*\"}
+	if [[ "$MATCH" == "" ]]; then
+		echo NOTMATCHED >> /tmp/test
+		# match unquoted windows path
+		LBUFFER=${LBUFFER%%(#m)[^\"]C:\\[^ ]#}
+	fi
+	if [[ "$MATCH" != "" ]]; then
+		MATCH=${MATCH//C:\\/\/mnt\/c\/}
+		MATCH=${MATCH//\\/\/}
+		LBUFFER+=$MATCH
+	fi
 }
 
 # BK: name of this function must be builtin
@@ -242,7 +256,7 @@ zle -N magic-space # BK
 bindkey "\r"  magic-abbrev-expand-and-accept # Can't do M-x RET because of not builtin command name...
 bindkey "^J"  accept-line # no magic
 bindkey " "   magic-space # BK
-bindkey "."   magic-abbrev-expand-and-insert
+#bindkey "."   magic-abbrev-expand-and-insert
 bindkey "^I"  magic-abbrev-expand-and-normal-complete
 
 function expand-to-home-or-insert () {
