@@ -265,25 +265,40 @@ call s:AddBlockTag('<!--[', 6, '![endif]-->')
 " Return non-zero when "tagname" is an opening tag, not being a block tag, for
 " which there should be a closing tag.  Can be used by scripts that include
 " HTML indenting.
-func! HtmlIndent_IsOpenTag(tagname)
-  "{{{
-  if get(s:indent_tags, a:tagname) == 1
-    return 1
-  endif
-  return get(b:hi_tags, a:tagname) == 1
-endfunc "}}}
+"func! HtmlIndent_IsOpenTag(tagname)
+"  "{{{
+"  if get(s:indent_tags, a:tagname) == 1
+"    return 1
+"  endif
+"  return get(b:hi_tags, a:tagname) == 1
+"endfunc "}}}
 
 " Get the value for "tagname", taking care of buffer-local tags.
+" -1 = closing
+"  1 = opening
+"  0 = block tag (open or close)
+"  * = other tag
 func! s:get_tag(tagname)
   "{{{
   let i = get(s:indent_tags, a:tagname)
   if (i == 1 || i == -1) && get(b:hi_removed_tags, a:tagname) != 0
     return 0
   endif
-  if i == 0
-    let i = get(b:hi_tags, a:tagname)
+  if i != 0
+    return i
   endif
-  return i
+
+  let i = get(b:hi_tags, a:tagname)
+  if i != 0
+    return i
+  endif
+
+  if match(a:tagname, '^/') == -1
+    call s:AddITags(s:indent_tags, [ a:tagname ])
+    return 1
+  else
+    return -1
+  endif
 endfunc "}}}
 
 " Count the number of start and end tags in "text".
@@ -377,6 +392,9 @@ endfunc "}}}
 
 " Used by s:CheckTag().
 func! s:CheckCustomTag(ctag)
+  " ignore custom tag check
+  return 0
+
   "{{{
   " Returns 1 if ctag is the tag for a custom element, 0 otherwise.
   " a:ctag can be "tag" or "/tag" or "<!--" or "-->"
@@ -544,7 +562,7 @@ func! s:FreshState(lnum)
   let swendtag = match(text, '^\s*</') >= 0
 
   " If previous line ended in a closing tag, line up with the opening tag.
-  if !swendtag && text =~ '</\w\+\s*>\s*$'
+  if !swendtag && text =~ '</[\w\-]\+\s*>\s*$'
     call cursor(state.lnum, 99999)
     normal! F<
     let start_lnum = HtmlIndent_FindStartTag()
@@ -874,7 +892,7 @@ func! HtmlIndent_FindStartTag()
   " The cursor must be on or before a closing tag.
   " If found, positions the cursor at the match and returns the line number.
   " Otherwise returns 0.
-  let tagname = matchstr(getline('.')[col('.') - 1:], '</\zs\w\+\ze')
+  let tagname = matchstr(getline('.')[col('.') - 1:], '</\zs\(\w\|-\)\+\ze')
   let start_lnum = searchpair('<' . tagname . '\>', '', '</' . tagname . '\>', 'bW')
   if start_lnum > 0
     return start_lnum
