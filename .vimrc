@@ -33,6 +33,8 @@
 
 		Plug 'rust-lang/rust.vim'
 		Plug 'posva/vim-vue'
+
+		Plug 'github/copilot.vim', { 'tag': 'v1.10.2' }
 	call plug#end()
 " }
 
@@ -97,7 +99,7 @@ au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#source
 	set directory=~/swp
 
 	set wildmode=longest,list
-	set ambiwidth=double
+	set ambiwidth=single
 	set completeopt=menu,preview,longest,menuone
 	set complete=.,w,b,u,k
 	set nobackup
