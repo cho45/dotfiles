@@ -380,9 +380,12 @@ au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#source
 
 " --------------------------------------------------------------------------------
 " html {
-	let g:use_xhtml = 1
-	let g:html_use_css = 1
 	let g:html_number_lines = 0
+	let g:html_indent_script1 = "inc"
+	let g:html_indent_style1 = "inc"
+	let g:html_indent_attribute = 1
+	let g:html_indent_autotags = ""
+	let g:html_indent_inctags = "html,body,head,tbody"
 
 	autocmd BufNewFile,BufRead *.tt set filetype=html
 	autocmd BufNewFile,BufRead *.tx set filetype=html
