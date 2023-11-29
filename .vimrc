@@ -12,9 +12,9 @@
 		Plug 'prabirshrestha/asyncomplete.vim'
 		Plug 'prabirshrestha/async.vim'
 		Plug 'prabirshrestha/vim-lsp'
-		Plug 'prabirshrestha/asyncomplete-lsp.vim'
 		Plug 'prabirshrestha/asyncomplete-buffer.vim'
 		Plug 'prabirshrestha/asyncomplete-file.vim'
+		Plug 'prabirshrestha/asyncomplete-lsp.vim'
 		" Plug 'ryanolsonx/vim-lsp-python' " pip install python-language-server
 
 		" tsuquyomi dependency
@@ -29,10 +29,12 @@
 		Plug 'myhere/vim-nodejs-complete', { 'for': 'javascript' }
 
 		"Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
-		Plug 'apple/swift', { 'for': 'swift', 'rtp': 'utils/vim' }
+		"Plug 'apple/swift', { 'for': 'swift', 'rtp': 'utils/vim' }
 
 		Plug 'rust-lang/rust.vim'
 		Plug 'posva/vim-vue'
+
+		Plug 'github/copilot.vim', { 'tag': 'v1.10.2' }
 	call plug#end()
 " }
 
@@ -50,9 +52,14 @@ else
 endif
 
 
+let g:lsp_text_edit_enabled = 0
 let g:lsp_log_verbose = 1
 let g:lsp_log_file = expand('/tmp/vim-lsp.log')
 let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_signs_enabled = 1
+let g:lsp_insert_text_enabled = 0
+let g:lsp_text_edit_enabled = 0
+let g:asyncomplete_completion_delay = 100
 let g:asyncomplete_log_file = expand('/tmp/asyncomplete.log')
 
 call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
@@ -92,7 +99,7 @@ au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#source
 	set directory=~/swp
 
 	set wildmode=longest,list
-	set ambiwidth=double
+	set ambiwidth=single
 	set completeopt=menu,preview,longest,menuone
 	set complete=.,w,b,u,k
 	set nobackup
@@ -522,8 +529,21 @@ endif
 		  \ 'name': 'ccls',
 		  \ 'cmd': {server_info->['ccls']},
 		  \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-		  \ 'initialization_options': {},
+		  \ 'initialization_options': #{
+		  \    cache: #{directory : '/tmp/ccls_cache'},
+		  \    completion: #{detailedLabel: v:false}
+		  \ },
 		  \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
 		  \ })
 	endif
+
+"	if executable('cquery')
+"		au User lsp_setup call lsp#register_server({
+"			\ 'name': 'cquery',
+"			\ 'cmd': {server_info->['cquery']},
+"			\ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+"			\ 'initialization_options': { 'cacheDirectory': '/tmp/cquery_cache' },
+"			\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+"			\ })
+"	endif
 " }

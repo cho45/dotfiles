@@ -4,6 +4,7 @@
 [user]
 	name = cho45
 	email = cho45@lowreal.net
+	signingkey = B2EC907E55F8C3FC
 
 [alias]
 	st      = status
