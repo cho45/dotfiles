@@ -148,9 +148,9 @@ function n () {
 function git () {
 	if [[ -e '.svn' ]]; then
 		if [[ $1 == "log" ]]; then
-			command svn $@ | $PAGER
+			command svn "$@" | $PAGER
 		else
-			command svn $@
+			command svn "$@"
 		fi
 		echo
 		echo "x| _ |x < .svn があったので svn コマンドにしました!"
@@ -158,7 +158,7 @@ function git () {
 		if [[ $1 == "" ]]; then
 			command hg status
 		else
-			command hg $@
+			command hg "$@"
 		fi
 		echo "x| _ |x < .hg があったので hg コマンドにしました!"
 	else
@@ -174,16 +174,16 @@ function git () {
 			fi
 		elif [[ $1 == "log" ]]; then
 			# 常に diff を表示してほしい
-			command git log --patch-with-stat ${@[2, -1]}
+			command git log --patch-with-stat "${@[2, -1]}"
 		elif [[ $1 == "pull" ]]; then
 			if [[ ( -x '.git/pull-chain' ) ]]; then
-				command git $@
+				command git "$@"
 				asyncrun ./.git/pull-chain
 			else
-				command git $@
+				command git "$@"
 			fi
 		else
-			command git $@
+			command git "$@"
 		fi
 	fi
 }
