@@ -15,7 +15,7 @@ PROMPT_CMD="%{[32m%} | q ド _ リ|$ <%{[m%}%{[m%} "
 # precmd で設定される
 PROMPT_CWD_ADD=""
 
-# for screen
+# for tmux
 preexec () {
 	# osascript -e 'tell application "System Events" to key code 103'
 
@@ -45,7 +45,9 @@ preexec () {
 			fi
 			;&
 		*)
-			echo -n "k$cmd[1]:t\\"
+			if [[ -n $TMUX ]]; then
+			printf "\033k%s\033\\\\" "${cmd[1]:t}"
+		fi
 			prev=$cmd[1]
 			return
 			;;
@@ -56,14 +58,18 @@ preexec () {
 
 	$cmd >>(read num rest
 		cmd=(${(z)${(e):-\$jt$num}})
-		echo -n "k$cmd[1]:t\\") 2>/dev/null
+		if [[ -n $TMUX ]]; then
+			printf "\033k%s\033\\\\" "${cmd[1]:t}"
+		fi) 2>/dev/null
 
 	prev=$cmd[1]
 }
 
 precmd () {
-	# Set title of screen window
-	echo -n "k:$prev\\"
+	# Set title of tmux window
+	if [[ -n $TMUX ]]; then
+		printf "\033k:%s\033\\\\" "$prev"
+	fi
 	PROMPT_CMD_ADD=""
 	PROMPT_CWD_ADD=""
 
@@ -78,7 +84,9 @@ precmd () {
 		PROMPT_CMD_ADD="$PROMPT_CMD_ADD [35m%}[${proxy:-[31mDisconnected[35m}]%{[m%}=$cmd[1]"
 
 		# どこの window が socks 経由になっているかわかったほうがいいので
-		echo -n "k:=:$prev\\"
+		if [[ -n $TMUX ]]; then
+			printf "\033k:=:%s\033\\\\" "$prev"
+		fi
 	fi
 
 	if [[ ${PERL5OPT:#lib::core::only} != "" ]]; then
@@ -139,10 +147,9 @@ update-git-status () {
 	fi
 }
 
-# 新しく screen window をつくり、カレントディレクトリを実行元のディレクトリに
+# 新しく tmux window を作成し、カレントディレクトリで開く
 function n () {
-	# screen -X eval "chdir $PWD" "screen" "chdir"
-	tmux new-window -c $PWD
+	tmux new-window -c "$PWD"
 }
 
 function git () {
@@ -252,29 +259,6 @@ function peco-godoc() {
 }
 zle -N peco-godoc
 
-# cdd for GNU screen
-#function cdd() {
-#	if [[ $1 == "" ]]; then
-#		local selected_dir=$(lsof -c zsh -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])' | uniq | peco)
-#		if [ -n "$selected_dir" ]; then
-#			cd "${selected_dir}"
-#		fi
-#	else
-#		local pid
-#		if [[ $(uname) == "Darwin" ]]; then
-#			pid=$(command ps -E -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
-#		else
-#			pid=$(command ps e -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
-#		fi
-#
-#		if [[ $pid == "" ]]; then
-#			echo "window not found"
-#		else
-#			local dir=$(lsof -p $pid -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])')
-#			cd "$dir"
-#		fi
-#	fi
-#}
 
 function cdd() {
 	typeset -A mapping
@@ -287,10 +271,6 @@ function cdd() {
 	fi
 }
 
-function pid2screen() {
-	local
-	command ps -E -o 'command' -p 42629 | perl -anal -e '/STY=$ENV{STY}/ and /WINDOW=([0-9]+)/ and print $1'
-}
 
 
 bindkey '^x^x' peco-src
