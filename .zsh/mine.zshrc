@@ -10,8 +10,8 @@ PROMPT_EXIT="%(?..exit %?
 )
 "
 RPROMPT=""
-PROMPT_CWD="%{[32m%}[%n@%m] %{[33m%}%~%{[m%}"
-PROMPT_CMD="%{[32m%} | q ド _ リ|$ <%{[m%}%{[m%} "
+PROMPT_CWD="%F{green}[%n@%m] %F{yellow}%~%f"
+PROMPT_CMD="%F{green} | q ド _ リ|$ <%f "
 # precmd で設定される
 PROMPT_CWD_ADD=""
 
@@ -24,7 +24,7 @@ preexec () {
 	emulate -L zsh
 	local -a cmd; cmd=(${(z)2})
 
-	if [[ $SSH_AGENT_PID != "" ]]; then
+	if [[ -n $SSH_AGENT_PID ]]; then
 		cmd[1]="@$cmd[1]"
 	fi
 
@@ -81,7 +81,7 @@ precmd () {
 		if command ps -ocommand= | grep -v grep | grep "ssh.*10081" > /dev/null; then
 			local proxy=Connected
 		fi
-		PROMPT_CMD_ADD="$PROMPT_CMD_ADD [35m%}[${proxy:-[31mDisconnected[35m}]%{[m%}=$cmd[1]"
+		PROMPT_CMD_ADD="$PROMPT_CMD_ADD %F{magenta}[${proxy:-%F{red}Disconnected%F{magenta}}]%f=$cmd[1]"
 
 		# どこの window が socks 経由になっているかわかったほうがいいので
 		if [[ -n $TMUX ]]; then
@@ -90,7 +90,7 @@ precmd () {
 	fi
 
 	if [[ ${PERL5OPT:#lib::core::only} != "" ]]; then
-		PROMPT_CWD_ADD="$PROMPT_CWD_ADD [36m%}*carton*%{[m%}"
+		PROMPT_CWD_ADD="$PROMPT_CWD_ADD %F{cyan}*carton*%f"
 	fi
 
 	# update prompt
@@ -104,20 +104,21 @@ chpwd () {
 # ~ (master) のように git レポジトリ以下では git のブランチを表示する
 update-git-status () {
 	local gitdir="$(command git rev-parse --git-dir 2>/dev/null)"
-	if [[ $gitdir != "" ]]; then
+	if [[ -n $gitdir ]]; then
 		local ret=''
 		if   [[ -d "$gitdir/rebase-apply" ]]; then
 			local next=$(< $gitdir/rebase-apply/next)
 			local last=$(< $gitdir/rebase-apply/last)
 			if [[ -n $next && -n $last ]]; then
-				local curr=$[ $next - 1]
+				local curr
+			(( curr = next - 1 ))
 			fi
 			ret="rebase[$curr/$last]"
 		elif [[ -d "$gitdir/rebase-merge" ]]; then
 			if [[ -f "$gitdir/rebase-merge/interactive" ]]; then
 				local left=$(grep '^[pes]' $git_dir/rebase-merge/git-rebase-todo | wc -l)
 				if [[ -n $left ]]; then
-					left=$[ $left + 1 ]
+					(( left += 1 ))
 				fi
 				ret="rebase[i, $left left]"
 			else
@@ -134,7 +135,7 @@ update-git-status () {
 
 			ret="bisect[$start, $bisect_nr left]"
 		else
-			ret=$(command git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
+			ret=$(command git symbolic-ref --short HEAD 2>/dev/null)
 			if [[ $ret == "(nobranch)" ]]; then
 				ret=$(command git name-rev --name-only HEAD)
 				ret="($ret)"
@@ -142,7 +143,7 @@ update-git-status () {
 		fi
 
 		if [[ -n $ret ]]; then
-			PROMPT_CWD_ADD="$PROMPT_CWD_ADD [32m%}($ret)%{[m%}"
+			PROMPT_CWD_ADD="$PROMPT_CWD_ADD %F{green}($ret)%f"
 		fi
 	fi
 }
@@ -218,7 +219,7 @@ function peco-git-recent-branches () {
 		perl -pne 's{^refs/heads/}{}' | \
 		peco --query "$LBUFFER")
 	if [ -n "$selected_branch" ]; then
-		BUFFER="git checkout ${selected_branch}"
+		BUFFER="git checkout \"${selected_branch}\""
 		zle accept-line
 	fi
 	zle clear-screen
@@ -230,7 +231,7 @@ function peco-git-recent-all-branches () {
 		perl -pne 's{^refs/(heads|remotes)/}{}' | \
 		peco --query "$LBUFFER")
 	if [ -n "$selected_branch" ]; then
-		BUFFER="git checkout -t ${selected_branch}"
+		BUFFER="git checkout -t \"${selected_branch}\""
 		zle accept-line
 	fi
 	zle clear-screen
@@ -241,7 +242,7 @@ zle -N peco-git-recent-all-branches
 function peco-src () {
 	local selected_dir=$(ghq list --full-path | peco --query "$LBUFFER")
 	if [ -n "$selected_dir" ]; then
-		BUFFER="cd ${selected_dir}"
+		BUFFER="cd \"${selected_dir}\""
 		zle accept-line
 	fi
 	zle clear-screen
@@ -252,7 +253,7 @@ zle -N peco-src
 function peco-godoc() {
 	local selected_dir=$(ghq list --full-path | peco --query "$LBUFFER")
 	if [ -n "$selected_dir" ]; then
-		BUFFER="godoc ${selected_dir} | less"
+		BUFFER="godoc \"${selected_dir}\" | less"
 		zle accept-line
 	fi
 	zle clear-screen
@@ -264,7 +265,7 @@ function cdd() {
 	typeset -A mapping
 	local window=$1
 	local dir=$(perl -e '$n = shift; print +{ map { split / /, $_, 2 } split /\n/, `tmux list-panes -s -F "#{window_index} #{pane_current_path}"` }->{$n}', $window);
-	if [[ $dir == "" ]]; then
+	if [[ -z $dir ]]; then
 		echo "window not found"
 	else
 		cd "$dir"
