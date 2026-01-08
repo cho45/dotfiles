@@ -34,7 +34,7 @@
 		Plug 'rust-lang/rust.vim'
 		Plug 'posva/vim-vue'
 
-		Plug 'github/copilot.vim', { 'tag': 'v1.10.2' }
+		Plug 'github/copilot.vim', { 'tag': 'release' }
 	call plug#end()
 " }
 

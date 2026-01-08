@@ -10,12 +10,12 @@ PROMPT_EXIT="%(?..exit %?
 )
 "
 RPROMPT=""
-PROMPT_CWD="%F{green}[%n@%m] %F{yellow}%~%f"
-PROMPT_CMD="%F{green} | q ド _ リ|$ <%f "
+PROMPT_CWD="%{[32m%}[%n@%m] %{[33m%}%~%{[m%}"
+PROMPT_CMD="%{[32m%} | q ド _ リ|$ <%{[m%}%{[m%} "
 # precmd で設定される
 PROMPT_CWD_ADD=""
 
-# for tmux
+# for screen
 preexec () {
 	# osascript -e 'tell application "System Events" to key code 103'
 
@@ -24,7 +24,7 @@ preexec () {
 	emulate -L zsh
 	local -a cmd; cmd=(${(z)2})
 
-	if [[ -n $SSH_AGENT_PID ]]; then
+	if [[ $SSH_AGENT_PID != "" ]]; then
 		cmd[1]="@$cmd[1]"
 	fi
 
@@ -45,9 +45,7 @@ preexec () {
 			fi
 			;&
 		*)
-			if [[ -n $TMUX ]]; then
-			printf "\033k%s\033\\\\" "${cmd[1]:t}"
-		fi
+			echo -n "k$cmd[1]:t\\"
 			prev=$cmd[1]
 			return
 			;;
@@ -58,18 +56,14 @@ preexec () {
 
 	$cmd >>(read num rest
 		cmd=(${(z)${(e):-\$jt$num}})
-		if [[ -n $TMUX ]]; then
-			printf "\033k%s\033\\\\" "${cmd[1]:t}"
-		fi) 2>/dev/null
+		echo -n "k$cmd[1]:t\\") 2>/dev/null
 
 	prev=$cmd[1]
 }
 
 precmd () {
-	# Set title of tmux window
-	if [[ -n $TMUX ]]; then
-		printf "\033k:%s\033\\\\" "$prev"
-	fi
+	# Set title of screen window
+	echo -n "k:$prev\\"
 	PROMPT_CMD_ADD=""
 	PROMPT_CWD_ADD=""
 
@@ -81,16 +75,14 @@ precmd () {
 		if command ps -ocommand= | grep -v grep | grep "ssh.*10081" > /dev/null; then
 			local proxy=Connected
 		fi
-		PROMPT_CMD_ADD="$PROMPT_CMD_ADD %F{magenta}[${proxy:-%F{red}Disconnected%F{magenta}}]%f=$cmd[1]"
+		PROMPT_CMD_ADD="$PROMPT_CMD_ADD [35m%}[${proxy:-[31mDisconnected[35m}]%{[m%}=$cmd[1]"
 
 		# どこの window が socks 経由になっているかわかったほうがいいので
-		if [[ -n $TMUX ]]; then
-			printf "\033k:=:%s\033\\\\" "$prev"
-		fi
+		echo -n "k:=:$prev\\"
 	fi
 
 	if [[ ${PERL5OPT:#lib::core::only} != "" ]]; then
-		PROMPT_CWD_ADD="$PROMPT_CWD_ADD %F{cyan}*carton*%f"
+		PROMPT_CWD_ADD="$PROMPT_CWD_ADD [36m%}*carton*%{[m%}"
 	fi
 
 	# update prompt
@@ -99,26 +91,29 @@ $PROMPT_CMD"
 }
 
 chpwd () {
+	if [[ -n "${WSLENV+x}" ]]; then
+		# in WSL
+		$HOME/dotfiles/bin/wsl-update-cwds
+	fi
 }
 
 # ~ (master) のように git レポジトリ以下では git のブランチを表示する
 update-git-status () {
 	local gitdir="$(command git rev-parse --git-dir 2>/dev/null)"
-	if [[ -n $gitdir ]]; then
+	if [[ $gitdir != "" ]]; then
 		local ret=''
 		if   [[ -d "$gitdir/rebase-apply" ]]; then
 			local next=$(< $gitdir/rebase-apply/next)
 			local last=$(< $gitdir/rebase-apply/last)
 			if [[ -n $next && -n $last ]]; then
-				local curr
-			(( curr = next - 1 ))
+				local curr=$[ $next - 1]
 			fi
 			ret="rebase[$curr/$last]"
 		elif [[ -d "$gitdir/rebase-merge" ]]; then
 			if [[ -f "$gitdir/rebase-merge/interactive" ]]; then
 				local left=$(grep '^[pes]' $git_dir/rebase-merge/git-rebase-todo | wc -l)
 				if [[ -n $left ]]; then
-					(( left += 1 ))
+					left=$[ $left + 1 ]
 				fi
 				ret="rebase[i, $left left]"
 			else
@@ -135,7 +130,7 @@ update-git-status () {
 
 			ret="bisect[$start, $bisect_nr left]"
 		else
-			ret=$(command git symbolic-ref --short HEAD 2>/dev/null)
+			ret=$(command git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
 			if [[ $ret == "(nobranch)" ]]; then
 				ret=$(command git name-rev --name-only HEAD)
 				ret="($ret)"
@@ -143,22 +138,23 @@ update-git-status () {
 		fi
 
 		if [[ -n $ret ]]; then
-			PROMPT_CWD_ADD="$PROMPT_CWD_ADD %F{green}($ret)%f"
+			PROMPT_CWD_ADD="$PROMPT_CWD_ADD [32m%}($ret)%{[m%}"
 		fi
 	fi
 }
 
-# 新しく tmux window を作成し、カレントディレクトリで開く
+# 新しく screen window をつくり、カレントディレクトリを実行元のディレクトリに
 function n () {
-	tmux new-window -c "$PWD"
+	# screen -X eval "chdir $PWD" "screen" "chdir"
+	tmux new-window -c $PWD
 }
 
 function git () {
 	if [[ -e '.svn' ]]; then
 		if [[ $1 == "log" ]]; then
-			command svn "$@" | $PAGER
+			command svn $@ | $PAGER
 		else
-			command svn "$@"
+			command svn $@
 		fi
 		echo
 		echo "x| _ |x < .svn があったので svn コマンドにしました!"
@@ -166,7 +162,7 @@ function git () {
 		if [[ $1 == "" ]]; then
 			command hg status
 		else
-			command hg "$@"
+			command hg $@
 		fi
 		echo "x| _ |x < .hg があったので hg コマンドにしました!"
 	else
@@ -182,16 +178,16 @@ function git () {
 			fi
 		elif [[ $1 == "log" ]]; then
 			# 常に diff を表示してほしい
-			command git log --patch-with-stat "${@[2, -1]}"
+			command git log --patch-with-stat ${@[2, -1]}
 		elif [[ $1 == "pull" ]]; then
 			if [[ ( -x '.git/pull-chain' ) ]]; then
-				command git "$@"
+				command git $@
 				asyncrun ./.git/pull-chain
 			else
-				command git "$@"
+				command git $@
 			fi
 		else
-			command git "$@"
+			command git $@
 		fi
 	fi
 }
@@ -219,7 +215,7 @@ function peco-git-recent-branches () {
 		perl -pne 's{^refs/heads/}{}' | \
 		peco --query "$LBUFFER")
 	if [ -n "$selected_branch" ]; then
-		BUFFER="git checkout \"${selected_branch}\""
+		BUFFER="git checkout ${selected_branch}"
 		zle accept-line
 	fi
 	zle clear-screen
@@ -231,7 +227,7 @@ function peco-git-recent-all-branches () {
 		perl -pne 's{^refs/(heads|remotes)/}{}' | \
 		peco --query "$LBUFFER")
 	if [ -n "$selected_branch" ]; then
-		BUFFER="git checkout -t \"${selected_branch}\""
+		BUFFER="git checkout -t ${selected_branch}"
 		zle accept-line
 	fi
 	zle clear-screen
@@ -242,7 +238,7 @@ zle -N peco-git-recent-all-branches
 function peco-src () {
 	local selected_dir=$(ghq list --full-path | peco --query "$LBUFFER")
 	if [ -n "$selected_dir" ]; then
-		BUFFER="cd \"${selected_dir}\""
+		BUFFER="cd ${selected_dir}"
 		zle accept-line
 	fi
 	zle clear-screen
@@ -253,25 +249,52 @@ zle -N peco-src
 function peco-godoc() {
 	local selected_dir=$(ghq list --full-path | peco --query "$LBUFFER")
 	if [ -n "$selected_dir" ]; then
-		BUFFER="godoc \"${selected_dir}\" | less"
+		BUFFER="godoc ${selected_dir} | less"
 		zle accept-line
 	fi
 	zle clear-screen
 }
 zle -N peco-godoc
 
+# cdd for GNU screen
+#function cdd() {
+#	if [[ $1 == "" ]]; then
+#		local selected_dir=$(lsof -c zsh -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])' | uniq | peco)
+#		if [ -n "$selected_dir" ]; then
+#			cd "${selected_dir}"
+#		fi
+#	else
+#		local pid
+#		if [[ $(uname) == "Darwin" ]]; then
+#			pid=$(command ps -E -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
+#		else
+#			pid=$(command ps e -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
+#		fi
+#
+#		if [[ $pid == "" ]]; then
+#			echo "window not found"
+#		else
+#			local dir=$(lsof -p $pid -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])')
+#			cd "$dir"
+#		fi
+#	fi
+#}
 
 function cdd() {
 	typeset -A mapping
 	local window=$1
 	local dir=$(perl -e '$n = shift; print +{ map { split / /, $_, 2 } split /\n/, `tmux list-panes -s -F "#{window_index} #{pane_current_path}"` }->{$n}', $window);
-	if [[ -z $dir ]]; then
+	if [[ $dir == "" ]]; then
 		echo "window not found"
 	else
 		cd "$dir"
 	fi
 }
 
+function pid2screen() {
+	local
+	command ps -E -o 'command' -p 42629 | perl -anal -e '/STY=$ENV{STY}/ and /WINDOW=([0-9]+)/ and print $1'
+}
 
 
 bindkey '^x^x' peco-src

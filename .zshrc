@@ -17,18 +17,22 @@ path=(
 	$HOME/sdk/apache-maven/bin
 	$HOME/.rbenv/bin
 	$HOME/app/vim/bin
+	$HOME/app/pwsh
 	$HOME/app/argyll/bin
 	$HOME/app/depot_tools
 	$HOME/app/node/bin
+	/home/cho45/app/gcc-arm-none-eabi/bin
 	$HOME/anaconda3/bin
 	$HOME/sdk/*/bin(N)
 	$HOME/.cargo/bin
 #	$HOME/.platformio/packages/toolchain-gccarmnoneeabi/bin
 
+	/usr/local/cuda/bin
 	/usr/local/opt/llvm/bin
 	/usr/local/opt/go/libexec/bin
 	/usr/local/opt/ruby/bin
 
+	/mnt/c/Users/cho45/AppData/Local/Programs/Microsoft\ VS\ Code/bin
 	/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin
 	/usr/local/scala/bin
 	/usr/local/screen/bin
@@ -349,16 +353,20 @@ fi
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$("$HOME/anaconda3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/cho45/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "$HOME/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/cho45/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/cho45/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="$HOME/anaconda3/bin:$PATH"
+        export PATH="/home/cho45/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

@@ -77,3 +77,8 @@
 [rebase]
 	stat = true
 	autostash = true
+[credential "https://github.com"]
+	helper = !/home/cho45/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/home/cho45/bin/gh auth git-credential
+
