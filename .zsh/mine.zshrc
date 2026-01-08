@@ -150,45 +150,18 @@ function n () {
 }
 
 function git () {
-	if [[ -e '.svn' ]]; then
-		if [[ $1 == "log" ]]; then
-			command svn $@ | $PAGER
+	if [[ $1 == "" ]]; then
+		if command git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+			# git ってだけうったときは status 表示
+			command git --no-pager branch-recent && \
+			command git --no-pager diff --stat --color-words && \
+			command git --no-pager status \
+			| $PAGER
 		else
-			command svn $@
+			echo "Not in git work tree."
 		fi
-		echo
-		echo "x| _ |x < .svn があったので svn コマンドにしました!"
-	elif [[ -e '.hg' ]]; then
-		if [[ $1 == "" ]]; then
-			command hg status
-		else
-			command hg $@
-		fi
-		echo "x| _ |x < .hg があったので hg コマンドにしました!"
 	else
-		if [[ $1 == "" ]]; then
-			if command git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-				# git ってだけうったときは status 表示
-				command git --no-pager branch-recent && \
-				command git --no-pager diff --stat --color-words && \
-				command git --no-pager status \
-				| $PAGER
-			else
-				echo "Not in git work tree."
-			fi
-		elif [[ $1 == "log" ]]; then
-			# 常に diff を表示してほしい
-			command git log --patch-with-stat ${@[2, -1]}
-		elif [[ $1 == "pull" ]]; then
-			if [[ ( -x '.git/pull-chain' ) ]]; then
-				command git $@
-				asyncrun ./.git/pull-chain
-			else
-				command git $@
-			fi
-		else
-			command git $@
-		fi
+		command git "$@"
 	fi
 }
 
