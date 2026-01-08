@@ -11,12 +11,7 @@
 	di      = diff
 	co      = checkout
 	ci      = commit -v
-	cii     = !sh -c 'git commit -av && [ \"$(git config --bool svn-remote.svn.autodcommit)\" = "true" ] && $HOME/.screen/asyncrun.rb \"git svn dcommit && echo dcommit done\"'
-	svn-ad  = config svn-remote.svn.autodcommit true
-	svn-ado = config svn-remote.svn.autodcommit false
-	br      = branch
-	lc      = log ORIG_HEAD.. --stat --no-merges
-	logall  = !sh -c 'git log --all --patch --color | git name-rev --stdin | $PAGER'
+	logg    = log --patch-with-stat
 	tree    = log --graph --pretty=oneline --abbrev-commit --decorate
 	checkout-pull-request = !sh -c 'git fetch origin pull/$1/head:pr-$1 && git checkout pr-$1' -
 
