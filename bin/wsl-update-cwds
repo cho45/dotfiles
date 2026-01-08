@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+
+is_wsl = ENV.has_key?('WSLENV')
+if !is_wsl
+    exit 0
+end
+
+# PWSH = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
+PWSH = '/mnt/c/Program Files/PowerShell/7/pwsh.exe'
+
+dirs = `tmux list-windows -F '\#{pane_current_path}'`.split("\n").uniq
+
+command = <<~CMD
+$WshShell = New-Object -COMObject WScript.Shell
+function Create-Shortcut($targetPath, $shortcutPath) {
+	$Shortcut = $WshShell.CreateShortcut($shortcutPath)
+	$Shortcut.TargetPath = $targetPath
+	$Shortcut.Save()
+}
+
+Remove-Item -Path $env:USERPROFILE/cwds/*.lnk
+CMD
+dirs.each do |dir|
+    basename =  File.basename(dir)
+    win_path = `wslpath -aw '#{dir}'`.chomp
+    command << "Create-Shortcut '#{win_path}' $env:USERPROFILE/cwds/#{basename}.lnk\n"
+end
+
+# Since pwsh takes a bit of time to start up, run it asynchronously using spawn.
+Process.daemon
+pid = spawn(PWSH, '-NoProfile', '-NoLogo', '-Command', command)
+Process.detach(pid)
+

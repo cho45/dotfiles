@@ -1,0 +1,37 @@
+#!/usr/bin/ruby
+
+message = ARGV.shift || "test"
+
+ps = <<EOS
+Set-StrictMode -Version Latest
+
+$message = @'
+#{message}
+'@
+
+$template = @'
+<toast>
+    <visual>
+        <binding template="ToastGeneric">
+            <text>aa</text>
+        </binding>
+    </visual>
+</toast>
+'@
+
+[Windows.Data.Xml.Dom.XmlDocument, Windows.Data, ContentType=WindowsRuntime] > $null
+[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null
+
+
+$xml = [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime]::GetTemplateContent(
+    [Windows.UI.Notifications.ToastTemplateType, Windows.UI.Notifications, ContentType = WindowsRuntime]::ToastText01
+)
+
+$xml.SelectSingleNode('//text').InnerText = $message
+
+$toast = [Windows.UI.Notifications.ToastNotification]::new($xml)
+[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier("wintoast").Show($toast)
+
+EOS
+
+system('/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe', '-ExecutionPolicy', 'Bypass', '-NonInteractive', '-Command', ps)
