@@ -1,5 +1,6 @@
 # vim:ft=zsh:
 export LANG=ja_JP.UTF-8
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 if [[ -n $WINDOW ]]; then
 	screen -X eval "escape ^yy"
@@ -24,15 +25,12 @@ alias strace='sudo dtruss'
 export PATH=/usr/local/mysql/bin:$PATH
 export PATH=$HOME/project/hatena/commands/bin:$PATH
 
-# for shared-mime-info
-export XDG_DATA_HOME=/usr/local/share
-# update-mime-database /usr/local/share/mime
-
 export CLASSPATH=.:lib/\*.jar:$JPATH/classes.jar
 
 export JAVA_HOME=$(/usr/libexec/java_home -v 1.8.0)
 
 export CGO_CFLAGS="-I/usr/local/include"
 export CGO_LDFLAGS="-L/usr/local/lib"
+
 
 
