@@ -308,13 +308,15 @@ function oo () {
 # Load extra rc
 
 function load-extra () {
-	echo "$fg[green] * Loading extra $reset_color$1"
 	if [[ -f $1 ]]; then
+		echo "$fg[green] * Loading extra $reset_color$1"
 		source $1
+	else
+		echo "$fg[blue] * Loading extra $reset_color$1 (not found)"
 	fi
 }
 
-echo "$fg[blue] # Loading extra files...$reset_color"
+echo "$fg[cyan] # Loading extra files...$reset_color"
 
 load-extra "$HOME/.zsh/mine.zshrc"
 load-extra "$HOME/.secret.zshrc"
