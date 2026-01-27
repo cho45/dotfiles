@@ -183,5 +183,23 @@ bindkey '^xb' peco-git-recent-all-branches
 
 # ホストごとの設定を読みこむ
 h="${HOST%%.*}"
+
+# プラットフォーム判定でデフォルト設定を読み込む
+if [[ -z "$WSLENV" ]]; then
+	# Not in WSL
+	case "$(uname)" in
+		Darwin)
+			load-extra "$HOME/.zsh/host-macos.zshrc"
+			;;
+		Linux)
+			load-extra "$HOME/.zsh/host-linux.zshrc"
+			;;
+	esac
+else
+	# in WSL
+	load-extra "$HOME/.zsh/host-windows.zsh"
+fi
+
+# ホスト固有設定 (レポジトリには含めない)
 load-extra "$HOME/.zsh/host-$h.zshrc"
 

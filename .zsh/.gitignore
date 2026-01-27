@@ -1,1 +1,6 @@
 cdd_pwd_list*
+# ホスト固有の設定ファイル (プラットフォーム設定以外)
+host-*.zshrc
+!host-macos.zshrc
+!host-linux.zshrc
+!host-windows.zsh

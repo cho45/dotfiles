@@ -1,1 +1,0 @@
-host-macos.zshrc
