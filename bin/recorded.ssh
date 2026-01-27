@@ -1,7 +1,0 @@
-#!/bin/sh
-
-cmd=${0#*.}
-date=`date +'%Y%m%d.%H%M%S'`
-
-exec script /tmp/recorded-$date $cmd ${@+"$@"}
-

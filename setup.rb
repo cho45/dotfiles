@@ -70,8 +70,6 @@ link ".zshrc", "~/.zshrc"
 link ".zsh", "~/.zsh"
 link ".ctags", "~/.ctags"
 
-link ".eclimrc", "~/.eclimrc"
-
 link ".irssi/scripts", "~/.irssi/scripts"
 
 link ".bashrc", "~/.bashrc"
@@ -82,7 +80,6 @@ link ".tscreenrc", "~/.tscreenrc"
 link ".screen", "~/.screen"
 
 link ".bvirc", "~/.bvirc"
-link ".rascutrc", "~/.rascutrc"
 link ".re.pl", "~/.re.pl"
 link ".irbrc", "~/.irbrc"
 link ".gdbinit", "~/.gdbinit"

@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
-#
 
-require "rubygems"
 require "json"
 
-puts JSON.pretty_generate(JSON.load(ARGF.read.gsub(/\n/, '')))
+puts JSON.pretty_generate(JSON.parse(ARGF.read))
