@@ -109,16 +109,11 @@ if RUBY_PLATFORM =~ /darwin/
 	link "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "~/bin/chrome"
 	link "skk/my.rule", "~/Library/Application Support/AquaSKK/my.rule"
 	sh "gcc -framework Cocoa tools/set_default_browser.m -o #{ENV['HOME']}/bin/set_default_browser"
-	sh "gcc -framework Cocoa tools/lockscreen.m -o #{ENV['HOME']}/bin/lockscreen"
 end
 
 with('npm') do
-	sh "npm set init.author.name cho45"
-	sh "npm set init.author.email cho45@lowreal.net"
-	sh "npm set init.author.url http://www.lowreal.net/"
-end
-
-with('go') do
-	sh "go get github.com/mattn/files"
+	sh "npm config set init-author-name cho45"
+	sh "npm config set init-author-email cho45@lowreal.net"
+	sh "npm config set init-author-url http://www.lowreal.net/"
 end
 
