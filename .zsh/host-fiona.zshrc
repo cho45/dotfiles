@@ -1,1 +1,1 @@
-host-mary.zshrc
+host-macos.zshrc

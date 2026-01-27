@@ -11,7 +11,7 @@ PROMPT_EXIT="%(?..exit %?
 "
 RPROMPT=""
 PROMPT_CWD="%{[32m%}[%n@%m] %{[33m%}%~%{[m%}"
-PROMPT_CMD="%{[32m%} | q ド _ リ|$ <%{[m%}%{[m%} "
+PROMPT_CMD="%{[32m%}$ %{[m%}%{[m%} "
 # precmd で設定される
 PROMPT_CWD_ADD=""
 
@@ -165,94 +165,6 @@ function git () {
 	fi
 }
 
-function socks () {
-	if [[ ${DYLD_INSERT_LIBRARIES:#libtsocks} == "" ]]; then
-		. tsocks on
-	else
-		. tsocks off
-	fi
-}
-
-
-function peco-select-history () {
-	BUFFER=$(perl -nl -e 's/^.*?;//; print' ~/.zsh_history| peco --query "$LBUFFER")
-	# zle clear-screen
-	zle reset-prompt
-	zle accept-line
-}
-zle -N peco-select-history
-
-
-function peco-git-recent-branches () {
-	local selected_branch=$(git for-each-ref --format='%(refname)' --sort=-committerdate refs/heads | \
-		perl -pne 's{^refs/heads/}{}' | \
-		peco --query "$LBUFFER")
-	if [ -n "$selected_branch" ]; then
-		BUFFER="git checkout ${selected_branch}"
-		zle accept-line
-	fi
-	zle clear-screen
-}
-zle -N peco-git-recent-branches
-
-function peco-git-recent-all-branches () {
-	local selected_branch=$(git for-each-ref --format='%(refname)' --sort=-committerdate refs/heads refs/remotes | \
-		perl -pne 's{^refs/(heads|remotes)/}{}' | \
-		peco --query "$LBUFFER")
-	if [ -n "$selected_branch" ]; then
-		BUFFER="git checkout -t ${selected_branch}"
-		zle accept-line
-	fi
-	zle clear-screen
-}
-zle -N peco-git-recent-all-branches
-
-
-function peco-src () {
-	local selected_dir=$(ghq list --full-path | peco --query "$LBUFFER")
-	if [ -n "$selected_dir" ]; then
-		BUFFER="cd ${selected_dir}"
-		zle accept-line
-	fi
-	zle clear-screen
-}
-zle -N peco-src
-
-
-function peco-godoc() {
-	local selected_dir=$(ghq list --full-path | peco --query "$LBUFFER")
-	if [ -n "$selected_dir" ]; then
-		BUFFER="godoc ${selected_dir} | less"
-		zle accept-line
-	fi
-	zle clear-screen
-}
-zle -N peco-godoc
-
-# cdd for GNU screen
-#function cdd() {
-#	if [[ $1 == "" ]]; then
-#		local selected_dir=$(lsof -c zsh -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])' | uniq | peco)
-#		if [ -n "$selected_dir" ]; then
-#			cd "${selected_dir}"
-#		fi
-#	else
-#		local pid
-#		if [[ $(uname) == "Darwin" ]]; then
-#			pid=$(command ps -E -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
-#		else
-#			pid=$(command ps e -o 'pid,command' | WINDOW=$1 perl -anal -e '/STY=$ENV{STY} / and /WINDOW=$ENV{WINDOW} / and /^ *([0-9]+) +[^ ]*zsh/ and print $1')
-#		fi
-#
-#		if [[ $pid == "" ]]; then
-#			echo "window not found"
-#		else
-#			local dir=$(lsof -p $pid -w -Ffn0 | perl -anal -e '/cwd/ and print((split /\0.?/)[1])')
-#			cd "$dir"
-#		fi
-#	fi
-#}
-
 function cdd() {
 	typeset -A mapping
 	local window=$1
@@ -263,12 +175,6 @@ function cdd() {
 		cd "$dir"
 	fi
 }
-
-function pid2screen() {
-	local
-	command ps -E -o 'command' -p 42629 | perl -anal -e '/STY=$ENV{STY}/ and /WINDOW=([0-9]+)/ and print $1'
-}
-
 
 bindkey '^x^x' peco-src
 bindkey '^x^h' peco-select-history

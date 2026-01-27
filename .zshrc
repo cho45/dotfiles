@@ -12,30 +12,25 @@ export GOPATH=$HOME/go
 path=(
 	$HOME/bin
 	$HOME/project/commands/bin
-	$HOME/sdk/play
 	$HOME/Library/Android/sdk/platform-tools
-	$HOME/sdk/apache-maven/bin
 	$HOME/.rbenv/bin
 	$HOME/app/vim/bin
 	$HOME/app/pwsh
 	$HOME/app/argyll/bin
-	$HOME/app/depot_tools
 	$HOME/app/node/bin
-	/home/cho45/app/gcc-arm-none-eabi/bin
-	$HOME/anaconda3/bin
 	$HOME/sdk/*/bin(N)
 	$HOME/.cargo/bin
-#	$HOME/.platformio/packages/toolchain-gccarmnoneeabi/bin
+	$HOME/.rd/bin
+	$HOME/.local/bin/
 
 	/usr/local/cuda/bin
 	/usr/local/opt/llvm/bin
 	/usr/local/opt/go/libexec/bin
 	/usr/local/opt/ruby/bin
+	/opt/homebrew/opt/curl/bin
 
 	/mnt/c/Users/cho45/AppData/Local/Programs/Microsoft\ VS\ Code/bin
 	/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin
-	/usr/local/scala/bin
-	/usr/local/screen/bin
     /usr/local/go/bin
 	$GOPATH/bin
 
@@ -74,10 +69,6 @@ export LANG=ja_JP.UTF-8
 
 ## Application environment variables
 export MYSQL_PS1="(\u@\h) [\d]> "
-export NYTPROF=sigexit=int,hup:trace=2:start=no
-#export PERL_CPANM_OPT="--verbose --sudo --prompt --mirror http://cpan.cpantesters.org"
-export PERL_CPANM_OPT="--verbose --prompt"
-export FLEX_HOME=$HOME/sdk/flex4sdk
 export _JAVA_OPTIONS="-Duser.language=en -Dfile.language=UTF-8"
 
 bindkey -e
@@ -206,7 +197,6 @@ function magic-abbrev-expand () {
 	# match quoted windows path
 	LBUFFER=${LBUFFER%%(#m)\"C:\\*\"}
 	if [[ "$MATCH" == "" ]]; then
-		echo NOTMATCHED >> /tmp/test
 		# match unquoted windows path
 		LBUFFER=${LBUFFER%%(#m)[^\"]C:\\[^ ]#}
 	fi
@@ -291,14 +281,6 @@ alias wget='noglob wget --no-check-certificate'
 NUMCPUS=$(ruby -retc -e 'puts Etc.nprocessors')
 alias make="make -j$NUMCPUS"
 
-alias :q=exit
-
-if [ `uname` = "Darwin" ]; then
-	alias nopaste='curl --form paste_code=@- pastebin.com/api_public.php >&1 > >(pbcopy) > >(open `cat`) '
-else
-	alias nopaste='curl --data paste_code=@- pastebin.com/api_public.php'
-fi
-
 # Ensure no background processes
 function reload () {
 	local j
@@ -313,14 +295,6 @@ function reload () {
 
 function snatch () {
 	gdb -p $1 -batch -n -x =( echo -e "p (int)open(\"/proc/$$/fd/1\", 1)\np (int)dup2(\$1, 1)\np (int)dup2(\$1, 2)" )
-}
-
-function gres () {
-	vim -c "argdo %s/$1/$2/gce | update" ${@[3, -1]}
-}
-
-function history () {
-	grep "${@[1, -1]}" ~/.zsh_history | cut -s -d ";" -f 2-10
 }
 
 # infinitely execute the command
@@ -343,30 +317,16 @@ function load-extra () {
 echo "$fg[blue] # Loading extra files...$reset_color"
 
 load-extra "$HOME/.zsh/mine.zshrc"
-load-extra "$HOME/perl5/perlbrew/etc/bashrc"
 load-extra "$HOME/.secret.zshrc"
+load-extra "$HOME/.local/bin/env"
+
 
 if [[ -d "$HOME/.rbenv" ]]; then
 	echo " * rbenv init"
 	eval "$(rbenv init -)"
 fi
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/cho45/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/cho45/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/cho45/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/cho45/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+

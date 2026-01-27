@@ -1,1 +1,1 @@
-host-windows.zsh
+host-windows.zshrc

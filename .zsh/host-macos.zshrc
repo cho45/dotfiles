@@ -21,16 +21,3 @@ alias -g CP="| pbcopy"
 alias ql='qlmanage -p "$@" >& /dev/null'
 alias lock='open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app'
 alias strace='sudo dtruss'
-
-export PATH=/usr/local/mysql/bin:$PATH
-export PATH=$HOME/project/hatena/commands/bin:$PATH
-
-export CLASSPATH=.:lib/\*.jar:$JPATH/classes.jar
-
-export JAVA_HOME=$(/usr/libexec/java_home -v 1.8.0)
-
-export CGO_CFLAGS="-I/usr/local/include"
-export CGO_LDFLAGS="-L/usr/local/lib"
-
-
-
