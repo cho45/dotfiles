@@ -11,7 +11,7 @@ PROMPT_EXIT="%(?..exit %?
 "
 RPROMPT=""
 PROMPT_CWD="%{[32m%}[%n@%m] %{[33m%}%~%{[m%}"
-PROMPT_CMD="%{[32m%}$ %{[m%}%{[m%} "
+PROMPT_CMD="%{[32m%}$ %{[m%}%{[m%}"
 # precmd で設定される
 PROMPT_CWD_ADD=""
 
