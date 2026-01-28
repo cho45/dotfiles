@@ -324,11 +324,22 @@ load-extra "$HOME/.local/bin/env"
 
 
 if [[ -d "$HOME/.rbenv" ]]; then
-	echo " * rbenv init"
-	eval "$(rbenv init -)"
+	rbenv() {
+		unset -f rbenv gem ruby rake rails
+		eval "$(command rbenv init -)"
+		rbenv "$@"
+	}
 fi
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+nvm() {
+	unset -f nvm node npm yarn npx
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+	nvm "$@"
+}
+node() { nvm; node "$@"; }
+npm()  { nvm; npm  "$@"; }
+yarn() { nvm; yarn "$@"; }
+npx()  { nvm; npx  "$@"; }
 

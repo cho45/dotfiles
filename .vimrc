@@ -58,7 +58,6 @@ let g:lsp_log_file = expand('/tmp/vim-lsp.log')
 let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_signs_enabled = 1
 let g:lsp_insert_text_enabled = 0
-let g:lsp_text_edit_enabled = 0
 let g:asyncomplete_completion_delay = 100
 let g:asyncomplete_log_file = expand('/tmp/asyncomplete.log')
 
@@ -506,44 +505,3 @@ endif
 	autocmd BufNewFile,BufRead deploy/nginx/* set filetype=nginx
 " }
 
-" --------------------------------------------------------------------------------
-" rust {
-	" rustup update
-	" rustup component add rls rust-analysis rust-src
-	if executable('rls')
-		au User lsp_setup call lsp#register_server({
-			\ 'name': 'rls',
-			\ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-			\ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
-			\ 'whitelist': ['rust'],
-			\ })
-	endif
-" }
-
-
-" --------------------------------------------------------------------------------
-" c/c++ {
-	" " https://github.com/MaskRay/ccls/wiki
-	if executable('ccls')
-	   au User lsp_setup call lsp#register_server({
-		  \ 'name': 'ccls',
-		  \ 'cmd': {server_info->['ccls']},
-		  \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-		  \ 'initialization_options': #{
-		  \    cache: #{directory : '/tmp/ccls_cache'},
-		  \    completion: #{detailedLabel: v:false}
-		  \ },
-		  \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-		  \ })
-	endif
-
-"	if executable('cquery')
-"		au User lsp_setup call lsp#register_server({
-"			\ 'name': 'cquery',
-"			\ 'cmd': {server_info->['cquery']},
-"			\ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-"			\ 'initialization_options': { 'cacheDirectory': '/tmp/cquery_cache' },
-"			\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-"			\ })
-"	endif
-" }

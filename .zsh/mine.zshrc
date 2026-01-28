@@ -111,7 +111,7 @@ update-git-status () {
 			ret="rebase[$curr/$last]"
 		elif [[ -d "$gitdir/rebase-merge" ]]; then
 			if [[ -f "$gitdir/rebase-merge/interactive" ]]; then
-				local left=$(grep '^[pes]' $git_dir/rebase-merge/git-rebase-todo | wc -l)
+				local left=$(grep '^[pes]' $gitdir/rebase-merge/git-rebase-todo | wc -l)
 				if [[ -n $left ]]; then
 					left=$[ $left + 1 ]
 				fi
@@ -175,11 +175,6 @@ function cdd() {
 		cd "$dir"
 	fi
 }
-
-bindkey '^x^x' peco-src
-bindkey '^x^h' peco-select-history
-bindkey '^x^b' peco-git-recent-branches
-bindkey '^xb' peco-git-recent-all-branches
 
 # ホストごとの設定を読みこむ
 h="${HOST%%.*}"
