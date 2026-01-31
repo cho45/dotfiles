@@ -89,6 +89,8 @@ link ".peco", "~/.peco"
 link "git/.gitconfig", "~/.gitconfig"
 link "git/.gitignore", "~/.gitignore"
 
+link "llm/opencode.json", "~/.config/opencode/opencode.json"
+
 cp ".gemrc", "~/.gemrc".expand unless Pathname.new("~/.gemrc").expand_path.exist?
 
 app = "~/app".expand
