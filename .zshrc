@@ -22,6 +22,7 @@ path=(
 	$HOME/.cargo/bin
 	$HOME/.rd/bin
 	$HOME/.local/bin/
+	$HOME/perl5/bin
 
 	/usr/local/cuda/bin
 	/usr/local/opt/llvm/bin
