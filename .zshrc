@@ -55,8 +55,10 @@ rubylib=(
 typeset -xT PERL5LIB perl5lib
 typeset -U perl5lib
 perl5lib=(
+	.
 	lib
 	$HOME/lib/perl
+	$HOME/perl5/lib/perl5/
 )
 
 unset PS1
@@ -338,8 +340,8 @@ nvm() {
 	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 	nvm "$@"
 }
-node() { nvm; node "$@"; }
-npm()  { nvm; npm  "$@"; }
-yarn() { nvm; yarn "$@"; }
-npx()  { nvm; npx  "$@"; }
+node() { nvm > /dev/null; node "$@"; }
+npm()  { nvm > /dev/null; npm  "$@"; }
+yarn() { nvm > /dev/null; yarn "$@"; }
+npx()  { nvm > /dev/null; npx  "$@"; }
 
