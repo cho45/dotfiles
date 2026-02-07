@@ -32,3 +32,4 @@ function load-extra() {
 load-extra "$HOME/.cargo/env"
 load-extra "$HOME/.local/bin/env"
 load-extra "$HOME/.nvm/nvm.sh"
+

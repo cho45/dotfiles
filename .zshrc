@@ -1,8 +1,10 @@
 # vim:set ft=zsh:
 # ~/.zshrc is standalone for copy to remote server as a file
 # ~/.zsh/mine.zshrc is located on local machines
-clear
-echo " > Initializing .zshrc"
+export IS_AGENT=$ANTIGRAVITY_AGENT
+function info () {
+	[[ $IS_AGENT != "1" ]] && echo "$@"
+}
 
 stty intr 
 
@@ -101,21 +103,23 @@ if is-at-least 4.3.10; then
 	bindkey '^S' history-incremental-pattern-search-forward
 fi
 
-### completion
-autoload -U compinit
-compinit -u
-zstyle ':completion:*:default' menu select=1
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-compdef -d _git
-compdef -d git
+if [[ $IS_AGENT != "1" ]]; then
+	### completion
+	autoload -U compinit
+	compinit -u
+	zstyle ':completion:*:default' menu select=1
+	zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+	compdef -d _git
+	compdef -d git
 
-### predict
-autoload predict-on
-zle -N predict-on
-zle -N predict-off
-bindkey '^X^Z' predict-on
-bindkey '^Z' predict-off
-zstyle ':predict' verbose true
+	### predict
+	autoload predict-on
+	zle -N predict-on
+	zle -N predict-off
+	bindkey '^X^Z' predict-on
+	bindkey '^Z' predict-off
+	zstyle ':predict' verbose true
+fi
 
 ## setopt
 setopt print_eight_bit
@@ -276,13 +280,7 @@ alias lm='ls -altrh'
 alias ps='ps aux'
 alias zcat='gzip -dfc'
 
-
 alias ..='cd ..'
-
-alias wget='noglob wget --no-check-certificate'
-
-NUMCPUS=$(ruby -retc -e 'puts Etc.nprocessors')
-alias make="make -j$NUMCPUS"
 
 # Ensure no background processes
 function reload () {
@@ -312,17 +310,21 @@ function oo () {
 
 function load-extra () {
 	if [[ -f $1 ]]; then
-		echo "$fg[green] * Loading extra $reset_color$1"
+		info "$fg[green] * Loading extra $reset_color$1"
 		source $1
 	else
-		echo "$fg[blue] * Loading extra $reset_color$1 (not found)"
+		info "$fg[blue] * Loading extra $reset_color$1 (not found)"
 	fi
 }
 
-echo "$fg[cyan] # Loading extra files...$reset_color"
+info "$fg[cyan] # Loading extra files...$reset_color"
 
-load-extra "$HOME/.zsh/mine.zshrc"
-load-extra "$HOME/.secret.zshrc"
+if [[ $IS_AGENT == "1" ]]; then
+	load-extra "$HOME/.zsh/agent.zshrc"
+else
+	load-extra "$HOME/.zsh/mine.zshrc"
+	load-extra "$HOME/.secret.zshrc"
+fi
 load-extra "$HOME/.local/bin/env"
 
 
@@ -346,3 +348,6 @@ npm()  { nvm > /dev/null; npm  "$@"; }
 yarn() { nvm > /dev/null; yarn "$@"; }
 npx()  { nvm > /dev/null; npx  "$@"; }
 
+
+# Added by Antigravity
+export PATH="/Users/cho45/.antigravity/antigravity/bin:$PATH"
