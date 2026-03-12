@@ -33,3 +33,7 @@ load-extra "$HOME/.cargo/env"
 load-extra "$HOME/.local/bin/env"
 load-extra "$HOME/.nvm/nvm.sh"
 
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/cho45/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)

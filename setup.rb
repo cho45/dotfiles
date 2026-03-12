@@ -89,7 +89,6 @@ link ".peco", "~/.peco"
 link "git/.gitconfig", "~/.gitconfig"
 link "git/.gitignore", "~/.gitignore"
 
-link "llm/opencode.json", "~/.config/opencode/opencode.json"
 
 cp ".gemrc", "~/.gemrc".expand unless Pathname.new("~/.gemrc").expand_path.exist?
 
@@ -117,4 +116,16 @@ with('npm') do
 	sh "npm config set init-author-email cho45@lowreal.net"
 	sh "npm config set init-author-url http://www.lowreal.net/"
 end
+
+
+link "llm/opencode.json", "~/.config/opencode/opencode.json"
+
+link "llm/rules/principal.md", "~/.claude/CLAUDE.md"
+link "llm/rules/principal.md", "~/.gemini/GEMINI.md"
+link "llm/rules/principal.md", "~/.kilocode/rules/principal.md"
+
+link "llm/skills", "~/.claude/skills"
+link "llm/skills", "~/.gemini/skills"
+link "llm/skills", "~/.kilocode/skills"
+
 

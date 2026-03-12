@@ -337,17 +337,13 @@ if [[ -d "$HOME/.rbenv" ]]; then
 fi
 
 export NVM_DIR="$HOME/.nvm"
-nvm() {
-	unset -f nvm node npm yarn npx
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-	nvm "$@"
-}
-node() { nvm > /dev/null; node "$@"; }
-npm()  { nvm > /dev/null; npm  "$@"; }
-yarn() { nvm > /dev/null; yarn "$@"; }
-npx()  { nvm > /dev/null; npx  "$@"; }
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 
 # Added by Antigravity
 export PATH="/Users/cho45/.antigravity/antigravity/bin:$PATH"
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/cho45/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
